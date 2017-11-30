@@ -4,8 +4,7 @@
   "description": "essential set of tools to develop web-components or SPA applications",
   "main": "index.js",
   "scripts": {
-    "build": "cross-env taskr clean build",
-    "task": "cross-env taskr",
+    "build": "cross-env taskr",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -43,6 +42,7 @@
   },
   "jspm": {
     "registry": "jspm",
+    "jspmPackage": true,
     "main": "index",
     "format": "amd",
     "directories": {

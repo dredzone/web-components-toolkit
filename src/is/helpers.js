@@ -1,10 +1,10 @@
 export const not = (fn: Function) => !fn.apply(null, Array.prototype.slice.call(arguments));
 
 export const all = (fn: Function) => {
-	const params =  Array.prototype.slice.call(arguments);
+	const params = Array.prototype.slice.call(arguments);
 	const len = params.length;
-	for (let i = 0; i< len; i++) {
-		if (fn.call(null, params[i])) {
+	for (let i = 0; i < len; i++) {
+		if (fn(params[i])) {
 			return false;
 		}
 	}
@@ -12,10 +12,10 @@ export const all = (fn: Function) => {
 };
 
 export const any = (fn: Function) => {
-	const params =  Array.prototype.slice.call(arguments);
+	const params = Array.prototype.slice.call(arguments);
 	const len = params.length;
-	for (let i = 0; i< len; i++) {
-		if (fn.call(null, params[i])) {
+	for (let i = 0; i < len; i++) {
+		if (fn(params[i])) {
 			return true;
 		}
 	}

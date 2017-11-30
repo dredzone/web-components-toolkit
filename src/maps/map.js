@@ -1,7 +1,9 @@
 import {global} from '../constants';
 
-export const Map = global.Map || function Map() {
-	const keys = [], values = [];
+export const Map = global.Map || function () {
+	const keys = [];
+	const values = [];
+
 	return {
 		get(obj: Object) {
 			return values[keys.indexOf(obj)];

@@ -1,7 +1,7 @@
 import {global} from '../constants';
 import {symbols} from '../symbols';
 
-export const WeakMap = global.WeakMap || function WeakMap() {
+export const WeakMap = global.WeakMap || function () {
 	const objectWeakMapId = symbols.get('_objectWeakMap');
 	return {
 		delete(obj: any) {

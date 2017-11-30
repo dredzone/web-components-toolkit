@@ -1,13 +1,15 @@
 import {setApi} from './helpers';
 import {isTypeChecks} from './is-type-checks';
 
-export const isArithmeticChecks = (function() {
+export const isArithmeticChecks = (function () {
 	const is = {
 		not: {},
 		any: {}
 	};
 
-	is.nan = (value) => value !== value;
+	/* eslint-disable no-self-compare */
+	is.nan = value => value !== value;
+	/* eslint-enable no-self-compare */
 
 	// is a given number above minimum parameter?
 	is.above = (n, min) => isTypeChecks.all.number(n, min) && n > min;
@@ -16,28 +18,28 @@ export const isArithmeticChecks = (function() {
 	is.above.api = ['not'];
 
 	// is a given number decimal?
-	is.decimal = (n) => isTypeChecks.number(n) && n % 1 !== 0;
+	is.decimal = n => isTypeChecks.number(n) && n % 1 !== 0;
 
 	// is a given number even?
-	is.even = (n) => isTypeChecks.number(n) && n % 2 === 0;
+	is.even = n => isTypeChecks.number(n) && n % 2 === 0;
 
 	// is a given number finite?
-	is.finite = isFinite || ((n) => is.not.infinite(n) && is.not.nan(n));
+	is.finite = isFinite || (n => is.not.infinite(n) && is.not.nan(n));
 
 	// is a given number infinite?
-	is.infinite = (n) => n === Infinity || n === -Infinity;
+	is.infinite = n => n === Infinity || n === -Infinity;
 
 	// is a given number integer?
-	is.integer = (n) => isTypeChecks.number(n) && n % 1 === 0;
+	is.integer = n => isTypeChecks.number(n) && n % 1 === 0;
 
 	// is a given number negative?
-	is.negative = (n) => isTypeChecks.number(n) && n < 0;
+	is.negative = n => isTypeChecks.number(n) && n < 0;
 
 	// is a given number odd?
-	is.odd = (n) => isTypeChecks.number(n) && (n % 2 === 1 || n % 2 === -1);
+	is.odd = n => isTypeChecks.number(n) && (n % 2 === 1 || n % 2 === -1);
 
 	// is a given number positive?
-	is.positive = (n) => isTypeChecks.number(n) && n > 0;
+	is.positive = n => isTypeChecks.number(n) && n > 0;
 
 	// is a given number above maximum parameter?
 	is.under = (n, max) => isTypeChecks.all.number(n, max) && n < max;

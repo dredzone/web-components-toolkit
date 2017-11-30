@@ -1,6 +1,6 @@
 import {setApi} from './helpers';
 
-export const isTypeChecks = (function() {
+export const isTypeChecks = (function () {
 	const is = {
 		not: {},
 		any: {}
@@ -12,7 +12,10 @@ export const isTypeChecks = (function() {
 
 	const getType = (obj: any): string => {
 		let type = toString.call(obj);
-		return typeCache[type] || (typeCache[type] = type.match(typeRegexp)[1].toLowerCase());
+		if (!typeCache[type]) {
+			typeCache[type] = type.match(typeRegexp)[1].toLowerCase();
+		}
+		return typeCache[type];
 	};
 
 	for (let i = types.length; i--;) {
