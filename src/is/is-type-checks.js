@@ -1,4 +1,4 @@
-import {setApi} from './helpers';
+import {setApi} from './is-helpers';
 
 export const isTypeChecks = (function () {
 	const is = {
