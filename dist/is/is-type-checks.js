@@ -1,4 +1,4 @@
-define(['exports', './helpers'], function (exports, _helpers) {
+define(['exports', './is-helpers'], function (exports, _isHelpers) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -34,6 +34,6 @@ define(['exports', './helpers'], function (exports, _helpers) {
 			_loop(i);
 		}
 
-		return (0, _helpers.setApi)(is);
+		return (0, _isHelpers.setApi)(is);
 	}();
 });

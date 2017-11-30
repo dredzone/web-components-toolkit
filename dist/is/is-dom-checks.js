@@ -1,4 +1,4 @@
-define(['exports', './helpers', './is-type-checks'], function (exports, _helpers, _isTypeChecks) {
+define(['exports', './is-helpers', './is-type-checks'], function (exports, _isHelpers, _isTypeChecks) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -22,6 +22,6 @@ define(['exports', './helpers', './is-type-checks'], function (exports, _helpers
 			return is.domElement(obj) && obj.nodeName.toLowerCase() === type.toLowerCase();
 		};
 
-		return (0, _helpers.setApi)(is);
+		return (0, _isHelpers.setApi)(is);
 	}();
 });
