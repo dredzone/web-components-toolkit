@@ -8,6 +8,7 @@ define(['exports', './is-helpers', './is-type-checks'], function (exports, _isHe
 	var isDomChecks = exports.isDomChecks = function () {
 		var is = {
 			not: {},
+			all: {},
 			any: {}
 		};
 

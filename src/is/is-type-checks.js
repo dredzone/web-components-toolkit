@@ -3,10 +3,12 @@ import {setApi} from './is-helpers';
 export const isTypeChecks = (function () {
 	const is = {
 		not: {},
+		all: {},
 		any: {}
 	};
+
 	const toString = Object.prototype.toString;
-	const types = 'Array Object String Date RegExp Function Boolean Number Null Undefined'.split(' ');
+	const types = 'Array Object String Date RegExp Function Boolean Number Null Undefined Arguments Error'.split(' ');
 	const typeCache = {};
 	const typeRegexp = /\s([a-zA-Z]+)/;
 
@@ -20,7 +22,7 @@ export const isTypeChecks = (function () {
 
 	for (let i = types.length; i--;) {
 		let type = types[i].toLowerCase();
-		is[types[i]] = obj => getType(obj) === type;
+		is[type] = obj => getType(obj) === type;
 	}
 
 	return setApi(is);

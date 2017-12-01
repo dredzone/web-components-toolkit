@@ -4,12 +4,15 @@ import {isTypeChecks} from './is-type-checks';
 export const isArithmeticChecks = (function () {
 	const is = {
 		not: {},
+		all: {},
 		any: {}
 	};
 
 	/* eslint-disable no-self-compare */
 	is.nan = value => value !== value;
 	/* eslint-enable no-self-compare */
+
+	is.numeric = value => is.not.nan(value) && isTypeChecks.number(value);
 
 	// is a given number above minimum parameter?
 	is.above = (n, min) => isTypeChecks.all.number(n, min) && n > min;

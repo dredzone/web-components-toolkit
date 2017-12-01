@@ -4,6 +4,7 @@ import {isTypeChecks} from './is-type-checks';
 export const isDomChecks = (function () {
 	const is = {
 		not: {},
+		all: {},
 		any: {}
 	};
 

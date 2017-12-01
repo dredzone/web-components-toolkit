@@ -8,10 +8,12 @@ define(['exports', './is-helpers'], function (exports, _isHelpers) {
 	var isTypeChecks = exports.isTypeChecks = function () {
 		var is = {
 			not: {},
+			all: {},
 			any: {}
 		};
+
 		var toString = Object.prototype.toString;
-		var types = 'Array Object String Date RegExp Function Boolean Number Null Undefined'.split(' ');
+		var types = 'Array Object String Date RegExp Function Boolean Number Null Undefined Arguments Error'.split(' ');
 		var typeCache = {};
 		var typeRegexp = /\s([a-zA-Z]+)/;
 
@@ -25,7 +27,7 @@ define(['exports', './is-helpers'], function (exports, _isHelpers) {
 
 		var _loop = function _loop(i) {
 			var type = types[i].toLowerCase();
-			is[types[i]] = function (obj) {
+			is[type] = function (obj) {
 				return getType(obj) === type;
 			};
 		};

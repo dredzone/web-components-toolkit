@@ -8,6 +8,7 @@ define(['exports', './is-helpers', './is-type-checks'], function (exports, _isHe
 	var isArithmeticChecks = exports.isArithmeticChecks = function () {
 		var is = {
 			not: {},
+			all: {},
 			any: {}
 		};
 
@@ -16,6 +17,10 @@ define(['exports', './is-helpers', './is-type-checks'], function (exports, _isHe
 			return value !== value;
 		};
 		/* eslint-enable no-self-compare */
+
+		is.numeric = function (value) {
+			return is.not.nan(value) && _isTypeChecks.isTypeChecks.number(value);
+		};
 
 		// is a given number above minimum parameter?
 		is.above = function (n, min) {
