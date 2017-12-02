@@ -1,3 +1,5 @@
+import {merge} from './merge';
+
 export const checksHelper = Object.freeze({
 	not(fn: Function): Function {
 		return () => !(fn.apply(null, Array.prototype.slice.call(arguments)));
@@ -30,6 +32,7 @@ export const checksHelper = Object.freeze({
 	},
 
 	setApi(checker: Object): void {
+		checker = merge({not: {}, all: {}, any: {}}, checker);
 		Object.keys(checker).forEach(key => {
 			if (typeof checker[key] === 'function') {
 				let interfaces = checker[key].api || ['not', 'all', 'any'];
@@ -46,5 +49,6 @@ export const checksHelper = Object.freeze({
 				}
 			}
 		});
+		return checker;
 	}
 });
