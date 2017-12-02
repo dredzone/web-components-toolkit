@@ -1,4 +1,4 @@
-import {WeakMap} from './maps/weak-map';
+import {WeakMap} from './weak-map';
 
 export const createStorage = (creator: Function): Function => {
 	let store = new WeakMap();

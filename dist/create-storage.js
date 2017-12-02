@@ -1,4 +1,4 @@
-define(['exports', './maps/weak-map'], function (exports, _weakMap) {
+define(['exports', './weak-map'], function (exports, _weakMap) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

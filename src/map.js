@@ -1,4 +1,4 @@
-import {global} from '../constants';
+import {global} from './constants';
 
 export const Map = global.Map || function () {
 	const keys = [];

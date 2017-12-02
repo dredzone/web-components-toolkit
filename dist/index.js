@@ -1,15 +1,42 @@
-define(['exports', './is', './create-storage', './maps', './mixin', './objects', './unique-id', './symbols'], function (exports, _is, _createStorage, _maps, _mixin, _objects, _uniqueId, _symbols) {
+define(['exports', './checks', './freeze', './merge', './config', './create-storage', './global-scope', './html-template-content', './mix', './unique-id', './symbols'], function (exports, _checks, _freeze, _merge, _config, _createStorage, _globalScope, _htmlTemplateContent, _mix, _uniqueId, _symbols) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  Object.keys(_is).forEach(function (key) {
+  Object.keys(_checks).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
-        return _is[key];
+        return _checks[key];
+      }
+    });
+  });
+  Object.keys(_freeze).forEach(function (key) {
+    if (key === "default" || key === "__esModule") return;
+    Object.defineProperty(exports, key, {
+      enumerable: true,
+      get: function () {
+        return _freeze[key];
+      }
+    });
+  });
+  Object.keys(_merge).forEach(function (key) {
+    if (key === "default" || key === "__esModule") return;
+    Object.defineProperty(exports, key, {
+      enumerable: true,
+      get: function () {
+        return _merge[key];
+      }
+    });
+  });
+  Object.keys(_config).forEach(function (key) {
+    if (key === "default" || key === "__esModule") return;
+    Object.defineProperty(exports, key, {
+      enumerable: true,
+      get: function () {
+        return _config[key];
       }
     });
   });
@@ -22,30 +49,30 @@ define(['exports', './is', './create-storage', './maps', './mixin', './objects',
       }
     });
   });
-  Object.keys(_maps).forEach(function (key) {
+  Object.keys(_globalScope).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
-        return _maps[key];
+        return _globalScope[key];
       }
     });
   });
-  Object.keys(_mixin).forEach(function (key) {
+  Object.keys(_htmlTemplateContent).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
-        return _mixin[key];
+        return _htmlTemplateContent[key];
       }
     });
   });
-  Object.keys(_objects).forEach(function (key) {
+  Object.keys(_mix).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
-        return _objects[key];
+        return _mix[key];
       }
     });
   });

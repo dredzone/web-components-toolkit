@@ -1,5 +1,5 @@
-import {global} from '../constants';
-import {symbols} from '../symbols';
+import {global} from './constants';
+import {symbols} from './symbols';
 
 export const WeakMap = global.WeakMap || function () {
 	const objectWeakMapId = symbols.get('_objectWeakMap');

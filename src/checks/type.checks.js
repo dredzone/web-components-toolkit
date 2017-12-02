@@ -1,7 +1,7 @@
-import {setApi} from './is-helpers';
+import {checksHelper} from './checks.helper';
 
-export const isTypeChecks = (function () {
-	const is = {
+export const typeChecks = (function () {
+	const checks = {
 		not: {},
 		all: {},
 		any: {}
@@ -22,9 +22,12 @@ export const isTypeChecks = (function () {
 
 	for (let i = types.length; i--;) {
 		let type = types[i].toLowerCase();
-		is[type] = obj => getType(obj) === type;
+		checks[type] = obj => getType(obj) === type;
 	}
 
-	return setApi(is);
+	checks.domNode = (obj: any) => Boolean(checks.object(obj) && obj.nodeType > 0);
+
+	checksHelper.setApi(checks);
+	return checks;
 })();
 
