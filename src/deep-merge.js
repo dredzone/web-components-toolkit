@@ -1,6 +1,8 @@
-export const merge = (target: Object | Array, source: Object | Array, optionsArgument: Object): Object => {
-	const sourceIsArray: boolean = Array.isArray(source);
-	const targetIsArray: boolean = Array.isArray(target);
+import {typeChecks} from './type.checks';
+
+export const deepMerge = (target: Object | Array, source: Object | Array, optionsArgument: Object): Object => {
+	const sourceIsArray: boolean = typeChecks.array(source);
+	const targetIsArray: boolean = typeChecks.array(target);
 	const options: Object = optionsArgument || {
 		arrayMerge: defaultArrayMerge
 	};
@@ -15,13 +17,13 @@ export const merge = (target: Object | Array, source: Object | Array, optionsArg
 	return mergeObject(target, source, optionsArgument);
 };
 
-merge.all = (array: Array<Object>, optionsArgument: Object): Object => {
-	if (!Array.isArray(array)) {
+deepMerge.all = (array: Array<Object>, optionsArgument: Object): Object => {
+	if (typeChecks.not.array(array)) {
 		throw new Error('first argument should be an array');
 	}
 
 	return array.reduce((prev, next) => {
-		return merge(prev, next, optionsArgument);
+		return deepMerge(prev, next, optionsArgument);
 	}, {});
 };
 
@@ -30,21 +32,20 @@ function isMergeableObject(value) {
 }
 
 function isNonNullObject(value) {
-	return value && typeof value === 'object';
+	return value && typeChecks.object(value);
 }
 
 function isSpecial(value) {
-	const stringValue = Object.prototype.toString.call(value);
-	return stringValue === '[object RegExp]' || stringValue === '[object Date]';
+	return typeChecks.regexp(value) || typeChecks.date(value);
 }
 
 function emptyTarget(val) {
-	return Array.isArray(val) ? [] : {};
+	return typeChecks.array(val) ? [] : {};
 }
 
 function cloneUnlessOtherwiseSpecified(value, optionsArgument) {
 	const clone = !optionsArgument || optionsArgument.clone !== false;
-	return (clone && isMergeableObject(value)) ? merge(emptyTarget(value), value, optionsArgument) : value;
+	return (clone && isMergeableObject(value)) ? deepMerge(emptyTarget(value), value, optionsArgument) : value;
 }
 
 function defaultArrayMerge(target, source, optionsArgument) {
@@ -64,7 +65,7 @@ function mergeObject(target, source, optionsArgument) {
 		if (!isMergeableObject(source[key]) || !target[key]) {
 			destination[key] = cloneUnlessOtherwiseSpecified(source[key], optionsArgument);
 		} else {
-			destination[key] = merge(target[key], source[key], optionsArgument);
+			destination[key] = deepMerge(target[key], source[key], optionsArgument);
 		}
 	});
 

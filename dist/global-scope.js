@@ -1,19 +1,16 @@
-define(['exports', './config'], function (exports, _config) {
+define(['exports', './constants', './objects.helper'], function (exports, _constants, _objects) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 	exports.globalScope = undefined;
-	var globalScope = exports.globalScope = function () {
-		var global = document.defaultView;
-		return {
-			get: function get(key) {
-				return _config.config.get(global, key);
-			},
-			set: function set(key, value) {
-				_config.config.set(global, key, value);
-			}
-		};
-	}();
+	var globalScope = exports.globalScope = Object.freeze({
+		get: function get(key) {
+			return (0, _objects.getPropertyValue)(_constants.global, key);
+		},
+		set: function set(key, value) {
+			(0, _objects.setPropertyValue)(_constants.global, key, value);
+		}
+	});
 });

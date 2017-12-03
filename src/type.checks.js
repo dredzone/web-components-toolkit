@@ -1,4 +1,4 @@
-import {checksHelper} from './checks.helper';
+import {setApi} from './checks.helper';
 
 export const typeChecks = (function () {
 	const checks = {};
@@ -23,6 +23,7 @@ export const typeChecks = (function () {
 
 	checks.domNode = (obj: any) => Boolean(checks.object(obj) && obj.nodeType > 0);
 
-	return checksHelper.setApi(checks);
+	setApi(checks);
+	return checks;
 })();
 

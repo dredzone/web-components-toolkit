@@ -1,3 +1,5 @@
+import {apply, dedupe, cached} from './mix.decorators';
+
 /**
  * Allows you to extend a class with one or more mixin classes.
  *
@@ -16,7 +18,8 @@ export const mix = (baseClass: Class = class {}): Object => {
 		 * @return {Class} a subclass of `baseClass` with `mixins` applied
 		 */
 		with(...mixins: Function): Class {
-			return mixins.reduce((c, m) => {
+			const decorated = mixins.map((mixin: Function) => cached(dedupe(apply(mixin))));
+			return decorated.reduce((c, m) => {
 				if (typeof m !== 'function') {
 					return c;
 				}

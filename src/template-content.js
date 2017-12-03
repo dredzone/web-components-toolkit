@@ -1,6 +1,6 @@
-import {typeChecks} from './checks/type.checks';
+import {typeChecks} from './type.checks';
 
-export const htmlTemplateContent = (template: string | Object): DocumentFragment => {
+export const templateContent = (template: string | Object): DocumentFragment => {
 	if (typeChecks.string(template)) {
 		template = document.querySelector(template);
 	}

@@ -1,9 +1,10 @@
-define(['exports'], function (exports) {
+define(['exports', './mix.decorators'], function (exports, _mix) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	exports.mix = undefined;
 
 	function _classCallCheck(instance, Constructor) {
 		if (!(instance instanceof Constructor)) {
@@ -41,7 +42,10 @@ define(['exports'], function (exports) {
 					mixins[_key] = arguments[_key];
 				}
 
-				return mixins.reduce(function (c, m) {
+				var decorated = mixins.map(function (mixin) {
+					return (0, _mix.cached)((0, _mix.dedupe)((0, _mix.apply)(mixin)));
+				});
+				return decorated.reduce(function (c, m) {
 					if (typeof m !== 'function') {
 						return c;
 					}

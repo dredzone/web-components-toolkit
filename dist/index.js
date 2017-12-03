@@ -1,15 +1,24 @@
-define(['exports', './checks', './freeze', './merge', './config', './create-storage', './global-scope', './html-template-content', './mix', './unique-id', './symbols'], function (exports, _checks, _freeze, _merge, _config, _createStorage, _globalScope, _htmlTemplateContent, _mix, _uniqueId, _symbols) {
+define(['exports', './number.checks', './type.checks', './freeze', './merge', './create-storage', './global-scope', './template-content', './mix', './unique-id', './symbols'], function (exports, _number, _type, _freeze, _merge, _createStorage, _globalScope, _templateContent, _mix, _uniqueId, _symbols) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  Object.keys(_checks).forEach(function (key) {
+  Object.keys(_number).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
-        return _checks[key];
+        return _number[key];
+      }
+    });
+  });
+  Object.keys(_type).forEach(function (key) {
+    if (key === "default" || key === "__esModule") return;
+    Object.defineProperty(exports, key, {
+      enumerable: true,
+      get: function () {
+        return _type[key];
       }
     });
   });
@@ -31,15 +40,6 @@ define(['exports', './checks', './freeze', './merge', './config', './create-stor
       }
     });
   });
-  Object.keys(_config).forEach(function (key) {
-    if (key === "default" || key === "__esModule") return;
-    Object.defineProperty(exports, key, {
-      enumerable: true,
-      get: function () {
-        return _config[key];
-      }
-    });
-  });
   Object.keys(_createStorage).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
     Object.defineProperty(exports, key, {
@@ -58,12 +58,12 @@ define(['exports', './checks', './freeze', './merge', './config', './create-stor
       }
     });
   });
-  Object.keys(_htmlTemplateContent).forEach(function (key) {
+  Object.keys(_templateContent).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
-        return _htmlTemplateContent[key];
+        return _templateContent[key];
       }
     });
   });

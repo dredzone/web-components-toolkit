@@ -1,4 +1,4 @@
-import {checksHelper} from './checks.helper';
+import {setApi} from './checks.helper';
 import {typeChecks} from './type.checks';
 
 export const numberChecks = (function () {
@@ -48,6 +48,7 @@ export const numberChecks = (function () {
 	// within method does not support 'all' and 'any' interfaces
 	checks.within.api = ['not'];
 
-	return checksHelper.setApi(checks);
+	setApi(checks);
+	return checks;
 })();
 
