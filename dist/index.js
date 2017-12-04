@@ -1,4 +1,4 @@
-define(['exports', './number.checks', './type.checks', './freeze', './merge', './create-storage', './global-scope', './template-content', './mix', './unique-id', './symbols'], function (exports, _number, _type, _freeze, _merge, _createStorage, _globalScope, _templateContent, _mix, _uniqueId, _symbols) {
+define(['exports', './number.checks', './type.checks', './objects.helper', './create-storage', './global-scope', './template-content', './mix', './unique-id', './symbols', './advice'], function (exports, _number, _type, _objects, _createStorage, _globalScope, _templateContent, _mix, _uniqueId, _symbols, _advice) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -22,21 +22,12 @@ define(['exports', './number.checks', './type.checks', './freeze', './merge', '.
       }
     });
   });
-  Object.keys(_freeze).forEach(function (key) {
+  Object.keys(_objects).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
-        return _freeze[key];
-      }
-    });
-  });
-  Object.keys(_merge).forEach(function (key) {
-    if (key === "default" || key === "__esModule") return;
-    Object.defineProperty(exports, key, {
-      enumerable: true,
-      get: function () {
-        return _merge[key];
+        return _objects[key];
       }
     });
   });
@@ -91,6 +82,15 @@ define(['exports', './number.checks', './type.checks', './freeze', './merge', '.
       enumerable: true,
       get: function () {
         return _symbols[key];
+      }
+    });
+  });
+  Object.keys(_advice).forEach(function (key) {
+    if (key === "default" || key === "__esModule") return;
+    Object.defineProperty(exports, key, {
+      enumerable: true,
+      get: function () {
+        return _advice[key];
       }
     });
   });

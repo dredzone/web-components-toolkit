@@ -7,3 +7,4 @@ export * from './template-content';
 export * from './mix';
 export * from './unique-id';
 export * from './symbols';
+export * from './advice';
