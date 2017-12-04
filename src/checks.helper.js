@@ -10,7 +10,7 @@ export const all = (fn: Function): Function => {
 			}
 		}
 		return true;
-	}
+	};
 };
 
 export const any = (fn: Function): Function => {
@@ -23,7 +23,7 @@ export const any = (fn: Function): Function => {
 			}
 		}
 		return false;
-	}
+	};
 };
 
 export const setApi = (checker: Object): void => {

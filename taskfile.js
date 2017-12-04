@@ -1,6 +1,6 @@
 const path = require('path');
 const source = 'src';
-const dist = 'dist';
+const dist = 'lib';
 
 module.exports = {
 	*clean(task) {

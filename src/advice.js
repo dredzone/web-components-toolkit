@@ -1,6 +1,6 @@
 export const before = (instance: Object, method: Function, advice: Function): void => {
 	let orig = instance[method];
-	instance[method] = function() {
+	instance[method] = function () {
 		advice.apply(this, arguments);
 		return orig.apply(this, arguments);
 	}.bind(instance);
@@ -8,7 +8,7 @@ export const before = (instance: Object, method: Function, advice: Function): vo
 
 export const after = (instance: Object, method: Function, advice: Function): void => {
 	let orig = instance[method];
-	instance[method] = function() {
+	instance[method] = function () {
 		let value;
 		let args = Array.prototype.slice.call(arguments, 0);
 		try {
@@ -18,8 +18,7 @@ export const after = (instance: Object, method: Function, advice: Function): voi
 			}
 			advice.apply(this, args);
 			return value;
-		}
-		catch (err) {
+		} catch (err) {
 			value = err;
 			args.unshift(value);
 			advice.apply(this, args);
@@ -30,7 +29,7 @@ export const after = (instance: Object, method: Function, advice: Function): voi
 
 export const around = (instance: Object, method: Function, advice: Function): void => {
 	let orig = instance[method];
-	instance[method] = function() {
+	instance[method] = function () {
 		let args = Array.prototype.slice.call(arguments, 0);
 		args.unshift(orig);
 		return advice.apply(this, args);
@@ -39,10 +38,10 @@ export const around = (instance: Object, method: Function, advice: Function): vo
 
 export const afterReturn = (instance: Object, method: Function, advice: Function): void => {
 	let orig = instance[method];
-	instance[method] = function() {
+	instance[method] = function () {
 		let value = orig.apply(this, arguments);
 		let args = Array.prototype.slice.call(arguments, 0);
-		if(value) {
+		if (value) {
 			args.unshift(value);
 		}
 		advice.apply(this, args);
@@ -52,15 +51,14 @@ export const afterReturn = (instance: Object, method: Function, advice: Function
 
 export const afterThrow = (instance: Object, method: Function, advice: Function): void => {
 	let orig = instance[method];
-	instance[method] = function() {
-	try {
-		return orig.apply(this, arguments);
-	}
-	catch (err) {
-		let args = Array.prototype.slice.call(arguments, 0);
-		args.unshift(err);
-		advice.apply(this, args);
-		throw err;
-	}
+	instance[method] = function () {
+		try {
+			return orig.apply(this, arguments);
+		} catch (err) {
+			let args = Array.prototype.slice.call(arguments, 0);
+			args.unshift(err);
+			advice.apply(this, args);
+			throw err;
+		}
 	}.bind(instance);
 };
