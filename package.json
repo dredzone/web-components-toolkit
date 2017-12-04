@@ -1,9 +1,11 @@
 {
   "name": "utility-toolkit",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "essential set of tools to develop web-components or SPA applications",
   "scripts": {
-    "build": "npm run test && npm run task",
+    "preversion": "npm run test",
+    "version": "",
+    "build": "npm run task",
     "task": "taskr",
     "test": "mocha --require babel-register ./test/**/*.spec.js"
   },
