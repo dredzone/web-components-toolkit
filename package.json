@@ -1,10 +1,11 @@
 {
   "name": "utility-toolkit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "essential set of tools to develop web-components or SPA applications",
   "scripts": {
     "preversion": "npm run test",
     "version": "",
+    "postversion": "git push && git push --tags",
     "build": "npm run task",
     "task": "taskr",
     "test": "mocha --require babel-register ./test/**/*.spec.js"
