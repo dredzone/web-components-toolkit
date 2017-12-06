@@ -9,6 +9,7 @@ module.exports = {
 	*build (task, opts) {
 		yield task
 			.source(path.join(source, '**/*.js'))
+			.unflow({all: true, sourceMap: ''})
 			.xo({
 				envs: ["browser", "es6"],
 				parser: "babel-eslint",
@@ -31,7 +32,6 @@ module.exports = {
 					"import/prefer-default-export": "off"
 				}
 			})
-			.babel({preload: true})
 			.target(dist);
 	},
 	*default(task) {
