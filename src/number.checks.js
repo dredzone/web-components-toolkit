@@ -1,8 +1,9 @@
 import {setApi} from './checks.helper';
 import {typeChecks} from './type.checks';
+import type {ApiChecker, Checker} from './typefile';
 
-export const numberChecks = (function () {
-	const checks = {};
+export const numberChecks = (function (): ApiChecker {
+	const checks: Checker = {};
 
 	checks.nan = isNaN || (n => Number(n) !== n);
 
@@ -48,7 +49,6 @@ export const numberChecks = (function () {
 	// within method does not support 'all' and 'any' interfaces
 	checks.within.api = ['not'];
 
-	setApi(checks);
-	return checks;
+	return setApi(checks);
 })();
 

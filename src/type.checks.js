@@ -1,8 +1,9 @@
 /* @flow */
 import {setApi} from './checks.helper';
+import type {ApiChecker, Checker} from './typefile';
 
-export const typeChecks = (function () {
-	const checks: {[key: string]: (val: any) => boolean} = {};
+export const typeChecks = (function (): ApiChecker {
+	const checks: Checker = {};
 
 	const toString = Object.prototype.toString;
 	const types = 'Array Object String Date RegExp Function Boolean Number Null Undefined Arguments Error'.split(' ');
@@ -27,7 +28,6 @@ export const typeChecks = (function () {
 
 	checks.domNode = (obj: any) => Boolean(checks.object(obj) && obj.nodeType > 0);
 
-	setApi(checks);
-	return checks;
+	return setApi(checks);
 })();
 

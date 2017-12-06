@@ -1,5 +1,5 @@
 /* @flow */
-import type {ApiChecker} from './typefile';
+import type {ApiChecker, Checker} from './typefile';
 
 export const not = (fn: Function): Function => !(fn.apply(null, Array.prototype.slice.call(arguments)));
 
@@ -30,7 +30,7 @@ export const any = (fn: Function): Function => {
 };
 
 const {assign, keys} = Object;
-export const setApi = (checks: {[key: string]: (val: any) => boolean}): ApiChecker => {
+export const setApi = (checks: Checker): ApiChecker => {
 	let checker: ApiChecker = assign({not: {}, all: {}, any: {}}, checks);
 	keys(checker).forEach(key => {
 		if (typeof checker[key] === 'function') {
