@@ -1,6 +1,6 @@
 import {expect} from 'chai';
-import {typeChecks} from '../src/type.checks';
-import {numberChecks} from '../src/number.checks';
+import {typeChecks} from '../lib/type.checks';
+import {numberChecks} from '../lib/number.checks';
 
 function checkApi(checker: Object, name: string, list: string[]) {
 	list = list || ['all', 'any', 'not'];
