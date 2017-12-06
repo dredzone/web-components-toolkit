@@ -1,3 +1,4 @@
+/* @flow */
 export const before = (instance: Object, method: Function, advice: Function): void => {
 	let orig = instance[method];
 	instance[method] = function () {

@@ -1,3 +1,4 @@
+/* @flow */
 import {global} from './constants';
 
 export const Map = global.Map || function () {

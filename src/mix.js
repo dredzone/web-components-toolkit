@@ -1,4 +1,8 @@
+/* @flow */
 import {apply, dedupe, cached} from './mix.decorators';
+import type {MixBuilder} from './typefile';
+
+const {freeze} = Object;
 
 /**
  * Allows you to extend a class with one or more mixin classes.
@@ -9,15 +13,15 @@ import {apply, dedupe, cached} from './mix.decorators';
  * @see https://github.com/justinfagnani/mixwith.js
  *
  */
-export const mix = (baseClass: Class = class {}): Object => {
-	return Object.freeze({
+export const mix = (baseClass: Class<any> = class {}): MixBuilder => {
+	return freeze({
 		/**
 		 * Applies `mixins` in order to the baseClass given to `mix()`.
 		 *
 		 * @param {Array.<Function>} mixins
 		 * @return {Class} a subclass of `baseClass` with `mixins` applied
 		 */
-		with(...mixins: Function): Class {
+		with(...mixins: Array<Function>): Class<any> {
 			const decorated = mixins.map((mixin: Function) => cached(dedupe(apply(mixin))));
 			return decorated.reduce((c, m) => {
 				if (typeof m !== 'function') {

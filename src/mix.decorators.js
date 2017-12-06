@@ -1,3 +1,4 @@
+/* @flow */
 import {symbols} from './symbols';
 import {
 	wrap,

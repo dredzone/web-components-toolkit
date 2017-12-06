@@ -1,3 +1,5 @@
+/* @flow */
+
 /**
  * A helper function for generating unique ids based on Data.now
  */

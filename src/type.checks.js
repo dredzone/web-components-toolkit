@@ -1,7 +1,8 @@
+/* @flow */
 import {setApi} from './checks.helper';
 
 export const typeChecks = (function () {
-	const checks = {};
+	const checks: {[key: string]: (val: any) => boolean} = {};
 
 	const toString = Object.prototype.toString;
 	const types = 'Array Object String Date RegExp Function Boolean Number Null Undefined Arguments Error'.split(' ');
@@ -11,7 +12,10 @@ export const typeChecks = (function () {
 	const getType = (obj: any): string => {
 		let type = toString.call(obj);
 		if (!typeCache[type]) {
-			typeCache[type] = type.match(typeRegexp)[1].toLowerCase();
+			let matches: any = type.match(typeRegexp);
+			if (Array.isArray(matches) && matches.length > 1) {
+				typeCache[type] = matches[1].toLowerCase();
+			}
 		}
 		return typeCache[type];
 	};

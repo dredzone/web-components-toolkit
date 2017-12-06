@@ -1,6 +1,7 @@
+/* @flow */
 import {typeChecks} from './type.checks';
 
-export const templateContent = (template: string | Object): DocumentFragment => {
+export const templateContent = (template: any): DocumentFragment => {
 	if (typeChecks.string(template)) {
 		template = document.querySelector(template);
 	}

@@ -1,3 +1,4 @@
+/* @flow */
 import {global} from './constants';
 import {getPropertyValue, setPropertyValue} from './objects.helper';
 

@@ -1,3 +1,4 @@
+/* @flow */
 import {global} from './constants';
 import {symbols} from './symbols';
 

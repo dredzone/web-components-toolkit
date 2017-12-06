@@ -1,3 +1,4 @@
+/* @flow */
 import {typeChecks} from './type.checks';
 
 const {freeze, getOwnPropertyNames, hasOwnProperty, isFrozen} = Object;
@@ -18,7 +19,7 @@ export const deepFreeze = (o: Object): Object => {
 	return o;
 };
 
-export const getPropertyValue = (obj: Object, key: string, defaultValue: Object = null): Object => {
+export const getPropertyValue = (obj: Object, key: string, defaultValue: any): any => {
 	if (key.indexOf('.') === -1) {
 		return obj[key] ? obj[key] : defaultValue;
 	}
@@ -28,7 +29,7 @@ export const getPropertyValue = (obj: Object, key: string, defaultValue: Object 
 
 	for (let i = 0; i < length; i++) {
 		object = object[parts[i]];
-		if (object === undefined) {
+		if (typeChecks.undefined(object)) {
 			object = defaultValue;
 			return;
 		}
@@ -36,7 +37,7 @@ export const getPropertyValue = (obj: Object, key: string, defaultValue: Object 
 	return object;
 };
 
-export const setPropertyValue = (obj: Object, key: string, defaultValue: Object = null): Object => {
+export const setPropertyValue = (obj: Object, key: string, defaultValue: any): any => {
 	if (key.indexOf('.') === -1) {
 		return obj[key] ? obj[key] : defaultValue;
 	}
