@@ -1,8 +1,9 @@
-/*  */
+/* @flow */
+import type {ApiChecker} from './typefile';
 
-export const not = (fn) => !(fn.apply(null, Array.prototype.slice.call(arguments)));
+export const not = (fn: Function): Function => !(fn.apply(null, Array.prototype.slice.call(arguments)));
 
-export const all = (fn) => {
+export const all = (fn: Function): Function => {
 	return () => {
 		const params = Array.prototype.slice.call(arguments);
 		const len = params.length;
@@ -15,7 +16,7 @@ export const all = (fn) => {
 	};
 };
 
-export const any = (fn) => {
+export const any = (fn: Function): Function => {
 	return () => {
 		const params = Array.prototype.slice.call(arguments);
 		const len = params.length;
@@ -29,8 +30,8 @@ export const any = (fn) => {
 };
 
 const {assign, keys} = Object;
-export const setApi = (checks) => {
-	let checker = assign({not: {}, all: {}, any: {}}, checks);
+export const setApi = (checks: {[key: string]: (val: any) => boolean}): ApiChecker => {
+	let checker: ApiChecker = assign({not: {}, all: {}, any: {}}, checks);
 	keys(checker).forEach(key => {
 		if (typeof checker[key] === 'function') {
 			let interfaces = checker[key].api || ['not', 'all', 'any'];

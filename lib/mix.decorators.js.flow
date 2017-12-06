@@ -1,4 +1,4 @@
-/*  */
+/* @flow */
 import {symbols} from './symbols';
 import {
 	wrap,
@@ -20,8 +20,8 @@ const {hasOwnProperty} = Object;
  *
  * @return {Function}
  */
-export const cached = (mixin) => {
-	return wrap(mixin, (superClass) => {
+export const cached = (mixin: Function) => {
+	return wrap(mixin, (superClass: Function): Function => {
 		// Create a symbol used to reference a cached application from a superclass
 		let applicationRef = mixin[cachedApplicationRef];
 		if (!applicationRef) {
@@ -52,8 +52,8 @@ export const cached = (mixin) => {
  * @param {Function} mixin The mixin to wrap with deduplication behavior
  * @return {Function} a new mixin function
  */
-export const dedupe = (mixin) => {
-	return wrap(mixin, (superClass) =>
+export const dedupe = (mixin: Function) => {
+	return wrap(mixin, (superClass: Function): Function =>
 		(hasMixin(superClass.prototype, mixin)) ? superClass : mixin(superClass));
 };
 
@@ -66,8 +66,8 @@ export const dedupe = (mixin) => {
  * @param {Function} mixin The mixin to wrap
  * @return {Function} a new mixin function
  */
-export const apply = (mixin) => {
-	return wrap(mixin, (superClass) => {
+export const apply = (mixin: Function): Function => {
+	return wrap(mixin, (superClass: Function): Function => {
 		let application = mixin(superClass);
 		application.prototype[appliedMixinRef] = unwrap(mixin);
 		return application;

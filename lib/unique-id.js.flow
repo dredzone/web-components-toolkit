@@ -1,13 +1,13 @@
-/*  */
+/* @flow */
 
 /**
  * A helper function for generating unique ids based on Data.now
  */
-let prevTimeId = 0;
-let prevUniqueId = 0;
+let prevTimeId: number = 0;
+let prevUniqueId: number = 0;
 
-export const uniqueId = () => {
-	let newUniqueId = Date.now();
+export const uniqueId = (): number => {
+	let newUniqueId: number = Date.now();
 	if (newUniqueId === prevTimeId) {
 		++prevUniqueId;
 	} else {

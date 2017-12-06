@@ -1,5 +1,5 @@
-/*  */
-export const before = (instance, method, advice) => {
+/* @flow */
+export const before = (instance: Object, method: Function, advice: Function): void => {
 	let orig = instance[method];
 	instance[method] = function () {
 		advice.apply(this, arguments);
@@ -7,7 +7,7 @@ export const before = (instance, method, advice) => {
 	}.bind(instance);
 };
 
-export const after = (instance, method, advice) => {
+export const after = (instance: Object, method: Function, advice: Function): void => {
 	let orig = instance[method];
 	instance[method] = function () {
 		let value;
@@ -28,7 +28,7 @@ export const after = (instance, method, advice) => {
 	}.bind(instance);
 };
 
-export const around = (instance, method, advice) => {
+export const around = (instance: Object, method: Function, advice: Function): void => {
 	let orig = instance[method];
 	instance[method] = function () {
 		let args = Array.prototype.slice.call(arguments, 0);
@@ -37,7 +37,7 @@ export const around = (instance, method, advice) => {
 	}.bind(instance);
 };
 
-export const afterReturn = (instance, method, advice) => {
+export const afterReturn = (instance: Object, method: Function, advice: Function): void => {
 	let orig = instance[method];
 	instance[method] = function () {
 		let value = orig.apply(this, arguments);
@@ -50,7 +50,7 @@ export const afterReturn = (instance, method, advice) => {
 	}.bind(instance);
 };
 
-export const afterThrow = (instance, method, advice) => {
+export const afterThrow = (instance: Object, method: Function, advice: Function): void => {
 	let orig = instance[method];
 	instance[method] = function () {
 		try {

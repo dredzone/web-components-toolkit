@@ -1,4 +1,4 @@
-/*  */
+/* @flow */
 import {global} from './constants';
 
 export const Map = global.Map || function () {
@@ -6,10 +6,10 @@ export const Map = global.Map || function () {
 	const values = [];
 
 	return {
-		get(obj) {
+		get(obj: Object) {
 			return values[keys.indexOf(obj)];
 		},
-		set(obj, value) {
+		set(obj: Object, value: any) {
 			values[keys.push(obj) - 1] = value;
 		}
 	};
