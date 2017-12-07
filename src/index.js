@@ -1,3 +1,4 @@
+/* @flow */
 export * from './poorlyfills';
 export * from './advice';
 export * from './mix';
