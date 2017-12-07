@@ -1,6 +1,6 @@
 {
   "name": "utility-toolkit",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "essential set of tools to develop web-components or SPA applications",
   "scripts": {
     "preversion": "npm run test",
