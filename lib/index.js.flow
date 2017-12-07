@@ -1,5 +1,4 @@
 /* @flow */
-export * from './constants';
 export * from './poorlyfills';
 export * from './advice';
 export * from './mix';

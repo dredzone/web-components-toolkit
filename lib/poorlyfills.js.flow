@@ -1,8 +1,9 @@
 /* @flow */
-import {global} from './constants';
 import {symbols} from './symbols';
 
-export const Map = global.Map || function (): Object {
+const window = document.defaultView;
+
+export const Map = window.Map || function (): Object {
 	let i;
 	let k = [];
 	let v = [];
@@ -38,7 +39,7 @@ export const Map = global.Map || function (): Object {
 	};
 };
 
-export const Set = global.Set || function (): Object {
+export const Set = window.Set || function (): Object {
 	const m = new Map();
 	const set = m.set;
 	delete m.get;
@@ -47,7 +48,7 @@ export const Set = global.Set || function (): Object {
 	return m;
 };
 
-export const WeakMap = global.WeakMap || function (): Object {
+export const WeakMap = window.WeakMap || function (): Object {
 	const objectWeakMapId = symbols.get('_WeakMap');
 	return {
 		delete(obj: any) {
@@ -68,7 +69,7 @@ export const WeakMap = global.WeakMap || function (): Object {
 	};
 };
 
-export const WeakSet = global.WeakSet || function (): Object {
+export const WeakSet = window.WeakSet || function (): Object {
 	const wm = new WeakMap();
 	return {
 		has: obj => wm.get(obj) === true,
