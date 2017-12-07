@@ -1,12 +1,13 @@
 /* @flow */
-import {global} from './constants';
 import {getPropertyValue, setPropertyValue} from './objects.helper';
+
+const window = document.defaultView;
 
 export const globalScope = Object.freeze({
 	get(key: string): any {
-		return getPropertyValue(global, key);
+		return getPropertyValue(window, key);
 	},
 	set(key: string, value: any): void {
-		setPropertyValue(global, key, value);
+		setPropertyValue(window, key, value);
 	}
 });

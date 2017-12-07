@@ -1,7 +1,5 @@
 /* @flow */
-import {global} from './constants';
-
-const document: Document = global.document;
+const document: Document = document.defaultView.document;
 
 export const templateContent = (template: HTMLTemplateElement): DocumentFragment => {
 	if ('content' in document.createElement('template')) {
