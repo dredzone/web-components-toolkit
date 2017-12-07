@@ -56,12 +56,13 @@
     ]
   },
   "jspm": {
+    "main": "index",
     "registry": "jspm",
     "jspmPackage": true,
     "format": "esm",
     "configFile": "jspm.config.js",
     "directories": {
-      "dist": "lib"
+      "lib": "lib"
     }
   }
 }

@@ -1,11 +1,10 @@
 /* @flow */
 import {typeChecks} from './type.checks';
+import {global} from './constants';
 
-export const templateContent = (template: any): DocumentFragment => {
-	if (typeChecks.string(template)) {
-		template = document.querySelector(template);
-	}
+const document: Document = global.document;
 
+export const templateContent = (template: HTMLTemplateElement): DocumentFragment => {
 	if (typeChecks.domNode(template)) {
 		if ('content' in document.createElement('template')) {
 			return document.importNode(template.content, true);
@@ -19,5 +18,5 @@ export const templateContent = (template: any): DocumentFragment => {
 		return fragment;
 	}
 
-	throw new Error('template must be a valid querySelector or domNode');
+	throw new Error('template must be an Element type');
 };

@@ -1,23 +1,17 @@
 /* @flow */
-import {typeChecks} from './type.checks';
+import {global} from './constants';
 
-export const templateContent = (template: any): DocumentFragment => {
-	if (typeChecks.string(template)) {
-		template = document.querySelector(template);
+const document: Document = global.document;
+
+export const templateContent = (template: HTMLTemplateElement): DocumentFragment => {
+	if ('content' in document.createElement('template')) {
+		return document.importNode(template.content, true);
 	}
 
-	if (typeChecks.domNode(template)) {
-		if ('content' in document.createElement('template')) {
-			return document.importNode(template.content, true);
-		}
-
-		let fragment = document.createDocumentFragment();
-		let children = template.childNodes;
-		for (let i = 0; i < children.length; i++) {
-			fragment.appendChild(children[i].cloneNode(true));
-		}
-		return fragment;
+	let fragment = document.createDocumentFragment();
+	let children = template.childNodes;
+	for (let i = 0; i < children.length; i++) {
+		fragment.appendChild(children[i].cloneNode(true));
 	}
-
-	throw new Error('template must be a valid querySelector or domNode');
+	return fragment;
 };
