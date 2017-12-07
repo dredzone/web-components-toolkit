@@ -1,2 +1,3 @@
 /* @flow */
-export const global: Window = document.defaultView;
+
+export const global: any = document.defaultView;
