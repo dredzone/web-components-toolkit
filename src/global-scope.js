@@ -9,5 +9,6 @@ export const globalScope = Object.freeze({
 	},
 	set(key: string, value: any): void {
 		setPropertyValue(window, key, value);
-	}
+	},
+	scope: window
 });
