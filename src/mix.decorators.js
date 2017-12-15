@@ -1,5 +1,5 @@
 /* @flow */
-import {symbols} from './symbols';
+import {symbols} from './symbols.utility';
 import {
 	wrap,
 	unwrap,
