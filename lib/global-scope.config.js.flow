@@ -1,5 +1,5 @@
 /* @flow */
-import {getPropertyValue, setPropertyValue} from './object.helpers';
+import {getPropertyValue, setPropertyValue} from './object-nested-keys.utility';
 import {window} from './constants';
 import type {ConfigObject} from './typefile';
 

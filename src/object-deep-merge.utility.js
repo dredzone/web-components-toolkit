@@ -1,7 +1,7 @@
 /* @flow */
 import {isType} from './is-type.utility';
 
-export const deepMerge = (target: any, source: any, optionsArgument: Object): Object | Array<any> => {
+export const objectDeepMerge = (target: any, source: any, optionsArgument: Object): Object | Array<any> => {
 	const sourceIsArray: boolean = isType.array(source);
 	const targetIsArray: boolean = isType.array(target);
 	const options: Object = optionsArgument || {
@@ -18,13 +18,13 @@ export const deepMerge = (target: any, source: any, optionsArgument: Object): Ob
 	return mergeObject(target, source, optionsArgument);
 };
 
-deepMerge.all = (array: Array<any>, optionsArgument: Object): Object | Array<any> => {
+objectDeepMerge.all = (array: Array<any>, optionsArgument: Object): Object | Array<any> => {
 	if (isType.not.array(array)) {
 		throw new Error('first argument should be an array');
 	}
 
 	return array.reduce((prev, next) => {
-		return deepMerge(prev, next, optionsArgument);
+		return objectDeepMerge(prev, next, optionsArgument);
 	}, {});
 };
 
@@ -46,7 +46,7 @@ function emptyTarget(val: any): Object | Array<[]> {
 
 function cloneUnlessOtherwiseSpecified(value: any, optionsArgument: Object): any {
 	const clone = !optionsArgument || optionsArgument.clone !== false;
-	return (clone && isMergeableObject(value)) ? deepMerge(emptyTarget(value), value, optionsArgument) : value;
+	return (clone && isMergeableObject(value)) ? objectDeepMerge(emptyTarget(value), value, optionsArgument) : value;
 }
 
 function defaultArrayMerge(target: Array<any>, source: Array<any>, optionsArgument: Object): Array<any> {
@@ -66,7 +66,7 @@ function mergeObject(target: any, source: any, optionsArgument: Object): Object 
 		if (!isMergeableObject(source[key]) || !target[key]) {
 			destination[key] = cloneUnlessOtherwiseSpecified(source[key], optionsArgument);
 		} else {
-			destination[key] = deepMerge(target[key], source[key], optionsArgument);
+			destination[key] = objectDeepMerge(target[key], source[key], optionsArgument);
 		}
 	});
 
