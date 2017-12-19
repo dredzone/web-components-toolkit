@@ -4,14 +4,9 @@
   "description": "essential set of tools to develop web-components or SPA applications",
   "main": "lib/index.js",
   "scripts": {
-    "preversion": "npm run test",
     "version": "",
     "postversion": "git push && git push --tags",
-    "build": "npm run flow:check && npm run task:build && npm run flow:copy-source",
-    "flow:copy-source": "flow-copy-source src lib",
-    "flow:check": "flow check",
-    "task": "taskr",
-    "task:build": "npm run task clean build",
+    "build": "taskr",
     "test": "mocha --require babel-register ./test/**/*.spec.js"
   },
   "keywords": [
