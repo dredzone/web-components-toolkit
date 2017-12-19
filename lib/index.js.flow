@@ -12,3 +12,4 @@ export * from './object-deep-freeze.utility';
 export * from './object-deep-merge.utility';
 export * from './object-assign.helper';
 export * from './function-name.helper';
+export * from './constants';
