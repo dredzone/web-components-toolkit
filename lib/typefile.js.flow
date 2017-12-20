@@ -14,3 +14,12 @@ export type ConfigObject = {
 	get(key: string): any;
 	set(key: string, value: any): void;
 };
+
+export type PropertyDescriptor = {
+	configurable?: boolean;
+	enumerable?: boolean;
+	value?: any;
+	writable?: boolean;
+	get(): any;
+	set(v: any): void;
+};

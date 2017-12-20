@@ -1,24 +1,25 @@
 /* @flow */
-import {isType} from './is-type.utility';
+import type {PropertyDescriptor} from './typefile';
 
-export const objectAssign = Object.assign || function (target: Object, ...sources: Array<Object>): Object {
-	if (isType.undefined(target) || isType.null(target)) {
-		throw new TypeError('Cannot convert first argument to object');
-	}
-
+export const objectAssign: Function = Object.assign || function (target: Object, ...sources: Array<any>): Object {
 	let to = Object(target);
 	for (let i = 0; i < sources.length; i++) {
-		let nextSource = sources[i];
-		if (isType.undefined(nextSource) || isType.null(nextSource)) {
+		if (isNotNextSource(sources[i])) {
 			continue;
 		}
-		let keys = Object.keys(Object(nextSource));
-		keys.forEach((key: string) => {
-			let desc = Object.getOwnPropertyDescriptor(nextSource, key);
-			if (!isType.undefined(desc) && desc.enumerable) {
-				to[key] = nextSource[key];
+		let nextSource = sources[i];
+		for (let key: string in nextSource) {
+			if (Object.prototype.hasOwnProperty.call(nextSource, key)) {
+				let desc: PropertyDescriptor = Object.getOwnPropertyDescriptor(nextSource, key);
+				if (desc && desc.enumerable) {
+					to[key] = nextSource[key];
+				}
 			}
-		});
+		}
 	}
 	return to;
 };
+
+function isNotNextSource(source: any) {
+	return Boolean(typeof source === 'undefined' || source === null);
+}
