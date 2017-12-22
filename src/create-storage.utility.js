@@ -1,11 +1,8 @@
 /* @flow */
 import {WeakMap} from './weakmap.helper';
 
-export const createStorage = (creator: Function): Function => {
+export const createStorage = (creator: Function = Object.create.bind(null, null, {})): Function => {
 	let store = new WeakMap();
-	if (!creator) {
-		creator = Object.create.bind(null, null, {});
-	}
 	return (obj: any): any => {
 		let value = store.get(obj);
 		if (!value) {
