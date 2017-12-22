@@ -2,8 +2,6 @@
 import {apply, dedupe, cached} from './mix.decorators';
 import type {MixBuilder} from './typefile';
 
-const {freeze} = Object;
-
 /**
  * Allows you to extend a class with one or more mixin classes.
  *
@@ -14,7 +12,7 @@ const {freeze} = Object;
  *
  */
 export const mix = (baseClass: Class<any> = class {}): MixBuilder => {
-	return freeze({
+	return Object.freeze({
 		/**
 		 * Applies `mixins` in order to the baseClass given to `mix()`.
 		 *

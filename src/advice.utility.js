@@ -1,14 +1,14 @@
 /* @flow */
-export const before = (instance: Object, method: Function, advice: Function): void => {
-	let orig = instance[method];
+export const before = (instance: Object, method: string, advice: Function): void => {
+	let orig: Function = instance[method];
 	instance[method] = function () {
 		advice.apply(this, arguments);
 		return orig.apply(this, arguments);
 	}.bind(instance);
 };
 
-export const after = (instance: Object, method: Function, advice: Function): void => {
-	let orig = instance[method];
+export const after = (instance: Object, method: string, advice: Function): void => {
+	let orig: Function = instance[method];
 	instance[method] = function () {
 		let value;
 		let args = Array.prototype.slice.call(arguments, 0);
@@ -28,8 +28,8 @@ export const after = (instance: Object, method: Function, advice: Function): voi
 	}.bind(instance);
 };
 
-export const around = (instance: Object, method: Function, advice: Function): void => {
-	let orig = instance[method];
+export const around = (instance: Object, method: string, advice: Function): void => {
+	let orig: Function = instance[method];
 	instance[method] = function () {
 		let args = Array.prototype.slice.call(arguments, 0);
 		args.unshift(orig);
@@ -37,8 +37,8 @@ export const around = (instance: Object, method: Function, advice: Function): vo
 	}.bind(instance);
 };
 
-export const afterReturn = (instance: Object, method: Function, advice: Function): void => {
-	let orig = instance[method];
+export const afterReturn = (instance: Object, method: string, advice: Function): void => {
+	let orig: Function = instance[method];
 	instance[method] = function () {
 		let value = orig.apply(this, arguments);
 		let args = Array.prototype.slice.call(arguments, 0);
@@ -50,8 +50,8 @@ export const afterReturn = (instance: Object, method: Function, advice: Function
 	}.bind(instance);
 };
 
-export const afterThrow = (instance: Object, method: Function, advice: Function): void => {
-	let orig = instance[method];
+export const afterThrow = (instance: Object, method: string, advice: Function): void => {
+	let orig: Function = instance[method];
 	instance[method] = function () {
 		try {
 			return orig.apply(this, arguments);
