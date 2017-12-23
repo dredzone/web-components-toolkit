@@ -1,9 +1,9 @@
 /* @flow */
 import {setApi} from './is.helpers';
-import type {Is, ApiIs} from './typefile';
+import type {IsType, ApiIsType} from './typefile';
 
-export const isType = (function (): ApiIs {
-	const is: Is = {};
+export const isType = (function (): ApiIsType {
+	const is: IsType = {};
 
 	const toString = Object.prototype.toString;
 	const types = 'Array Object String Date RegExp Function Boolean Number Null Undefined Arguments Error'.split(' ');

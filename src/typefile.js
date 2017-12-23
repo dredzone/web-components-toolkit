@@ -1,21 +1,21 @@
-export type Is = {[key: string]: (val: any) => boolean};
+export type IsType = {[key: string]: (val: any) => boolean};
 
-export type ApiIs = Is & {
+export type ApiIsType = IsType & {
 	not: {[key: string]: (val: Function) => Function};
 	all: {[key: string]: (val: Function) => Function};
 	any: {[key: string]: (val: Function) => Function};
 };
 
-export type MixBuilder = {
+export type MixBuilderType = {
 	with(...mixins: Array<Function>): Class<any>;
 };
 
-export type ConfigObject = {
+export type ConfigObjectType = {
 	get(key: string): any;
 	set(key: string, value: any): void;
 };
 
-export type PropertyDescriptor = {
+export type PropertyDescriptorType = {
 	configurable?: boolean;
 	enumerable?: boolean;
 	value?: any;

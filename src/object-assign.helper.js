@@ -1,5 +1,5 @@
 /* @flow */
-import type {PropertyDescriptor} from './typefile';
+import type {PropertyDescriptorType} from './typefile';
 
 export const objectAssign: Function = Object.assign || function (target: Object, ...sources: Array<any>): Object {
 	let to = Object(target);
@@ -10,7 +10,7 @@ export const objectAssign: Function = Object.assign || function (target: Object,
 		let nextSource = sources[i];
 		for (let key: string in nextSource) {
 			if (Object.prototype.hasOwnProperty.call(nextSource, key)) {
-				let desc: PropertyDescriptor = Object.getOwnPropertyDescriptor(nextSource, key);
+				let desc: PropertyDescriptorType = Object.getOwnPropertyDescriptor(nextSource, key);
 				if (desc && desc.enumerable) {
 					to[key] = nextSource[key];
 				}

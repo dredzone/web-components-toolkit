@@ -1,10 +1,10 @@
 /* @flow */
 import {setApi} from './is.helpers';
 import {isType} from './is-type.utility';
-import type {Is, ApiIs} from './typefile';
+import type {IsType, ApiIsType} from './typefile';
 
-export const isNumber = (function (): ApiIs {
-	const is: Is = {};
+export const isNumber = (function (): ApiIsType {
+	const is: IsType = {};
 
 	is.nan = isNaN || (n => Number(n) !== n);
 

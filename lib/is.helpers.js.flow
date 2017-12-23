@@ -1,5 +1,5 @@
 /* @flow */
-import type {ApiIs, Is} from './typefile';
+import type {ApiIsType, IsType} from './typefile';
 import {objectAssign} from './object-assign.helper';
 
 export const not = (fn: Function): Function => !(fn.apply(null, Array.prototype.slice.call(arguments)));
@@ -30,8 +30,8 @@ export const any = (fn: Function): Function => {
 	};
 };
 
-export const setApi = (is: Is): ApiIs => {
-	let api: ApiIs = objectAssign({not: {}, all: {}, any: {}}, is);
+export const setApi = (is: IsType): ApiIsType => {
+	let api: ApiIsType = objectAssign({not: {}, all: {}, any: {}}, is);
 	Object.keys(api).forEach(key => {
 		if (typeof api[key] === 'function') {
 			let interfaces = api[key].api || ['not', 'all', 'any'];

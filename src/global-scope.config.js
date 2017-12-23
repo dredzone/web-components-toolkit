@@ -1,9 +1,9 @@
 /* @flow */
 import {getPropertyValue, setPropertyValue} from './object-nested-keys.utility';
 import {window} from './constants';
-import type {ConfigObject} from './typefile';
+import type {ConfigObjectType} from './typefile';
 
-export const globalScope: ConfigObject = Object.freeze({
+export const globalScope: ConfigObjectType = Object.freeze({
 	get(key: string): any {
 		return getPropertyValue(window, key);
 	},
