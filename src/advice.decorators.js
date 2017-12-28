@@ -40,7 +40,10 @@ export const advice: AdviceType = Object.freeze({
 			for (let methodName: string of methodNames) {
 				const method: Function = clazz.prototype[methodName];
 				defineProperty(clazz.prototype, methodName, {
-					value: behaviour(method),
+					value: function (...args) {
+						let bound: Function = behaviour.bind(this);
+						bound(method, ...args);
+					},
 					writable: true
 				});
 			}
