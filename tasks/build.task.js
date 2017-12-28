@@ -3,8 +3,7 @@ const paths = require('./paths');
 
 module.exports = function *(task) {
 	yield task.source(path.join(paths.source, '**/*.js'), {
-		ignore:
-			path.join(paths.source, '**/*typefile.js'),
+		// ignore: path.join(paths.source, '**/*typefile.js'),
 		})
 		.xo({
 			envs: ["browser", "es6"],
