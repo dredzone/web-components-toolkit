@@ -6,7 +6,8 @@ const {defineProperty} = Object;
 export const advice: AdviceType = Object.freeze({
 	before: (behaviour: Function, ...methodNames: string[]): Function =>
 		(clazz: Class<any>) => {
-			for (let methodName: string of methodNames) {
+			for (let i = 0; i < methodNames.length; i++) {
+				const methodName: string = methodNames[i];
 				const method: Function = clazz.prototype[methodName];
 				defineProperty(clazz.prototype, methodName, {
 					value: function (...args) {
@@ -21,7 +22,8 @@ export const advice: AdviceType = Object.freeze({
 
 	after: (behaviour: Function, ...methodNames: string[]): Function =>
 		(clazz: Class<any>) => {
-			for (let methodName: string of methodNames) {
+			for (let i = 0; i < methodNames.length; i++) {
+				const methodName: string = methodNames[i];
 				const method: Function = clazz.prototype[methodName];
 				defineProperty(clazz.prototype, methodName, {
 					value: function (...args) {
@@ -37,7 +39,8 @@ export const advice: AdviceType = Object.freeze({
 
 	around: (behaviour: Function, ...methodNames: string[]): Function =>
 		(clazz: Class<any>) => {
-			for (let methodName: string of methodNames) {
+			for (let i = 0; i < methodNames.length; i++) {
+				const methodName: string = methodNames[i];
 				const method: Function = clazz.prototype[methodName];
 				defineProperty(clazz.prototype, methodName, {
 					value: function (...args) {
@@ -52,7 +55,8 @@ export const advice: AdviceType = Object.freeze({
 
 	afterThrow: (behaviour: Function, ...methodNames: string[]): Function =>
 		(clazz: Class<any>) => {
-			for (let methodName: string of methodNames) {
+			for (let i = 0; i < methodNames.length; i++) {
+				const methodName: string = methodNames[i];
 				const method: Function = clazz.prototype[methodName];
 				defineProperty(clazz.prototype, methodName, {
 					value: function (...args) {
