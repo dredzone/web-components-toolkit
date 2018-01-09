@@ -1,5 +1,5 @@
 /* @flow */
-import {WeakMap} from './weakmap.helper';
+import {WeakMap} from './weakmap.ponyfill';
 
 export const createStorage = (creator: Function = Object.create.bind(null, null, {})): Function => {
 	let store = new WeakMap();

@@ -1,6 +1,6 @@
 /* @flow */
 import type {ApiIsType, IsType} from './types';
-import {objectAssign} from './object-assign.helper';
+import {objectAssign} from './object-assign.ponyfill';
 
 export const not = (fn: Function): Function => !(fn.apply(null, Array.prototype.slice.call(arguments)));
 

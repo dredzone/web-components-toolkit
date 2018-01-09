@@ -1,5 +1,6 @@
 /* @flow */
 import {uniqueId} from './unique-id.utility';
+import type {UniqueStringGeneratorType} from './types';
 
 /**
  * A helper function for simulating instances of the `Symbol`
@@ -8,7 +9,7 @@ import {uniqueId} from './unique-id.utility';
 let domain: string = 'abcdefghijklmnopqrstuvwxyz';
 let idLength: number = 8;
 
-export const symbols = Object.freeze({
+export const uniqueString: UniqueStringGeneratorType = Object.freeze({
 	setDomain(newDomain: string) {
 		domain = newDomain;
 	},

@@ -1,5 +1,5 @@
 /* @flow */
-import {Map} from './map.helper';
+import {Map} from './map.ponyfill';
 import {window} from './constants';
 
 export const Set = window.Set || function (): Object {

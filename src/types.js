@@ -34,3 +34,9 @@ export type AdviceType = {
 
 	afterThrow(behaviour: Function, ...methodNames: string[]): Function
 };
+
+export type UniqueStringGeneratorType = {
+	setDomain(newDomain: string): void,
+	setLength(newLength: number): void,
+	get(description: string): string
+}

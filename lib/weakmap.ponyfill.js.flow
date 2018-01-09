@@ -1,9 +1,9 @@
 /* @flow */
-import {symbols} from './symbols.utility';
+import {uniqueString} from './unique-string.utility';
 import {window} from './constants';
 
 export const WeakMap = window.WeakMap || function (): Object {
-	const objectWeakMapId = symbols.get('_WeakMap');
+	const objectWeakMapId = uniqueString.get('_WeakMap');
 	return {
 		delete(obj: any) {
 			delete obj[objectWeakMapId];
