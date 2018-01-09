@@ -1,5 +1,5 @@
 /* @flow */
-import {type AdviceType} from './types';
+import type {AdviceType} from './types';
 
 const {defineProperty, freeze} = Object;
 

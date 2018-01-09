@@ -1,6 +1,6 @@
 /* @flow */
 import {setApi} from './is.helpers';
-import {type IsType, type ApiIsType} from './types';
+import type {IsType, ApiIsType} from './types';
 
 export const isType = (function (): ApiIsType {
 	const is: IsType = {};

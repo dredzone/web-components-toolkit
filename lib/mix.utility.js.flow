@@ -1,6 +1,6 @@
 /* @flow */
 import {apply, dedupe, cached} from './mix.decorators';
-import {type MixBuilderType} from './types';
+import type {MixBuilderType} from './types';
 
 /**
  * Allows you to extend a class with one or more mixin classes.
