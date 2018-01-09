@@ -1,9 +1,9 @@
 /* @flow */
-import type {AdviceType} from './advice.typefile';
+import {type AdviceType} from './types';
 
-const {defineProperty} = Object;
+const {defineProperty, freeze} = Object;
 
-export const advice: AdviceType = Object.freeze({
+export const advice: AdviceType = freeze({
 	before: (behaviour: Function, ...methodNames: string[]): Function =>
 		(clazz: Class<any>) => {
 			for (let i = 0; i < methodNames.length; i++) {

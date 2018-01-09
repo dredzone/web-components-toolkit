@@ -1,4 +1,8 @@
 /* @flow */
+export default {
+
+};
+
 export type IsType = {[key: string]: (val: any) => boolean};
 
 export type ApiIsType = IsType & {
@@ -23,4 +27,14 @@ export type PropertyDescriptorType = {
 	writable?: boolean;
 	get(): any;
 	set(v: any): void;
+};
+
+export type AdviceType = {
+	before(behaviour: Function, ...methodNames: string[]): Function,
+
+	after(behaviour: Function, ...methodNames: string[]): Function,
+
+	around(behaviour: Function, ...methodNames: string[]): Function,
+
+	afterThrow(behaviour: Function, ...methodNames: string[]): Function
 };

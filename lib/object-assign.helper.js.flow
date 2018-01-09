@@ -1,5 +1,5 @@
 /* @flow */
-import type {PropertyDescriptorType} from './typefile';
+import {type PropertyDescriptorType} from './types';
 
 export const objectAssign: Function = Object.assign || function (target: Object, ...sources: Array<any>): Object {
 	let to = Object(target);
