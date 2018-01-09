@@ -1,8 +1,4 @@
 /* @flow */
-export default {
-
-};
-
 export type IsType = {[key: string]: (val: any) => boolean};
 
 export type ApiIsType = IsType & {

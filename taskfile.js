@@ -20,5 +20,5 @@ glob.sync(path.join(process.cwd(), 'tasks', '*.task.js'))
 	});
 
 module.exports.default = function *(task) {
-	task.serial(['clean', 'flow:check', 'build', 'flow:copy']);
+	task.serial(['clean', 'flow:check', 'copy', 'build', 'flow:copy']);
 };
