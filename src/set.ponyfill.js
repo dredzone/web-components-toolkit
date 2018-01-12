@@ -1,8 +1,7 @@
 /* @flow */
 import {Map} from './map.ponyfill';
-import {window} from './constants';
 
-export const Set = window.Set || function (): Object {
+export const Set = function (): Object {
 	const m = new Map();
 	const set = m.set;
 	delete m.get;

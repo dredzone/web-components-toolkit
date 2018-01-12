@@ -1,8 +1,7 @@
 /* @flow */
 import {uniqueString} from './unique-string.utility';
-import {window} from './constants';
 
-export const WeakMap = window.WeakMap || function (): Object {
+export const WeakMap = function (): Object {
 	const objectWeakMapId = uniqueString.get('_WeakMap');
 	return {
 		delete(obj: any) {

@@ -5,5 +5,5 @@ export * from './set.ponyfill';
 export * from './map.ponyfill';
 export * from './weakmap.ponyfill';
 export * from './weakset.ponyfill';
-export * from './template-content.ponyfill';
+export * from './dom.ponyfill';
 
