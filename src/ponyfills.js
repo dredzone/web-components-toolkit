@@ -6,4 +6,4 @@ export * from './map.ponyfill';
 export * from './weakmap.ponyfill';
 export * from './weakset.ponyfill';
 export * from './dom.ponyfill';
-
+export * from './custom-event.ponyfill';
