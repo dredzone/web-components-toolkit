@@ -1,7 +1,7 @@
 /* @flow */
 import type {PropertyDescriptorType} from './types';
 
-export const objectAssign: Function = function (target: Object, ...sources: Array<any>): Object {
+export const objectAssign: Function = Object.assign || function (target: Object, ...sources: Array<any>): Object {
 	let to = Object(target);
 	for (let i = 0; i < sources.length; i++) {
 		if (isNotNextSource(sources[i])) {

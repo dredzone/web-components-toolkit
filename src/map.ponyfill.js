@@ -1,5 +1,7 @@
 /* @flow */
-export const Map = function (): Object {
+import {window} from './constants';
+
+export const Map = window.Map || function (): Object {
 	let i;
 	let k = [];
 	let v = [];
