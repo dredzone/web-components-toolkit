@@ -9,6 +9,7 @@ export * from './global-scope.config';
 export * from './create-storage.utility';
 export * from './object-deep-freeze.utility';
 export * from './object-deep-merge.utility';
-export * from './ponyfills';
+export * from './dom.utility';
 export * from './constants';
+export * from './ponyfills';
 export * from './types';
