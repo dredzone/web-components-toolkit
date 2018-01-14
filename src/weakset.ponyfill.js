@@ -1,8 +1,8 @@
 /* @flow */
 import {WeakMap} from './weakmap.ponyfill';
-import {window} from './constants';
+import {global} from './global-scope.utility';
 
-export const WeakSet = window.WeakSet || function (): Object {
+export const WeakSet = global.WeakSet || function (): Object {
 	const wm = new WeakMap();
 	return {
 		has: obj => wm.get(obj) === true,

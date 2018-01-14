@@ -1,6 +1,7 @@
+/* @flow */
 export const throttle: Function = (callback: Function, delay: number): Function => {
 	let isThrottled: boolean = false;
-	let args: Array<any> = null;
+	let args: Array<any> | null = null;
 
 	function wrapper(...params) {
 		if (isThrottled) {

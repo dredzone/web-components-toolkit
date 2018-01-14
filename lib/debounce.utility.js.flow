@@ -1,3 +1,4 @@
+/* @flow */
 export const debounce: Function = (callback: Function, delay: number): Function => {
 	let timer: ?number;
 

@@ -1,5 +1,6 @@
 /* @flow */
 import {objectAssign} from './object-assign.utility';
+import {global} from './global-scope.utility';
 
 export const createCustomEvent: Function = (evtName: string, params: Object = {}): CustomEvent => {
 	let evt: CustomEvent;
@@ -10,8 +11,8 @@ export const createCustomEvent: Function = (evtName: string, params: Object = {}
 		detail: undefined
 	}, params);
 
-	if ('CustomEvent' in window) {
-		evt = new window.CustomEvent(evtName, params);
+	if ('CustomEvent' in global) {
+		evt = new global.CustomEvent(evtName, params);
 	} else {
 		evt = document.createEvent('CustomEvent');
 		evt.initCustomEvent(evtName, params.bubbles, params.cancelable, params.detail);

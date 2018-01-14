@@ -1,5 +1,4 @@
 /* @flow */
-
 export const templateContent = (template: HTMLTemplateElement): DocumentFragment => {
 	if ('content' in document.createElement('template')) {
 		return document.importNode(template.content, true);

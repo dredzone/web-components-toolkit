@@ -1,7 +1,7 @@
 /* @flow */
-import {window} from './constants';
+import {global} from './global-scope.utility';
 
-export const Map = window.Map || function (): Object {
+export const Map = global.Map || function (): Object {
 	let i;
 	let k = [];
 	let v = [];

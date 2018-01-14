@@ -1,5 +1,4 @@
 /* @flow */
-
 export const adviceAfter: Function = (behaviour: Function, ...methodNames: string[]): Function => {
 	return function (clazz: Class<any>) {
 		for (let i = 0; i < methodNames.length; i++) {

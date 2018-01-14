@@ -1,5 +1,4 @@
 /* @flow */
-
 type PropertyDescriptorType = {
 	configurable?: boolean;
 	enumerable?: boolean;
