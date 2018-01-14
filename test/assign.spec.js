@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import {objectAssign} from '../lib/object-assign.helper';
+import {objectAssign} from '../lib/object-assign.utility';
 
 describe('objectAssign', () => {
 	it('should return true', () => {

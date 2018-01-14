@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {isType} from '../lib/is-type.utility';
 import {isNumber} from '../lib/is-number.utility';
-import type {Is} from '../lib/typefile';
+import type {Is} from '../lib/is.helper';
 
 function checkApi(is: Is, name: string, list: string[]) {
 	list = list || ['all', 'any', 'not'];
