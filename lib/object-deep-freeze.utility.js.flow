@@ -7,7 +7,7 @@ const {freeze, getOwnPropertyNames, hasOwnProperty, isFrozen} = Object;
  * A helper function for deep freezing of objects
  *
  */
-export const objectDeepFreeze = (o: Object): Object => {
+export const objectDeepFreeze: Function = (o: Object): Object => {
 	freeze(o);
 	getOwnPropertyNames(o).forEach((prop: string) => {
 		if (hasOwnProperty.call(o, prop) && o[prop] !== null && (isType.object(o[prop]) || isType.function(o[prop])) && !isFrozen(o[prop])) {

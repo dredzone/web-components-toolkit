@@ -1,4 +1,4 @@
-export const debounce = (callback: Function, delay: number): Function => {
+export const debounce: Function = (callback: Function, delay: number): Function => {
 	let timer: ?number;
 
 	return function (...args: Array<any>) {

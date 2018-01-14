@@ -1,8 +1,7 @@
 /* @flow */
-import {setApi} from './is.helpers';
-import type {IsType, ApiIsType} from './types';
+import {setApi, type IsType, type ApiIsType} from './is.helper';
 
-export const isType = (function (): ApiIsType {
+export const isType: ApiIsType = (function (): ApiIsType {
 	const is: IsType = {};
 
 	const toString = Object.prototype.toString;

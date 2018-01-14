@@ -1,4 +1,4 @@
-export const throttle = (callback: Function, delay: number): Function => {
+export const throttle: Function = (callback: Function, delay: number): Function => {
 	let isThrottled: boolean = false;
 	let args: Array<any> = null;
 

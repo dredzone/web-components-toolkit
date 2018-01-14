@@ -1,6 +1,11 @@
 /* @flow */
 import {uniqueId} from './unique-id.utility';
-import type {UniqueStringGeneratorType} from './types';
+
+export type UniqueStringGeneratorType = {
+	setDomain(newDomain: string): void,
+	setLength(newLength: number): void,
+	get(description: string): string
+}
 
 /**
  * A helper function for simulating instances of the `Symbol`

@@ -1,7 +1,7 @@
 /* @flow */
 import {isType} from './is-type.utility';
 
-export const objectDeepMerge = (target: any, source: any, optionsArgument: Object): Object | Array<any> => {
+export const objectDeepMerge: Function = (target: any, source: any, optionsArgument: Object): Object | Array<any> => {
 	const sourceIsArray: boolean = isType.array(source);
 	const targetIsArray: boolean = isType.array(target);
 	const options: Object = optionsArgument || {

@@ -6,7 +6,7 @@
 let prevTimeId: number = 0;
 let prevUniqueId: number = 0;
 
-export const uniqueId = (): number => {
+export const uniqueId: Function = (): number => {
 	let newUniqueId: number = Date.now();
 	if (newUniqueId === prevTimeId) {
 		++prevUniqueId;

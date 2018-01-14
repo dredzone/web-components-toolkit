@@ -25,16 +25,6 @@ export type PropertyDescriptorType = {
 	set(v: any): void;
 };
 
-export type AdviceType = {
-	before(behaviour: Function, ...methodNames: string[]): Function,
-
-	after(behaviour: Function, ...methodNames: string[]): Function,
-
-	around(behaviour: Function, ...methodNames: string[]): Function,
-
-	afterThrow(behaviour: Function, ...methodNames: string[]): Function
-};
-
 export type UniqueStringGeneratorType = {
 	setDomain(newDomain: string): void,
 	setLength(newLength: number): void,
