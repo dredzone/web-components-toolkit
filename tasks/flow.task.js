@@ -4,7 +4,7 @@ const flow = require('flow-bin');
 const flowCopySource = require('flow-copy-source');
 const paths = require('./paths');
 
-const flowCopyIgnore = 'index.js';
+const flowCopyIgnore = '';
 
 module.exports.check = function* (task) {
 	yield new Promise((resolve, reject) => {
