@@ -1,4 +1,8 @@
 /* @flow */
+import {mixinCached} from './mixin-cached.decorator';
+import {mixinDedupe} from './mixin-dedupe.decorator';
+import {mixinApply} from './mixin-apply.decorator';
+
 export type MixBuilderType = {
 	with(...mixins: Array<Function>): Class<any>;
 };
@@ -21,7 +25,12 @@ export const MixBuilder: Function = (baseClass: Class<any> = class {}): MixBuild
 		 * @return {Class} a subclass of `baseClass` with `mixins` applied
 		 */
 		with(...mixins: Array<Function>): Class<any> {
-			return mixins.reduce((c, m) => {
+			const decoratedMixins: Array<Function> = mixins.map((mixin: Function) => mixinCached(
+				mixinDedupe(
+					mixinApply(mixin)
+				)
+			));
+			return decoratedMixins.reduce((c, m) => {
 				if (typeof m !== 'function') {
 					return c;
 				}
