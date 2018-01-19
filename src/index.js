@@ -20,6 +20,11 @@ export * from './custom-events.utility';
 export * from './template-content.utility';
 export * from './selector-matches.utility';
 export * from './global-scope.utility';
+export * from './before-element.utility';
+export * from './after-element.utility';
+export * from './append-element.utility';
+export * from './prepend-element.utility';
+export * from './remove-element.utility';
 
 // runtime type checking
 export * from './is-type.utility';
