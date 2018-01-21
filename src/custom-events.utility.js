@@ -11,7 +11,7 @@ export const createCustomEvent: Function = (evtName: string, params: Object = {}
 		detail: undefined
 	}, params);
 
-	if ('CustomEvent' in global) {
+	if (typeof global.CustomEvent === 'function') {
 		evt = new global.CustomEvent(evtName, params);
 	} else {
 		evt = document.createEvent('CustomEvent');
