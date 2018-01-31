@@ -4,13 +4,10 @@ import {uniqueString} from './unique-string.utility';
 const {hasOwnProperty, setPrototypeOf, getPrototypeOf} = Object;
 
 // used by wrap() and unwrap()
-export const wrappedMixinRef: string = uniqueString.get('_wrappedMixin');
+const wrappedMixinRef: string = uniqueString.get('_wrappedMixin');
 
 // used by apply() and isApplicationOf()
-export const appliedMixinRef: string = uniqueString.get('_appliedMixin');
-
-// used by cached
-export const cachedApplicationRef: string = uniqueString.get('_cachedApplicationRef');
+const appliedMixinRef: string = uniqueString.get('_appliedMixin');
 
 /**
  * Sets up the function `mixin` to be wrapped by the function `wrapper`, while
@@ -28,7 +25,7 @@ export const cachedApplicationRef: string = uniqueString.get('_cachedApplication
  * @param {Function} wrapper A function that wraps {@link mixin}
  * @return {Function} `wrapper`
  */
-export const wrap: Function = (mixin: Function, wrapper: Function): Function => {
+export const wrapMixin: Function = (mixin: Function, wrapper: Function): Function => {
 	setPrototypeOf(wrapper, mixin);
 	if (!mixin[wrappedMixinRef]) {
 		mixin[wrappedMixinRef] = mixin;
@@ -45,7 +42,7 @@ export const wrap: Function = (mixin: Function, wrapper: Function): Function => 
  * @param {Function} wrapper A wrapped mixin produced by {@link wrap}
  * @return {Function} The originally wrapped mixin
  */
-export const unwrap: Function = (wrapper: Function): Function => wrapper[wrappedMixinRef] || wrapper;
+export const unwrapMixin: Function = (wrapper: Function): Function => wrapper[wrappedMixinRef] || wrapper;
 
 /**
  * Returns `true` iff `proto` is a prototype created by the application of
@@ -61,7 +58,7 @@ export const unwrap: Function = (wrapper: Function): Function => wrapper[wrapped
  * `mixin` to a superclass
  */
 export const isApplicationOf: Function = (proto: Object, mixin: Function): boolean => {
-	return 	hasOwnProperty.call(proto, appliedMixinRef) && proto[appliedMixinRef] === unwrap(mixin);
+	return hasOwnProperty.call(proto, appliedMixinRef) && proto[appliedMixinRef] === unwrapMixin(mixin);
 };
 
 /**
@@ -82,4 +79,24 @@ export const hasMixin: Function = (o: Object, mixin: Function): boolean => {
 		o = getPrototypeOf(o);
 	}
 	return false;
+};
+
+/**
+ * Applies `mixin` to `superclass`.
+ *
+ * `apply` stores a reference from the mixin application to the unwrapped mixin
+ * to make `isApplicationOf` and `hasMixin` work.
+ *
+ * This function is usefull for mixin wrappers that want to automatically enable
+ * {@link hasMixin} support.
+ *
+ * @function
+ * @param {Function} superClass A class or constructor function
+ * @param {Function} mixin The mixin to apply
+ * @return {Function} A subclass of `superclass` produced by `mixin`
+ */
+export const applyMixin: Function = (superClass: Function, mixin: Function) => {
+	let application = mixin(superClass);
+	application.prototype[appliedMixinRef] = unwrapMixin(mixin);
+	return application;
 };

@@ -44,6 +44,13 @@ export * from './throttle.utility';
 export * from './function-name.utility';
 export * from './create-storage.utility';
 
+// mixin decorators / helper
+export * from './mixin.helper';
+export * from './declare-mixin.decorator';
+export * from './dedupe-mixin.decorator';
+export * from './cache-mixin.decorator';
+export * from './compose-mixin.decorator';
+
 // ponyfills that don't pollute global space
 export * from './map.ponyfill';
 export * from './weakmap.ponyfill';
