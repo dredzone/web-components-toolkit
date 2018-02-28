@@ -25,6 +25,7 @@ export * from './after-element.utility';
 export * from './append-element.utility';
 export * from './prepend-element.utility';
 export * from './remove-element.utility';
+export * from './element-children.utility';
 
 // runtime type checking
 export * from './is-type.utility';
