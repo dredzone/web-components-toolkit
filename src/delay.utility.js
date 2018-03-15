@@ -1,3 +1,4 @@
+/* @flow */
 import {global} from './global-scope.utility';
 
 export const delay: Function = (fn: Function): void => {
