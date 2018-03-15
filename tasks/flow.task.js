@@ -1,12 +1,7 @@
-const execFile = require('child_process').execFile;
-const path = require('path');
-const flow = require('flow-bin');
-const flowCopySource = require('flow-copy-source');
-const paths = require('./paths');
-
-const flowCopyIgnore = '';
-
 module.exports.check = function* (task) {
+	const execFile = require('child_process').execFile;
+	const flow = require('flow-bin');
+
 	yield new Promise((resolve, reject) => {
 		execFile(flow, ['check'], (err, stdout) => {
 			if (err) {
@@ -16,8 +11,4 @@ module.exports.check = function* (task) {
 			resolve();
 		});
 	});
-};
-
-module.exports.copy = function* (task, opts) {
-	yield flowCopySource([paths.source], paths.target, {ignore: flowCopyIgnore})
 };
