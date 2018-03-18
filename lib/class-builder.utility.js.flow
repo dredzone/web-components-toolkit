@@ -1,15 +1,11 @@
 /* @flow */
 import {composeMixin} from './compose-mixin.decorator';
 
-interface IBuilder {
-	with(...mixins: Array<Function>): Class<any>;
-}
-
-class ClassBuilder implements IBuilder {
+class ClassBuilder {
 	superClass: Class<any>;
 
-	constructor(elementClass: Class<any>) {
-		this.superClass = elementClass;
+	constructor(klass: Class<any>) {
+		this.superClass = klass;
 	}
 
 	with(...mixins: Array<Function>): Class<any> {
@@ -24,6 +20,6 @@ class ClassBuilder implements IBuilder {
 	}
 }
 
-export const classBuilder = (klass: Class<any>): IBuilder => {
+export const classBuilder = (klass: Class<any>): ClassBuilder => {
 	return new ClassBuilder(klass);
 };
