@@ -46,7 +46,8 @@ export * from './function-name.utility';
 export * from './create-storage.utility';
 export * from './delay.utility';
 
-// mixin decorators / helper
+// class subfactories pattern utilities
+export * from './class-builder.utility';
 export * from './mixin.helper';
 export * from './declare-mixin.decorator';
 export * from './dedupe-mixin.decorator';
