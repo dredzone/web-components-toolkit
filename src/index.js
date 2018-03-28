@@ -46,6 +46,7 @@ export * from './function-name.utility';
 export * from './create-storage.utility';
 export * from './delay.utility';
 export * from './document-ready.utility';
+export * from './microtask.utility';
 
 // class subfactories pattern utilities
 export * from './class-builder.utility';
