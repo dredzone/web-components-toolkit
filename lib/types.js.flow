@@ -1,0 +1,45 @@
+/* @flow */
+
+export type ClassBuilder = {
+	with(...mixins: Array<Function>): Class<any>;
+}
+
+export type MicroTask = {
+	run(callback: Function): number;
+	cancel(handle: number): void;
+}
+
+export type EventHandler = {
+	remove(): void;
+}
+
+export type PausableEventHandler = EventHandler & {
+	pause(): void,
+	resume(): void
+}
+
+export type PropertyConfig = {
+	type: mixed;
+	value?: any;
+	reflectToAttribute: boolean;
+	readOnly: boolean;
+	observer?: string | Function;
+	notify: boolean;
+	hasObserver: boolean;
+	isObserver: boolean;
+	isObserverString: boolean;
+	isString: boolean;
+	isNumber: boolean;
+	isBoolean: boolean;
+	isObject: boolean;
+	isArray: boolean;
+	isDate: boolean;
+}
+
+export type PropertiesConfig = {
+	[string]: PropertyConfig
+}
+export type SlotsData = {
+	[key: string]: Node;
+	default: Array<Node>;
+}

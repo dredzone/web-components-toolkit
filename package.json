@@ -1,7 +1,7 @@
 {
   "name": "utility-toolkit",
   "version": "0.18.0",
-  "description": "essential set of tools to develop web-components or SPA applications",
+  "description": "Essential set of tools to develop web-components and applications",
   "main": "lib/index.js",
   "scripts": {
     "version": "",
@@ -60,5 +60,8 @@
     "directories": {
       "lib": "lib"
     }
+  },
+  "dependencies": {
+    "lodash": "^4.17.10"
   }
 }

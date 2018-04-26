@@ -1,7 +1,7 @@
 const glob = require('glob');
 const path = require('path');
 
-glob.sync(path.join(process.cwd(), 'tasks', '*.task.js'))
+glob.sync(path.join(process.cwd(), 'tasks', '*.js'))
 	.forEach((file) => {
 		const taskName = path.basename(file, '.js').split('.')[0];
 		const task = require(file);
