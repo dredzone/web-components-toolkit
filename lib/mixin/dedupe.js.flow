@@ -1,5 +1,6 @@
 /* @flow */
-import {wrapMixin, hasMixin} from './mixin-helpers';
+import hasMixin from './has-mixin';
+import wrapMixin from './wrap-mixin';
 
 /**
  * Decorates `mixin` so that it only applies if it's not already on the
@@ -13,4 +14,3 @@ export default (mixin: Function) => {
 	return wrapMixin(mixin, (superClass: Function): Function =>
 		(hasMixin(superClass.prototype, mixin)) ? superClass : mixin(superClass));
 };
-

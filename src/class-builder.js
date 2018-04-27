@@ -1,19 +1,22 @@
 /* @flow */
-import mixinDecorator from './class-builder/mixin-decorator';
+import isFunction from 'lodash/isFunction';
+import decorator from './mixin';
 import type {ClassBuilder} from './types';
 
-export default (klass: Class<any>): ClassBuilder => {
+const {freeze} = Object;
+
+export default (klass: Class<any> = class {}): ClassBuilder => {
 	const superClass: Class<any> = klass;
-	return {
+	return freeze({
 		with(...mixins: Array<Function>): Class<any> {
 			return mixins
-				.map((mixin: Function) => mixinDecorator(mixin))
+				.map((mixin: Function) => decorator(mixin))
 				.reduce((c, m) => {
-					if (typeof m !== 'function') {
+					if (!isFunction(m)) {
 						return c;
 					}
 					return m(c);
 				}, superClass);
 		}
-	};
+	});
 };

@@ -6,7 +6,7 @@ import {type ICustomElement, type IState} from '../../interfaces';
 type InType = HTMLElement & ICustomElement;
 type OutType = InType & IState;
 
-export const state: Function = (baseClass: Class<InType>): Class<OutType> => {
+export default (baseClass: Class<InType>): Class<OutType> => {
 	const stateSymbol: Symbol = Symbol('state');
 	const renderedStateSymbol: Symbol = Symbol('renderedState');
 

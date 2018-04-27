@@ -1,8 +1,5 @@
-/* @flow */
-import isUndefined from 'lodash/isUndefined';
-import {wrapMixin} from './mixin-helpers';
+import wrapMixin from './wrap-mixin';
 
-// used by cached
 const cachedApplicationSymbol: Symbol = Symbol('cachedApplication');
 
 /**
@@ -20,13 +17,13 @@ export default (mixin: Function): Function => {
 	return wrapMixin(mixin, (superClass: Function): Function => {
 		// Create a symbol used to reference a cached application from a superclass
 		let cachedApplication = superClass[cachedApplicationSymbol];
-		if (isUndefined(cachedApplication)) {
+		if (!cachedApplication) {
 			cachedApplication = superClass[cachedApplicationSymbol] = new Map();
 		}
 
 		// $FlowFixMe
 		let application: Function = cachedApplication.get(mixin);
-		if (isUndefined(application)) {
+		if (!application) {
 			application = mixin(superClass);
 			cachedApplication.set(mixin, application);
 		}
