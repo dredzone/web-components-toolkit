@@ -1,3 +1,5 @@
+/* @flow */
+
 // used by wrap() and unwrap()
 export const wrappedMixinSymbol: Symbol = Symbol('wrappedMixin');
 

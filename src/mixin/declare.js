@@ -1,3 +1,4 @@
+/* @flow */
 import applyMixin from './apply-mixin';
 import wrapMixin from './wrap-mixin';
 
