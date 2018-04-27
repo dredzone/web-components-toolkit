@@ -1,8 +1,6 @@
 SystemJS.config({
 	paths: {
-		"npm:": "jspm_packages/npm/",
-		"utility-toolkit/": "lib/",
-		"github:": "jspm_packages/github/"
+		"utility-toolkit/": "lib/"
 	},
 	browserConfig: {
 		"baseURL": "."

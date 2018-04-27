@@ -1,7 +1,7 @@
 /* @flow */
 import assign from 'lodash/assign';
 import after from '../../advice/after';
-import {type ICustomElement, type IState} from '../../interfaces';
+import type {ICustomElement, IState} from '../../interfaces';
 
 type InType = HTMLElement & ICustomElement;
 type OutType = InType & IState;

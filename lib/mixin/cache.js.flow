@@ -1,3 +1,4 @@
+/* @flow */
 import wrapMixin from './wrap-mixin';
 
 const cachedApplicationSymbol: Symbol = Symbol('cachedApplication');

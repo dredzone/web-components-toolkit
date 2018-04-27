@@ -1,5 +1,4 @@
 /* @flow */
-
 export type ClassBuilder = {
 	with(...mixins: Array<Function>): Class<any>;
 }

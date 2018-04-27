@@ -1,8 +1,8 @@
 /* @flow */
 import before from '../../advice/before';
 import elementChildren from '../../dom/element-children';
-import {type ICustomElement, type ISlots} from '../../interfaces';
-import {type SlotsData} from '../../types';
+import type {ICustomElement, ISlots} from '../../interfaces';
+import type {SlotsData} from '../../types';
 
 export default (baseClass: Class<HTMLElement & ICustomElement>): Class<HTMLElement & ICustomElement> => {
 	return class Slots extends baseClass implements ISlots {

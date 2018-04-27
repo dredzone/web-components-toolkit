@@ -1,5 +1,5 @@
 /* @flow */
-import {type MicroTask} from '../types';
+import type {MicroTask} from '../types';
 
 let microTaskCurrHandle: number = 0;
 let microTaskLastHandle: number = 0;

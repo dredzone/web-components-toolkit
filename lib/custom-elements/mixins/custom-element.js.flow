@@ -1,7 +1,7 @@
 /* @flow */
 import around from '../../advice/around';
 import microTask from '../microtask';
-import {type ICustomElement} from '../../interfaces';
+import type {ICustomElement} from '../../interfaces';
 
 const global: Object = document.defaultView;
 
