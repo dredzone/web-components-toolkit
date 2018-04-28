@@ -1,8 +1,21 @@
 /* @flow */
-import after from '../../advice/after';
-import on from '../on';
-import type {ICustomElement, IEvents} from '../../interfaces';
-import type {EventHandler} from '../../types';
+import after from '../../functions/advice/after';
+import {default as on, type EventHandler} from '../on';
+import type {ICustomElement} from './custom-element';
+
+export interface IEvents {
+	[key: string]: Function;
+
+	handleEvent(evt: Event): void;
+
+	on(type: string, listener: Function, capture: boolean): void;
+
+	dispatch(type: string, data: Object): void;
+
+	off(): void;
+
+	own(...handlers: Array<EventHandler>): void;
+}
 
 type InType = HTMLElement & ICustomElement;
 type OutType = InType & IEvents;

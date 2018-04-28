@@ -1,10 +1,23 @@
 /* @flow */
-import before from '../../advice/before';
+import before from '../../functions/advice/before';
 import elementChildren from '../../dom/element-children';
-import type {ICustomElement, ISlots} from '../../interfaces';
-import type {SlotsData} from '../../types';
+import type {ICustomElement} from './custom-element';
 
-export default (baseClass: Class<HTMLElement & ICustomElement>): Class<HTMLElement & ICustomElement> => {
+export type SlotsData = {
+	[key: string]: Node;
+	default: Array<Node>;
+}
+
+export interface ISlots {
+	slots: SlotsData;
+
+	slotsAssigned(): void;
+}
+
+type InType = HTMLElement & ICustomElement;
+type OutType = InType & ISlots;
+
+export default (baseClass: Class<InType>): Class<OutType> => {
 	return class Slots extends baseClass implements ISlots {
 		slots: SlotsData;
 

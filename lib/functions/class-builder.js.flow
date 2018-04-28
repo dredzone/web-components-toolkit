@@ -1,9 +1,12 @@
 /* @flow */
 import isFunction from 'lodash/isFunction';
 import decorator from './mixin';
-import type {ClassBuilder} from './types';
 
 const {freeze} = Object;
+
+export type ClassBuilder = {
+	with(...mixins: Array<Function>): Class<any>;
+}
 
 export default (klass: Class<any> = class {}): ClassBuilder => {
 	const superClass: Class<any> = klass;

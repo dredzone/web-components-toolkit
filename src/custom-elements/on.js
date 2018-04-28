@@ -1,5 +1,12 @@
 /* @flow */
-import type {EventHandler, PausableEventHandler} from '../types';
+export type EventHandler = {
+	remove(): void;
+}
+
+export type PausableEventHandler = EventHandler & {
+	pause(): void,
+	resume(): void
+}
 
 const on: Function = (target: EventTarget, type: string, listener: Function, capture: boolean = false): EventHandler => {
 	return parse(target, type, listener, capture);

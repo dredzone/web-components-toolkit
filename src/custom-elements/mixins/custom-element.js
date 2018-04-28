@@ -1,7 +1,6 @@
 /* @flow */
-import around from '../../advice/around';
+import around from '../../functions/advice/around';
 import microTask from '../microtask';
-import type {ICustomElement} from '../../interfaces';
 
 const global: Object = document.defaultView;
 
@@ -12,6 +11,57 @@ if (typeof global.HTMLElement !== 'function') {
 	};
 	_HTMLElement.prototype = global.HTMLElement.prototype;
 	global.HTMLElement = _HTMLElement;
+}
+
+export interface ICustomElement {
+	[key: any]: any;
+
+	static observedAttributes: string[];
+
+	static finalizeClass(): void;
+
+	static define(tagName: string): void;
+
+	/**
+	 * Called during creation time,
+	 * subclasses extend override this, and should not use `constructor`
+	 */
+	construct(): void;
+
+	isConnected(): boolean;
+
+	/**
+	 * Called when an observed attribute has been added, removed, updated, or replaced.
+	 * Also called for initial values when an element is created by the parser, or upgraded.
+	 * Note: only attributes listed in the observedAttributes property will receive this callback.
+	 */
+	// attributeChangedCallback(attributeName: string, oldValue: string, newValue: string): void;
+	attributeChanged(attributeName: string, oldValue: string, newValue: string): void;
+
+	/**
+	 * Called every time the element is inserted into the DOM.
+	 * Useful for running setup code, such as fetching resources or rendering.
+	 * Generally, you should try to delay work until this time.
+	 */
+	// connectedCallback(): void;
+	connected(): void;
+
+	/**
+	 * Called every time the element is removed from the DOM. Useful for running clean up code.
+	 */
+	disconnected(): void;
+
+	/**
+	 * The custom element has been moved into a new document (e.g. someone called document.adoptNode(el)).
+	 */
+	// adoptedCallback(): void;
+	adopted(): void;
+
+	render(): void;
+
+	_onRender(firstRender: boolean): void;
+
+	_postRender(firstRender: boolean): void;
 }
 
 export default (baseClass?: Class<HTMLElement>): Class<HTMLElement & ICustomElement> => {

@@ -1,11 +1,77 @@
 /* @flow */
-import before from '../../advice/before';
-import createStorage from '../../create-storage';
+import before from '../../functions/advice/before';
+import createStorage from '../../functions/create-storage';
 import microTask from '../microtask';
-import type {ICustomElement, IProperties} from '../../interfaces';
-import type {PropertiesConfig, PropertyConfig} from '../../types';
+import type {ICustomElement} from './custom-element';
 
-export default (baseClass: Class<HTMLElement & ICustomElement>): Class<HTMLElement & ICustomElement & IProperties> => {
+export type PropertyConfig = {
+	type: Function;
+	value?: any;
+	reflectToAttribute: boolean;
+	readOnly: boolean;
+	observer?: string | Function;
+	notify: boolean;
+	hasObserver: boolean;
+	isObserver: boolean;
+	isObserverString: boolean;
+	isString: boolean;
+	isNumber: boolean;
+	isBoolean: boolean;
+	isObject: boolean;
+	isArray: boolean;
+	isDate: boolean;
+}
+
+export type PropertiesConfig = {
+	[string]: PropertyConfig
+}
+
+export interface IProperties {
+	static +classProperties: PropertiesConfig;
+
+	static createProperties(): void;
+
+	static attributeToPropertyName(attribute: string): string;
+
+	static propertyNameToAttribute(property: string): string;
+
+	propertiesChanged(currentProps: Object, changedProps: Object, oldProps: Object): void;
+
+	_createPropertyAccessor(property: string, readOnly: boolean): void;
+
+	_getProperty(property: string): any;
+
+	_setProperty(property: string, newValue: any): void;
+
+	_initializeProtoProperties(): void;
+
+	_initializeProperties(): void;
+
+	_attributeToProperty(attribute: string, value: string): void;
+
+	_isValidPropertyValue(property: string, value: any): boolean;
+
+	_propertyToAttribute(property: string, value: any): void;
+
+	_deserializeValue(property: string, value: any): any;
+
+	_serializeValue(property: string, value: any): any;
+
+	_setPendingProperty(property: string, value: any): boolean;
+
+	_invalidateProperties(): void;
+
+	_flushProperties(): void;
+
+	_shouldPropertiesChange(currentProps: Object, changedProps: Object, oldProps: Object): boolean;
+
+	_shouldPropertyChange(property: string, value: any, old: any): boolean;
+}
+
+type InType = HTMLElement & ICustomElement;
+type OutType = InType & IProperties;
+
+export default (baseClass: Class<InType>): Class<OutType> => {
 	const {defineProperty, keys, assign} = Object;
 	const attributeToPropertyNames: {[key: string]: string} = {};
 	const propertyNamesToAttributes: {[key: string]: string} = {};
@@ -129,9 +195,9 @@ export default (baseClass: Class<HTMLElement & ICustomElement>): Class<HTMLEleme
 
 		static get classProperties(): PropertiesConfig {
 			if (!propertiesConfig) {
+				const getPropertiesConfig = () => propertiesConfig || {};
 				let checkObj: any = null;
 				let loop: boolean = true;
-				propertiesConfig = {};
 
 				while (loop) {
 					checkObj = Object.getPrototypeOf(checkObj === null ? this : checkObj);
@@ -144,12 +210,12 @@ export default (baseClass: Class<HTMLElement & ICustomElement>): Class<HTMLEleme
 					}
 					if (Object.hasOwnProperty.call(checkObj, 'properties')) {
 						// $FlowFixMe
-						propertiesConfig = assign(propertiesConfig, normalizeProperties(checkObj.properties));
+						propertiesConfig = assign(getPropertiesConfig(), normalizeProperties(checkObj.properties));
 					}
 				}
 				if (this.properties) {
 					// $FlowFixMe
-					propertiesConfig = assign(propertiesConfig, normalizeProperties(this.properties));
+					propertiesConfig = assign(getPropertiesConfig(), normalizeProperties(this.properties));
 				}
 			}
 			return propertiesConfig;

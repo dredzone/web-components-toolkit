@@ -1,82 +1,12 @@
 /* @flow */
-export type ClassBuilder = {
-	with(...mixins: Array<Function>): Class<any>;
-}
-
-export type MicroTask = {
-	run(callback: Function): number;
-	cancel(handle: number): void;
-}
-
-export type EventHandler = {
-	remove(): void;
-}
-
-export type PausableEventHandler = EventHandler & {
-	pause(): void,
-	resume(): void
-}
-
-export type PropertyConfig = Object & {
-	type: Function;
-	value?: any;
-	reflectToAttribute: boolean;
-	readOnly: boolean;
-	observer?: string | Function;
-	notify: boolean;
-	hasObserver: boolean;
-	isObserver: boolean;
-	isObserverString: boolean;
-	isString: boolean;
-	isNumber: boolean;
-	isBoolean: boolean;
-	isObject: boolean;
-	isArray: boolean;
-	isDate: boolean;
-}
-
-export type PropertiesConfig = Object & {
-	[string]: PropertyConfig
-}
-export type SlotsData = {
-	[key: string]: Node;
-	default: Array<Node>;
-}
-
-export type Dom = {
-	createElement(tagName: string, attributes: Object): Element;
-
-	documentReady(passThrough: any): Promise<any>;
-
-	elementChildren(element: Element, nodeType: number): Array<Element>;
-
-	elementSiblings(element: Node): Array<Node>;
-
-	isDescendantElement(child: Node, parent: Node): boolean;
-
-	removeElement(element: Node): void;
-
-	templateContent(template: HTMLTemplateElement): DocumentFragment;
-}
-
-export type Advice = {
-	before(behaviour: Function, ...methodNames: string[]): Function;
-
-	around(behaviour: Function, ...methodNames: string[]): Function;
-
-	after(behaviour: Function, ...methodNames: string[]): Function;
-
-	afterThrow(behaviour: Function, ...methodNames: string[]): Function;
-}
-
-export type LangObject = {
-	getNestedValue(obj: Object, key: string, defaultValue: any): any;
-
-	setNestedValue(obj: Object, key: string, value: any): void;
-
-	toMap(o: Object): Map<any, any>;
-}
-
-export type Lang = {
-	object: LangObject
-}
+export type {ICustomElement} from './custom-elements/mixins/custom-element';
+export type {IEvents} from './custom-elements/mixins/events';
+export type {IProperties, PropertyConfig, PropertiesConfig} from './custom-elements/mixins/properties';
+export type {ISlots, SlotsData} from './custom-elements/mixins/slots';
+export type {IState} from './custom-elements/mixins/state';
+export type {EventHandler, PausableEventHandler} from './custom-elements/on';
+export type {MicroTask} from './custom-elements/microtask';
+export type {Dom} from './dom';
+export type {ObjectUtil} from './object';
+export type {Advice} from './functions/advice';
+export type {ClassBuilder} from './functions/class-builder';

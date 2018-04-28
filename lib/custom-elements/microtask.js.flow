@@ -1,12 +1,16 @@
 /* @flow */
-import type {MicroTask} from '../types';
-
 let microTaskCurrHandle: number = 0;
 let microTaskLastHandle: number = 0;
 let microTaskCallbacks: Array<mixed> = [];
 let microTaskNodeContent: number = 0;
 let microTaskNode: Text = document.createTextNode('');
 new MutationObserver(microTaskFlush).observe(microTaskNode, {characterData: true});
+
+export type MicroTask = {
+	run(callback: Function): number;
+
+	cancel(handle: number): void;
+}
 
 /**
  * Based on Polymer.async

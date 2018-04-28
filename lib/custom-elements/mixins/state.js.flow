@@ -1,7 +1,25 @@
 /* @flow */
 import assign from 'lodash/assign';
-import after from '../../advice/after';
-import type {ICustomElement, IState} from '../../interfaces';
+import after from '../../functions/advice/after';
+import type {ICustomElement} from './custom-element';
+
+export interface IState {
+	[key: any]: any;
+
+	+state: Object;
+
+	setState(changes: Object, render: boolean): void;
+
+	shouldComponentUpdate(nextState: Object): boolean;
+
+	componentWillRender(newState: Object): void;
+
+	componentWillUpdate(newState: Object, previousState: Object): void;
+
+	componentDidRender(previousState: Object): void;
+
+	componentDidUpdate(previousState: Object): void;
+}
 
 type InType = HTMLElement & ICustomElement;
 type OutType = InType & IState;
