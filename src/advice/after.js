@@ -1,10 +1,13 @@
 /* @flow */
 export default (behaviour: Function, ...methodNames: string[]): Function => {
-	return function (clazz: Class<any>) {
-		for (let i = 0; i < methodNames.length; i++) {
+	return function (klass: Class<any>) {
+		const proto: any = klass.prototytpe;
+		const len: number = methodNames.length;
+		const {defineProperty} = Object;
+		for (let i = 0; i < len; i++) {
 			const methodName: string = methodNames[i];
-			const method: Function = clazz.prototype[methodName];
-			Object.defineProperty(clazz.prototype, methodName, {
+			const method: Function = proto[methodName];
+			defineProperty(proto, methodName, {
 				value: function (...args) {
 					const returnValue: any = method.apply(this, args);
 					behaviour.apply(this, args);
@@ -13,6 +16,6 @@ export default (behaviour: Function, ...methodNames: string[]): Function => {
 				writable: true
 			});
 		}
-		return clazz;
+		return klass;
 	};
 };
