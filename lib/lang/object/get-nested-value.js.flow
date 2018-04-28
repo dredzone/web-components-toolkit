@@ -1,6 +1,4 @@
 /* @flow */
-import isUndefined from 'lodash/isUndefined';
-
 export default (obj: Object, key: string, defaultValue: any): any => {
 	if (key.indexOf('.') === -1) {
 		return obj[key] ? obj[key] : defaultValue;
@@ -11,7 +9,7 @@ export default (obj: Object, key: string, defaultValue: any): any => {
 
 	for (let i = 0; i < length; i++) {
 		object = object[parts[i]];
-		if (isUndefined(object)) {
+		if (typeof object === 'undefined') {
 			object = defaultValue;
 			return;
 		}

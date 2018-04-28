@@ -1,14 +1,12 @@
 /* @flow */
-import assign from 'lodash/assign';
 import before from '../../advice/before';
 import createStorage from '../../create-storage';
 import microTask from '../microtask';
 import type {ICustomElement, IProperties} from '../../interfaces';
 import type {PropertiesConfig, PropertyConfig} from '../../types';
-import functionName from '../helpers/function-name';
 
 export default (baseClass: Class<HTMLElement & ICustomElement>): Class<HTMLElement & ICustomElement & IProperties> => {
-	const {defineProperty, keys} = Object;
+	const {defineProperty, keys, assign} = Object;
 	const attributeToPropertyNames: {[key: string]: string} = {};
 	const propertyNamesToAttributes: {[key: string]: string} = {};
 	const storage: Function = createStorage();
@@ -150,6 +148,7 @@ export default (baseClass: Class<HTMLElement & ICustomElement>): Class<HTMLEleme
 					}
 				}
 				if (this.properties) {
+					// $FlowFixMe
 					propertiesConfig = assign(propertiesConfig, normalizeProperties(this.properties));
 				}
 			}
@@ -214,7 +213,7 @@ export default (baseClass: Class<HTMLElement & ICustomElement>): Class<HTMLEleme
 				}
 			} else {
 				console.log(`invalid value ${newValue} for property ${property} of 
-						type ${functionName(this.constructor.classProperties[property].type)}`);
+					type ${this.constructor.classProperties[property].type.name}`);
 			}
 		}
 
@@ -248,7 +247,7 @@ export default (baseClass: Class<HTMLElement & ICustomElement>): Class<HTMLEleme
 			if (typeof value === 'object') {
 				isValid = value instanceof propertyType;
 			} else {
-				isValid = `${typeof value}` === `${functionName(propertyType).toLowerCase()}`;
+				isValid = `${typeof value}` === propertyType.name.toLowerCase();
 			}
 			return isValid;
 		}

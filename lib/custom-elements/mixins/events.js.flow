@@ -1,5 +1,4 @@
 /* @flow */
-import assign from 'lodash/assign';
 import after from '../../advice/after';
 import on from '../on';
 import type {ICustomElement, IEvents} from '../../interfaces';
@@ -13,6 +12,7 @@ type OutType = InType & IEvents;
  */
 export default (baseClass: Class<InType>): Class<OutType> => {
 	const eventsHandlersSymbol: Symbol = Symbol('eventsHandlers');
+	const {assign} = Object;
 
 	const eventDefaultParams: Object = {
 		bubbles: false,
