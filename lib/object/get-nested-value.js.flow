@@ -1,5 +1,7 @@
 /* @flow */
-export default (obj: Object, key: string, defaultValue: any): any => {
+import type from '../is/type';
+
+export default (obj: Object, key: string, defaultValue: any = undefined): any => {
 	if (key.indexOf('.') === -1) {
 		return obj[key] ? obj[key] : defaultValue;
 	}
@@ -9,7 +11,7 @@ export default (obj: Object, key: string, defaultValue: any): any => {
 
 	for (let i = 0; i < length; i++) {
 		object = object[parts[i]];
-		if (typeof object === 'undefined') {
+		if (type.undefined(object)) {
 			object = defaultValue;
 			return;
 		}

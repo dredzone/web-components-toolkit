@@ -1,6 +1,6 @@
-import customElement from '../../../lib/custom-elements/mixins/custom-element';
-import events from '../../../lib/custom-elements/mixins/events';
-import stopEvent from '../../../lib/custom-elements/stop-event';
+import customElement from '../../../lib/web-components/mixins/custom-element';
+import events from '../../../lib/web-components/mixins/events';
+import stopEvent from '../../../lib/web-components/stop-event';
 import removeElement from '../../../lib/dom/remove-element';
 
 class EventsEmitter extends events(customElement()) {
@@ -28,8 +28,8 @@ EventsListener.define('events-listener');
 
 describe("Events Mixin", () => {
 	let container;
-	const emmiter = document.createElement('evented-emitter');
-	const listener = document.createElement('evented-listener');
+	const emmiter = document.createElement('events-emitter');
+	const listener = document.createElement('events-listener');
 
 	before(() => {
 		container = document.getElementById('container');

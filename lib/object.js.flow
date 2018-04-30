@@ -4,16 +4,16 @@ import setNestedValue from './object/set-nested-value';
 import toMap from './object/to-map';
 
 export type ObjectUtil = {
-	getNestedValue(obj: Object, key: string, defaultValue: any): any;
+	get(obj: Object, key: string, defaultValue: any): any;
 
-	setNestedValue(obj: Object, key: string, value: any): void;
+	set(obj: Object, key: string, value: any): void;
 
 	toMap(o: Object): Map<any, any>;
 }
 
 const object: ObjectUtil = Object.freeze({
-	getNestedValue,
-	setNestedValue,
+	get: getNestedValue,
+	set: setNestedValue,
 	toMap
 });
 

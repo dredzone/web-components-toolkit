@@ -1,12 +1,12 @@
 /* @flow */
-export type {ICustomElement} from './custom-elements/mixins/custom-element';
-export type {IEvents} from './custom-elements/mixins/events';
-export type {IProperties, PropertyConfig, PropertiesConfig} from './custom-elements/mixins/properties';
-export type {ISlots, SlotsData} from './custom-elements/mixins/slots';
-export type {IState} from './custom-elements/mixins/state';
-export type {EventHandler, PausableEventHandler} from './custom-elements/on';
-export type {MicroTask} from './custom-elements/microtask';
+export type {ICustomElement} from './web-components/mixins/custom-element';
+export type {IEvents} from './web-components/mixins/events';
+export type {IProperties, PropertyConfig, PropertiesConfig} from './web-components/mixins/properties';
+export type {ISlots, SlotsData} from './web-components/mixins/slots';
+export type {IState} from './web-components/mixins/state';
+export type {EventHandler, PausableEventHandler} from './web-components/on';
+export type {MicroTask} from './web-components/microtask';
 export type {Dom} from './dom';
 export type {ObjectUtil} from './object';
-export type {Advice} from './functions/advice';
-export type {ClassBuilder} from './functions/class-builder';
+export type {Advice} from './advice';
+export type {ClassBuilder} from './class-builder';
