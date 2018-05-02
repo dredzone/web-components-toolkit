@@ -11,7 +11,7 @@ export default (obj: Object, key: string, value: any): void => {
 	let object: Object = obj;
 
 	for (let i = 0; i < depth; i++) {
-		if (type.undefined(object[parts[i]])) {
+		if (type.is.undefined(object[parts[i]])) {
 			object[parts[i]] = {};
 		}
 		object = object[parts[i]];

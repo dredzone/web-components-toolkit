@@ -1,4 +1,6 @@
 /* @flow */
+import {type IsApi, default as api} from './api';
+
 export type IsType = {
 	array: Function;
 	object: Function;
@@ -19,7 +21,7 @@ const types: string[] = 'Array Object String Date RegExp Function Boolean Number
 const len: number = types.length;
 const typeCache: Object = {};
 const typeRegexp: RegExp = /\s([a-zA-Z]+)/;
-const typeCheck: IsType = setupTypeChecks();
+const typeCheck: IsApi<IsType> = api(setupTypeChecks());
 
 export default typeCheck;
 

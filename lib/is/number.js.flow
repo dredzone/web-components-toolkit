@@ -1,28 +1,64 @@
 /* @flow */
-import type from './type';
-import all from './helpers/all';
-import not from './helpers/not';
+import {default as api, type IsApi} from './api';
+import nan from './number/nan';
+import above from './number/above';
+import under from './number/under';
+import within from './number/within';
+import decimal from './number/decimal';
+import even from './number/even';
+import infinite from './number/infinite';
+import finite from './number/finite';
+import integer from './number/integer';
+import negative from './number/negative';
+import odd from './number/odd';
+import positive from './number/positive';
 
-export const nan: Function = isNaN || ((n: any) => Number(n) !== n);
+export type IsNumber = {
+	nan(n: any): boolean;
 
-export const above: Function = (n: any, min: any) => all(type.number)(n, min) && n > min;
+	above(n: any, min: any): boolean;
 
-export const decimal: Function = (n: any) => type.number(n) && n % 1 !== 0;
+	under(n: any, max: any): boolean;
 
-export const even: Function = (n: any) => type.number(n) && n % 2 === 0;
+	within(n: any, min: any, max: any): boolean;
 
-export const infinite: Function = (n: any) => n === Infinity || n === -Infinity;
+	decimal(n: any): boolean;
 
-export const finite: Function = isFinite || ((n: any) => not(infinite(n) || nan(n)));
+	even(n: any): boolean;
 
-export const integer: Function = (n: any) => type.number(n) && n % 1 === 0;
+	infinite(n: any): boolean;
 
-export const negative: Function = (n: any) => type.number(n) && n < 0;
+	finite(n: any): boolean;
 
-export const odd: Function = (n: any) => type.number(n) && (n % 2 === 1 || n % 2 === -1);
+	integer(n: any): boolean;
 
-export const positive: Function = (n: any) => type.number(n) && n > 0;
+	negative(n: any): boolean;
 
-export const under: Function = (n: any, max: any) => all(type.number)(n, max) && n < max;
+	odd(n: any): boolean;
 
-export const within: Function = (n: any, min, max: any) => all(type.number)(n, min, max) && n > min && n < max;
+	positive(n: any): boolean;
+}
+
+const {assign} = Object;
+const notApiOnly: Object = {above, under, within};
+
+Object.keys(notApiOnly).forEach((key: string) => {
+	notApiOnly[key].api = ['not'];
+});
+
+const isNumberApi: IsApi<IsNumber> = api(assign({
+	nan,
+	above,
+	decimal,
+	even,
+	infinite,
+	finite,
+	integer,
+	negative,
+	odd,
+	positive,
+	under,
+	within
+}, notApiOnly));
+
+export default isNumberApi;

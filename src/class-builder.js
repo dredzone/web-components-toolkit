@@ -15,7 +15,7 @@ export default (klass: Class<any> = class {}): ClassBuilder => {
 			return mixins
 				.map((mixin: Function) => decorator(mixin))
 				.reduce((c, m) => {
-					if (type.function(m)) {
+					if (type.is.function(m)) {
 						return m(c);
 					}
 					return c;

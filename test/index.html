@@ -9,15 +9,24 @@
     <script>
 		mocha.setup('bdd');
 		window.assert = chai.assert;
+		window.expect = chai.expect;
     </script>
+    <script type="module" defer src="/test/is/type.test.js"></script>
+    <script type="module" defer src="/test/web-components/mixins/properties.test.js"></script>
 
+    <!--
+    <script type="module" src="/test/web-components/mixins/events.test.js"></script>
+    <script type="module" src="/test/is/type.test.js"></script>
+    <script type="module" src="/test/is/type.test.js"></script>
+    <script type="module" src="/test/is/number.test.js"></script>
+    <script type="module" src="/test/web-components/mixins/events.test.js"></script>
+    <script type="module" src="/test/web-components/mixins/properties.test.js"></script>
+    -->
     <script type="module">
-		import * as tests from './tests.js';
-		const errors = [];
+        const errors = [];
 		mocha.run()
-			.on('fail', function(_, err) { errors.push(err.stack)})
-			.on('end', function() { console.log(`${this.failures ? JSON.stringify(errors): 'OK'}`)})
-		;
+			.on('fail', function(_, err) {errors.push(err.stack)})
+			.on('end', function() {console.log(`${this.failures ? JSON.stringify(errors): 'OK'}`)});
     </script>
 </head>
 <body>

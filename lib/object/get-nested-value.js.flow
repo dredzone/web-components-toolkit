@@ -11,7 +11,7 @@ export default (obj: Object, key: string, defaultValue: any = undefined): any =>
 
 	for (let i = 0; i < length; i++) {
 		object = object[parts[i]];
-		if (type.undefined(object)) {
+		if (type.is.undefined(object)) {
 			object = defaultValue;
 			return;
 		}
