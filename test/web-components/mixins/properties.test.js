@@ -44,8 +44,8 @@ describe("Properties Mixin", () => {
 
 	afterEach(() => {
 		setTimeout(() => {
-			// container.remove(propertiesMixinTest);
-			// container.innerHTML = '';
+			container.remove(propertiesMixinTest);
+			container.innerHTML = '';
 		});
 	});
 
@@ -53,12 +53,12 @@ describe("Properties Mixin", () => {
 		assert.equal(propertiesMixinTest.prop, 'prop');
 	});
 
-	it('reflecting properties', () => {
-		propertiesMixinTest.propertiesChanged = function() {
-			console.log(arguments);
-			// assert.equal(propertiesMixinTest.getAttribute('prop'), 'propValue');
-		};
+	it('reflecting properties', done => {
 		propertiesMixinTest.prop = 'propValue';
+		setTimeout(() => {
+			assert.equal(propertiesMixinTest.getAttribute('prop'), 'propValue');
+			done();
+		})
 	});
 
 	it('notify property change', () => {
