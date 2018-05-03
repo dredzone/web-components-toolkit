@@ -1,6 +1,6 @@
-import customElement from '../../../lib/web-components/mixins/custom-element';
-import properties from '../../../lib/web-components/mixins/properties';
-import on from '../../../lib/web-components/on';
+import customElement from '../../lib/web-components/custom-element-mixin';
+import properties from '../../lib/web-components/properties-mixin';
+import listenEvent from '../../lib/dom/listen-event';
 
 class PropertiesMixinTest extends properties(customElement()) {
 	connected() {
@@ -42,27 +42,23 @@ describe("Properties Mixin", () => {
 		container.append(propertiesMixinTest);
 	});
 
-	afterEach(() => {
-		setTimeout(() => {
-			container.remove(propertiesMixinTest);
-			container.innerHTML = '';
-		});
+	after(() => {
+		container.remove(propertiesMixinTest);
+		container.innerHTML = '';
 	});
 
 	it("properties", () => {
 		assert.equal(propertiesMixinTest.prop, 'prop');
 	});
 
-	it('reflecting properties', done => {
+	it('reflecting properties', () => {
 		propertiesMixinTest.prop = 'propValue';
-		setTimeout(() => {
-			assert.equal(propertiesMixinTest.getAttribute('prop'), 'propValue');
-			done();
-		})
+		propertiesMixinTest._flushProperties();
+		assert.equal(propertiesMixinTest.getAttribute('prop'), 'propValue');
 	});
 
 	it('notify property change', () => {
-		on(propertiesMixinTest, 'prop-changed', (evt) => {
+		listenEvent(propertiesMixinTest, 'prop-changed', (evt) => {
 			assert.isOk(evt.type === 'prop-changed', 'event dispatched');
 		});
 
