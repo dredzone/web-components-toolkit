@@ -1,5 +1,5 @@
 /* @flow */
-import createMixin from './mixin';
+import createMixin from './class-builder/mixin-decorator';
 
 const {freeze} = Object;
 
