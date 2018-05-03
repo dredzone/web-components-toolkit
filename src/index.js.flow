@@ -1,7 +1,0 @@
-/* @flow */
-export type {WebComponents} from './web-components';
-export type {Dom} from './dom';
-export type {ObjectUtil} from './object';
-export type {Advice} from './advice';
-export type {ClassBuilder} from './class-builder';
-export * from './exports';
