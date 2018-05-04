@@ -1,11 +1,10 @@
 /* @flow */
 import after from '../advice/after';
+import createStorage from '../create-storage';
 import listenEvent, {type EventHandler} from '../dom/listen-event';
 import type {ICustomElement} from './custom-element-mixin';
 
 export interface IEvents {
-	[key: string]: Function;
-
 	handleEvent(evt: Event): void;
 
 	on(type: string, listener: Function, capture?: boolean): void;
@@ -24,9 +23,12 @@ type OutType = InType & IEvents;
  * Mixin adds CustomEvent handling to an element
  */
 export default (baseClass: Class<InType>): Class<OutType> => {
-	const eventsHandlersSymbol: Symbol = Symbol('eventsHandlers');
 	const {assign} = Object;
-
+	const privates: Function = createStorage(function () {
+		return {
+			handlers: []
+		};
+	});
 	const eventDefaultParams: Object = {
 		bubbles: false,
 		cancelable: false
@@ -39,12 +41,6 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 		static finalizeClass(): void {
 			super.finalizeClass();
 			after(createDisconnectedAdvice(), 'disconnected')(this);
-		}
-
-		construct() {
-			super.construct();
-			// $FlowFixMe
-			this[eventsHandlersSymbol] = [];
 		}
 
 		handleEvent(event): void {
@@ -64,15 +60,14 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 		}
 
 		off(): void {
-			this[eventsHandlersSymbol].forEach((handler: EventHandler) => {
+			privates(this).handlers.forEach((handler: EventHandler) => {
 				handler.remove();
 			});
-			this[eventsHandlersSymbol] = [];
 		}
 
 		own(...handlers: Array<EventHandler>): void {
 			handlers.forEach((handler: EventHandler) => {
-				this[eventsHandlersSymbol].push(handler);
+				privates(this).handlers.push(handler);
 			});
 		}
 	};

@@ -1,4 +1,5 @@
 /* @flow */
+import createStorage from '../create-storage';
 import around from '../advice/around';
 import microTask from '../dom/microtask';
 
@@ -14,8 +15,6 @@ if (typeof global.HTMLElement !== 'function') {
 }
 
 export interface ICustomElement {
-	[key: any]: any;
-
 	static observedAttributes: string[];
 
 	static finalizeClass(): void;
@@ -72,9 +71,7 @@ export default (baseClass?: Class<HTMLElement>): Class<HTMLElement & ICustomElem
 		'attributeChangedCallback'
 	];
 	const {defineProperty, hasOwnProperty} = Object;
-	const connectedKeySymbol: Symbol = Symbol('connected');
-	const initializedKeySymbol: Symbol = Symbol('initialized');
-	const renderingKeySymbol: Symbol = Symbol('rendering');
+	const privates: Function = createStorage();
 
 	if (!baseClass) {
 		baseClass = class extends global.HTMLElement {};
@@ -132,7 +129,7 @@ export default (baseClass?: Class<HTMLElement>): Class<HTMLElement & ICustomElem
 		}
 
 		isConnected(): boolean {
-			return this[initializedKeySymbol] === true;
+			return privates(this).initialized === true;
 		}
 
 		/* eslint-disable no-unused-vars */
@@ -169,9 +166,9 @@ export default (baseClass?: Class<HTMLElement>): Class<HTMLElement & ICustomElem
 	function createConnectedAdvice(): Function {
 		return function (connectedCallback: Function) {
 			const context: ICustomElement = this;
-			context[connectedKeySymbol] = true;
-			if (context[initializedKeySymbol] !== true) {
-				context[initializedKeySymbol] = true;
+			privates(context).connected = true;
+			if (!privates(context).initialized) {
+				privates(context).initialized = true;
 				connectedCallback.call(context);
 				context.render();
 			}
@@ -181,12 +178,12 @@ export default (baseClass?: Class<HTMLElement>): Class<HTMLElement & ICustomElem
 	function createRenderAdvice(): Function {
 		return function (renderCallback: Function) {
 			const context: ICustomElement = this;
-			if (context[renderingKeySymbol] !== true) {
-				const firstRender: boolean = context[renderingKeySymbol] === undefined;
-				context[renderingKeySymbol] = true;
+			if (!privates(context).rendering) {
+				const firstRender: boolean = privates(context).rendering === undefined;
+				privates(context).rendering = true;
 				microTask.run(() => {
-					if (context[renderingKeySymbol]) {
-						context[renderingKeySymbol] = false;
+					if (privates(context).rendering) {
+						privates(context).rendering = false;
 						context._onRender(firstRender);
 						renderCallback.call(context);
 						context._postRender(firstRender);
@@ -199,10 +196,10 @@ export default (baseClass?: Class<HTMLElement>): Class<HTMLElement & ICustomElem
 	function createDisconnectedAdvice(): Function {
 		return function (disconnectedCallback: Function) {
 			const context: ICustomElement = this;
-			context[connectedKeySymbol] = false;
+			privates(context).connected = false;
 			microTask.run(() => {
-				if (!context[connectedKeySymbol] && context[initializedKeySymbol]) {
-					context[initializedKeySymbol] = false;
+				if (!privates(context).connected && privates(context).initialized) {
+					privates(context).initialized = false;
 					disconnectedCallback.call(context);
 				}
 			});

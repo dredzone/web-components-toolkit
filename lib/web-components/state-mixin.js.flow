@@ -1,10 +1,9 @@
 /* @flow */
+import createStorage from '../create-storage';
 import after from '../advice/after';
 import type {ICustomElement} from './custom-element-mixin';
 
 export interface IState {
-	[key: any]: any;
-
 	+state: Object;
 
 	setState(changes: Object, render: boolean): void;
@@ -24,14 +23,10 @@ type InType = HTMLElement & ICustomElement;
 type OutType = InType & IState;
 
 export default (baseClass: Class<InType>): Class<OutType> => {
-	const stateSymbol: Symbol = Symbol('state');
-	const renderedStateSymbol: Symbol = Symbol('renderedState');
 	const {assign} = Object;
+	const privates: Function = createStorage();
 
 	return class State extends baseClass implements IState {
-		$key: any;
-		$value: any;
-
 		static finalizeClass(): void {
 			super.finalizeClass();
 			after(createBeforeRenderAdvice(), '_onRender')(this);
@@ -48,12 +43,12 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 		}
 
 		get state(): Object {
-			return this[stateSymbol];
+			return assign({}, privates(this).state);
 		}
 
 		shouldComponentUpdate(nextState: Object): boolean {
 			for (let key in nextState) {
-				if (nextState[key] !== this.state[key]) {
+				if (nextState[key] !== privates(this).state[key]) {
 					return true;
 				}
 			}
@@ -61,12 +56,12 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 		}
 
 		setState(changes: Object): void {
-			const nextState: Object = assign({}, this.state, changes);
-			const previousState: Object = this.state;
+			const nextState: Object = assign({}, privates(this).state, changes);
+			const previousState: Object = privates(this).state;
 			const changed = previousState === undefined || this.shouldComponentUpdate(nextState);
 
 			if (changed) {
-				this[stateSymbol] = nextState;
+				privates(this).state = nextState;
 				if (this.isConnected()) {
 					this.render();
 				}
@@ -94,9 +89,9 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 		return function (firstRender: boolean): void {
 			const context: IState = this;
 			if (firstRender) {
-				context.componentWillRender(context[stateSymbol]);
+				context.componentWillRender(this.state);
 			} else {
-				context.componentWillUpdate(context[stateSymbol], context[renderedStateSymbol]);
+				context.componentWillUpdate(this.state, assign({}, privates(context).renderedState));
 			}
 		};
 	}
@@ -104,8 +99,8 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 	function createAfterRenderAdvice(): Function {
 		return function (firstRender: boolean): void {
 			const context: IState = this;
-			const previousState: Object = context[renderedStateSymbol];
-			context[renderedStateSymbol] = context[stateSymbol];
+			const previousState: Object = privates(context).renderedState;
+			privates(context).renderedState = privates(context).state;
 			if (firstRender) {
 				context.componentDidRender(previousState);
 			} else {

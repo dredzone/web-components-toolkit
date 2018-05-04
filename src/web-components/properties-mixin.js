@@ -75,7 +75,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 	const {defineProperty, keys, assign} = Object;
 	const attributeToPropertyNames: {[key: string]: string} = {};
 	const propertyNamesToAttributes: {[key: string]: string} = {};
-	const storage: Function = createStorage();
+	const privates: Function = createStorage();
 
 	let propertiesConfig: PropertiesConfig;
 	let dataHasAccessor: {[key: string]: boolean} = {};
@@ -112,9 +112,9 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 	function createConnectedAdvice(): Function {
 		return function (): void {
 			const context: IProperties = this;
-			if (Object.keys(storage(context).initializeProperties).length > 0) {
-				assign(context, storage(context).initializeProperties);
-				storage(context).initializeProperties = {};
+			if (Object.keys(privates(context).initializeProperties).length > 0) {
+				assign(context, privates(context).initializeProperties);
+				privates(context).initializeProperties = {};
 			}
 			context._flushProperties();
 		};
@@ -238,12 +238,12 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 
 		construct() {
 			super.construct();
-			storage(this).data = {};
-			storage(this).serializing = false;
-			storage(this).initializeProperties = {};
-			storage(this).dataPending = null;
-			storage(this).dataOld = null;
-			storage(this).dataInvalid = false;
+			privates(this).data = {};
+			privates(this).serializing = false;
+			privates(this).initializeProperties = {};
+			privates(this).dataPending = null;
+			privates(this).dataOld = null;
+			privates(this).dataInvalid = false;
 			this._initializeProtoProperties();
 			this._initializeProperties();
 		}
@@ -269,7 +269,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 		}
 
 		_getProperty(property: string): any {
-			return storage(this).data[property];
+			return privates(this).data[property];
 		}
 
 		_setProperty(property: string, newValue: any): void {
@@ -294,14 +294,14 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 		_initializeProperties(): void {
 			Object.keys(dataHasAccessor).forEach((property: string) => {
 				if (Object.hasOwnProperty.call(this, property)) {
-					storage(this).initializeProperties[property] = this[property];
+					privates(this).initializeProperties[property] = this[property];
 					delete this[property];
 				}
 			});
 		}
 
 		_attributeToProperty(attribute: string, value: string): void {
-			if (!storage(this).serializing) {
+			if (!privates(this).serializing) {
 				const property: string = this.constructor.attributeToPropertyName(attribute);
 				this[property] = this._deserializeValue(property, value);
 			}
@@ -319,7 +319,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 		}
 
 		_propertyToAttribute(property: string, value: any): void {
-			storage(this).serializing = true;
+			privates(this).serializing = true;
 			const attribute = this.constructor.propertyNameToAttribute(property);
 			value = this._serializeValue(property, value);
 			if (value === undefined) {
@@ -327,7 +327,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 			} else if (this.getAttribute(attribute) !== value) {
 				this.setAttribute(attribute, value);
 			}
-			storage(this).serializing = false;
+			privates(this).serializing = false;
 		}
 
 		_deserializeValue(property: string, value: any): any {
@@ -362,29 +362,29 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 		}
 
 		_setPendingProperty(property: string, value: any): boolean {
-			let old = storage(this).data[property];
+			let old = privates(this).data[property];
 			let changed = this._shouldPropertyChange(property, value, old);
 			if (changed) {
-				if (!storage(this).dataPending) {
-					storage(this).dataPending = {};
-					storage(this).dataOld = {};
+				if (!privates(this).dataPending) {
+					privates(this).dataPending = {};
+					privates(this).dataOld = {};
 				}
 				// Ensure old is captured from the last turn
-				if (storage(this).dataOld && !(property in storage(this).dataOld)) {
-					storage(this).dataOld[property] = old;
+				if (privates(this).dataOld && !(property in privates(this).dataOld)) {
+					privates(this).dataOld[property] = old;
 				}
-				storage(this).data[property] = value;
-				storage(this).dataPending[property] = value;
+				privates(this).data[property] = value;
+				privates(this).dataPending[property] = value;
 			}
 			return changed;
 		}
 
 		_invalidateProperties(): void {
-			if (!storage(this).dataInvalid) {
-				storage(this).dataInvalid = true;
+			if (!privates(this).dataInvalid) {
+				privates(this).dataInvalid = true;
 				microTask.run(() => {
-					if (storage(this).dataInvalid) {
-						storage(this).dataInvalid = false;
+					if (privates(this).dataInvalid) {
+						privates(this).dataInvalid = false;
 						this._flushProperties();
 					}
 				});
@@ -392,13 +392,13 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 		}
 
 		_flushProperties(): void {
-			const props: Object = storage(this).data;
-			const changedProps: Object = storage(this).dataPending;
-			const old: Object = storage(this).dataOld;
+			const props: Object = privates(this).data;
+			const changedProps: Object = privates(this).dataPending;
+			const old: Object = privates(this).dataOld;
 
 			if (this._shouldPropertiesChange(props, changedProps, old)) {
-				storage(this).dataPending = null;
-				storage(this).dataOld = null;
+				privates(this).dataPending = null;
+				privates(this).dataOld = null;
 				this.propertiesChanged(props, changedProps, old);
 			}
 		}

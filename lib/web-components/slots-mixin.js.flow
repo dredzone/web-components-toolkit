@@ -26,7 +26,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 			before(createBeforeRenderAdvice(), '_onRender')(this);
 		}
 
-		construct() {
+		construct(): void {
 			super.construct();
 			this.slots = {default: []};
 		}
@@ -46,7 +46,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 				children.forEach((child: Element) => {
 					const attribute: mixed = child.getAttribute ? child.getAttribute('slot') : null;
 					if (typeof attribute === 'string' && attribute.length > 0) {
-						const slot = attribute.replace(hypenRegEx, match => match[1].toUpperCase());
+						const slot: string = attribute.replace(hypenRegEx, match => match[1].toUpperCase());
 						context.slots[slot] = child;
 					} else {
 						context.slots.default.push(child);
