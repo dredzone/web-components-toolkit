@@ -1,8 +1,8 @@
 /* @flow */
 export default (creator: Function = Object.create.bind(null, null, {})): Function => {
-	let store = new WeakMap();
+	let store: WeakMap<any, any> = new WeakMap();
 	return (obj: any): any => {
-		let value = store.get(obj);
+		let value: any = store.get(obj);
 		if (!value) {
 			store.set(obj, value = creator(obj));
 		}
