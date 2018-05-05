@@ -37,7 +37,7 @@ describe("Events Mixin", () => {
 		container.append(listener);
 	});
 
-	after(() => {
+	afterEach(() => {
 		removeElement(emmiter);
 		removeElement(listener);
 		container.innerHTML = '';
