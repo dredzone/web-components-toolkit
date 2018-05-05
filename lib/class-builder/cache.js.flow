@@ -1,7 +1,8 @@
 /* @flow */
-import wrapMixin from './wrap-mixin';
+import uniqueId from '../unique-id';
+import wrap from './wrap';
 
-const cachedApplicationSymbol: Symbol = Symbol('cachedApplication');
+const cachedApplicationKey: string = uniqueId('_cachedApplication');
 
 /**
  * Decorate the given mixin class with a "cached decorator".
@@ -15,11 +16,10 @@ const cachedApplicationSymbol: Symbol = Symbol('cachedApplication');
  * @return {Function}
  */
 export default (mixin: Function): Function => {
-	return wrapMixin(mixin, (superClass: Function): Function => {
-		// Create a symbol used to reference a cached application from a superclass
-		let cachedApplication = superClass[cachedApplicationSymbol];
+	return wrap(mixin, (superClass: Function): Function => {
+		let cachedApplication = superClass[cachedApplicationKey];
 		if (!cachedApplication) {
-			cachedApplication = superClass[cachedApplicationSymbol] = new Map();
+			cachedApplication = superClass[cachedApplicationKey] = new Map();
 		}
 
 		// $FlowFixMe

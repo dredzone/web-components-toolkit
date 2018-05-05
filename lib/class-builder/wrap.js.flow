@@ -1,5 +1,5 @@
 /* @flow */
-import {wrappedMixinSymbol} from './symbols';
+import {wrappedMixinKey} from './commons';
 
 const {setPrototypeOf} = Object;
 
@@ -21,8 +21,8 @@ const {setPrototypeOf} = Object;
  */
 export default (mixin: Function, wrapper: Function): Function => {
 	setPrototypeOf(wrapper, mixin);
-	if (!mixin[wrappedMixinSymbol]) {
-		mixin[wrappedMixinSymbol] = mixin;
+	if (!mixin[wrappedMixinKey]) {
+		mixin[wrappedMixinKey] = mixin;
 	}
 	return wrapper;
 };

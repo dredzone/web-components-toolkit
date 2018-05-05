@@ -1,6 +1,6 @@
 /* @flow */
-import {appliedMixinSymbol} from './symbols';
-import unwrapMixin from './unwrap-mixin';
+import {appliedMixinKey} from './commons';
+import unwrap from './unwrap';
 
 const {hasOwnProperty} = Object;
 
@@ -18,5 +18,5 @@ const {hasOwnProperty} = Object;
  * `mixin` to a superclass
  */
 export default (proto: Object, mixin: Function): boolean => {
-	return hasOwnProperty.call(proto, appliedMixinSymbol) && proto[appliedMixinSymbol] === unwrapMixin(mixin);
+	return hasOwnProperty.call(proto, appliedMixinKey) && proto[appliedMixinKey] === unwrap(mixin);
 };

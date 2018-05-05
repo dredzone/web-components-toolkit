@@ -1,5 +1,5 @@
 /* @flow */
-import {wrappedMixinSymbol} from './symbols';
+import {wrappedMixinKey} from './commons';
 
 /**
  * Unwraps the function `wrapper` to return the original function wrapped by
@@ -10,4 +10,4 @@ import {wrappedMixinSymbol} from './symbols';
  * @param {Function} wrapper A wrapped mixin produced by {@link wrap}
  * @return {Function} The originally wrapped mixin
  */
-export default (wrapper: Function): Function => wrapper[wrappedMixinSymbol] || wrapper;
+export default (wrapper: Function): Function => wrapper[wrappedMixinKey] || wrapper;

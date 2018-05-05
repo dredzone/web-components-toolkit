@@ -1,6 +1,6 @@
 /* @flow */
-import {appliedMixinSymbol} from './symbols';
-import unwrapMixin from './unwrap-mixin';
+import {appliedMixinKey} from './commons';
+import unwrap from './unwrap';
 
 /**
  * Applies `mixin` to `superclass`.
@@ -19,6 +19,6 @@ import unwrapMixin from './unwrap-mixin';
 export default (superClass: Function, mixin: Function) => {
 	let application = mixin(superClass);
 	const proto: any = application.prototype;
-	proto[appliedMixinSymbol] = unwrapMixin(mixin);
+	proto[appliedMixinKey] = unwrap(mixin);
 	return application;
 };

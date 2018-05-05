@@ -1,6 +1,6 @@
-/*  */
-import applyMixin from './apply-mixin';
-import wrapMixin from './wrap-mixin';
+/* @flow */
+import apply from './apply';
+import wrap from './wrap';
 
 /**
  * A basic mixin decorator that applies the mixin with {@link applyMixin} so that it
@@ -11,5 +11,5 @@ import wrapMixin from './wrap-mixin';
  * @param {Function} mixin The mixin to wrap
  * @return {Function} a new mixin function
  */
-export default (mixin) =>
-	wrapMixin(mixin, (superClass) => applyMixin(superClass, mixin));
+export default (mixin: Function): Function =>
+	wrap(mixin, (superClass: Function) => apply(superClass, mixin));
