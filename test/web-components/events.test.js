@@ -5,21 +5,21 @@ import removeElement from '../../lib/dom/remove-element.js';
 
 class EventsEmitter extends events(customElement()) {
 	connected() {
-		console.log(this.tagName.toLowerCase(), 'connected');
+
 	}
 
 	disconnected() {
-		console.log(this.tagName.toLowerCase(), 'disconnected');
+
 	}
 }
 
 class EventsListener extends events(customElement()) {
 	connected() {
-		console.log(this.tagName.toLowerCase(), 'connected');
+
 	}
 
 	disconnected() {
-		console.log(this.tagName.toLowerCase(), 'disconnected');
+
 	}
 }
 

@@ -19,9 +19,8 @@
 	window.assert = chai.assert;
 	window.expect = chai.expect;
 </script>
-<script type="module" src="/test/web-components/events.test.js"></script>
-<script type="module" src="/test/web-components/properties.test.js"></script>
 <script type="module">
+    import '/test/tests.js';
 	const errors = [];
 	mocha.run()
 		.on('fail', function(_, err) {errors.push(err.stack)})

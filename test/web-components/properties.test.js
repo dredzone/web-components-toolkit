@@ -3,14 +3,6 @@ import properties from '../../lib/web-components/properties-mixin.js';
 import listenEvent from '../../lib/dom/listen-event.js';
 
 class PropertiesMixinTest extends properties(customElement()) {
-	connected() {
-		console.log(this.tagName, 'connected');
-	}
-
-	disconnected() {
-		console.log(this.tagName, 'disconnected');
-	}
-
 	static get properties() {
 		return {
 			prop: {
