@@ -1,7 +1,7 @@
 /* @flow */
-import createStorage from '../create-storage';
-import around from '../advice/around';
-import microTask from '../dom/microtask';
+import createStorage from '../create-storage.js';
+import around from '../advice/around.js';
+import microTask from '../dom/microtask.js';
 
 const global: Object = document.defaultView;
 

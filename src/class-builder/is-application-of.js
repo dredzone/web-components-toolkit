@@ -1,6 +1,6 @@
 /* @flow */
-import {appliedMixinKey} from './commons';
-import unwrap from './unwrap';
+import {appliedMixinKey} from './commons.js';
+import unwrap from './unwrap.js';
 
 const {hasOwnProperty} = Object;
 

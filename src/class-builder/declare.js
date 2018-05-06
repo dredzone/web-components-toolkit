@@ -1,6 +1,6 @@
 /* @flow */
-import apply from './apply';
-import wrap from './wrap';
+import apply from './apply.js';
+import wrap from './wrap.js';
 
 /**
  * A basic mixin decorator that applies the mixin with {@link applyMixin} so that it

@@ -1,6 +1,6 @@
 /* @flow */
-import uniqueId from '../unique-id';
-import wrap from './wrap';
+import uniqueId from '../unique-id.js';
+import wrap from './wrap.js';
 
 const cachedApplicationKey: string = uniqueId('_cachedApplication');
 

@@ -1,8 +1,8 @@
 /* @flow */
-import before from '../advice/before';
-import createStorage from '../create-storage';
-import microTask from '../dom/microtask';
-import type {ICustomElement} from './custom-element-mixin';
+import before from '../advice/before.js';
+import createStorage from '../create-storage.js';
+import microTask from '../dom/microtask.js';
+import type {ICustomElement} from './custom-element-mixin.js';
 
 export type PropertyConfig = {
 	type: Function;

@@ -1,8 +1,8 @@
 /* @flow */
-import classBuilder from '../class-builder';
-import customElement, {type ICustomElement} from './custom-element-mixin';
-import properties, {type IProperties} from './properties-mixin';
-import events, {type IEvents} from './events-mixin';
+import classBuilder from '../class-builder.js';
+import customElement, {type ICustomElement} from './custom-element-mixin.js';
+import properties, {type IProperties} from './properties-mixin.js';
+import events, {type IEvents} from './events-mixin.js';
 
 export default (baseClass: Class<ICustomElement> = customElement()): Class<ICustomElement & IEvents & IProperties> => {
 	return class Component extends classBuilder(baseClass).with(events, properties) {

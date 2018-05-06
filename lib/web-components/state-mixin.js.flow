@@ -1,7 +1,7 @@
 /* @flow */
-import createStorage from '../create-storage';
-import after from '../advice/after';
-import type {ICustomElement} from './custom-element-mixin';
+import createStorage from '../create-storage.js';
+import after from '../advice/after.js';
+import type {ICustomElement} from './custom-element-mixin.js';
 
 export interface IState {
 	+state: Object;

@@ -1,5 +1,5 @@
 /* @flow */
-import uniqueId from '../unique-id';
+import uniqueId from '../unique-id.js';
 
 // used by wrap() and unwrap()
 export const wrappedMixinKey: string = uniqueId('_wrappedMixin');

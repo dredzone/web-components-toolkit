@@ -1,5 +1,5 @@
 /* @flow */
-import isApplicationOf from './is-application-of';
+import isApplicationOf from './is-application-of.js';
 
 const {getPrototypeOf} = Object;
 

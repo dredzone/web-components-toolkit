@@ -1,8 +1,8 @@
 /* @flow */
-import after from '../advice/after';
-import createStorage from '../create-storage';
-import listenEvent, {type EventHandler} from '../dom/listen-event';
-import type {ICustomElement} from './custom-element-mixin';
+import after from '../advice/after.js';
+import createStorage from '../create-storage.js';
+import listenEvent, {type EventHandler} from '../dom/listen-event.js';
+import type {ICustomElement} from './custom-element-mixin.js';
 
 export interface IEvents {
 	handleEvent(evt: Event): void;

@@ -1,5 +1,5 @@
 /* @flow */
-import {wrappedMixinKey} from './commons';
+import {wrappedMixinKey} from './commons.js';
 
 /**
  * Unwraps the function `wrapper` to return the original function wrapped by

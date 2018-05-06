@@ -1,5 +1,5 @@
 /* @flow */
-import listenEvent, {type EventHandler} from './listen-event';
+import listenEvent, {type EventHandler} from './listen-event.js';
 
 export type PausableEventHandler = EventHandler & {
 	pause(): void,

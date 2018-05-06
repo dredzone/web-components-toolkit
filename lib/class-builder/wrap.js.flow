@@ -1,5 +1,5 @@
 /* @flow */
-import {wrappedMixinKey} from './commons';
+import {wrappedMixinKey} from './commons.js';
 
 const {setPrototypeOf} = Object;
 
