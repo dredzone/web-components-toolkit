@@ -3,10 +3,17 @@
   "version": "0.18.0",
   "description": "Essential set of tools to develop web-components and applications",
   "main": "lib/index.js",
+  "module": "lib/index.js",
   "scripts": {
     "version": "",
     "postversion": "git push && git push --tags",
-    "build": "taskr",
+    "clean": "rimraf lib",
+    "flow": "npm run flow:check && npm run flow:transform && npm run flow:copy",
+    "flow:check": "flow check ./src/",
+    "flow:copy": "flow-copy-source src lib",
+    "flow:transform": "flow-remove-types  --pretty src/ --out-dir lib/",
+    "build": "npm run clean && npm run lint && npm run flow",
+    "lint": "eslint src",
     "test": "npm run build server:serve"
   },
   "keywords": [
@@ -23,34 +30,16 @@
   "author": "Dmitri Redcenco",
   "license": "MIT",
   "devDependencies": {
-    "@taskr/clear": "^1.1.0",
-    "@taskr/concat": "^1.1.0",
-    "@taskr/unflow": "^1.1.0",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^6.0.4",
-    "babel-plugin-syntax-flow": "^6.18.0",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-stage-1": "^6.24.1",
+    "babel-eslint": "^7.0.0",
     "chai": "^4.1.2",
+    "eslint": "^4.19.1",
     "eslint-plugin-flowtype": "2.30.0",
     "express": "^4.16.3",
     "flow-bin": "^0.60.1",
     "flow-copy-source": "^1.2.1",
+    "flow-remove-types": "^1.2.3",
     "mocha": "^4.0.1",
-    "taskr": "^1.1.0",
-    "taskr-xo": "^1.0.0",
-    "xo": "^0.17.0"
-  },
-  "babel": {
-    "presets": [
-      "env",
-      "stage-1"
-    ],
-    "plugins": [
-      "syntax-flow",
-      "transform-flow-strip-types"
-    ]
+    "rimraf": "^2.6.2"
   },
   "jspm": {
     "main": "index",
