@@ -31,7 +31,6 @@ const runTestsInHeadlessChrome = async (port) => {
 (async () => {
 	const server = await startStaticHttpServer();
 	const testResult = await runTestsInHeadlessChrome(server.port);
-	console.log(testResult);
 	if (testResult === 'OK') {
 		console.log('Tests passed.');
 	} else {
