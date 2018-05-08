@@ -12,7 +12,7 @@
     "flow:check": "flow check ./src/",
     "flow:copy": "flow-copy-source src lib",
     "flow:transform": "flow-remove-types  --pretty src/ --out-dir lib/",
-    "build": "npm run clean && npm run lint && npm run flow",
+    "build": "npm run clean && npm run lint && npm run flow && npm run bundle",
     "bundle": "rimraf bundles/umd && rollup -c",
     "lint": "eslint src",
     "serve": "static-server . --port 3000",
