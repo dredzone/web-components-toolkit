@@ -8,15 +8,16 @@
     "version": "",
     "postversion": "git push && git push --tags",
     "clean": "rimraf lib",
+    "build": "npm run build:lib && npm run build:bundle",
+    "lint": "eslint src",
+    "serve": "static-server . --port 3000",
+    "test": "node tasks/headless-tests.js",
     "flow": "npm run flow:check && npm run flow:transform && npm run flow:copy",
     "flow:check": "flow check ./src/",
     "flow:copy": "flow-copy-source src lib",
     "flow:transform": "flow-remove-types  --pretty src/ --out-dir lib/",
-    "build": "npm run clean && npm run lint && npm run flow && npm run bundle",
-    "bundle": "rimraf bundles/umd && rollup -c",
-    "lint": "eslint src",
-    "serve": "static-server . --port 3000",
-    "test": "node tasks/headless-tests.js"
+    "build:lib": "npm run clean && npm run lint && npm run flow",
+    "build:bundle": "rimraf bundles/umd && rollup -c"
   },
   "keywords": [
     "web-components",
