@@ -1,10 +1,10 @@
 /* @flow */
 export default (passThrough: any): Promise<any> => {
-	if (document.readyState === 'loading') {
-		return new Promise((resolve: Function) => {
-			document.addEventListener('DOMContentLoaded', () => resolve(passThrough));
-		});
-	}
+  if (document.readyState === 'loading') {
+    return new Promise((resolve: Function) => {
+      document.addEventListener('DOMContentLoaded', () => resolve(passThrough));
+    });
+  }
 
-	return Promise.resolve(passThrough);
+  return Promise.resolve(passThrough);
 };

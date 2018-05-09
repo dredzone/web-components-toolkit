@@ -11,6 +11,9 @@ import wrap from './wrap.js';
  * @return {Function} a new mixin function
  */
 export default (mixin: Function) => {
-	return wrap(mixin, (superClass: Function): Function =>
-		(has(superClass.prototype, mixin)) ? superClass : mixin(superClass));
+  return wrap(
+    mixin,
+    (superClass: Function): Function =>
+      has(superClass.prototype, mixin) ? superClass : mixin(superClass)
+  );
 };

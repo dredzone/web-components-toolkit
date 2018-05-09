@@ -12,4 +12,4 @@ import wrap from './wrap.js';
  * @return {Function} a new mixin function
  */
 export default (mixin: Function): Function =>
-	wrap(mixin, (superClass: Function) => apply(superClass, mixin));
+  wrap(mixin, (superClass: Function) => apply(superClass, mixin));

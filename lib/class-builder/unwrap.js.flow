@@ -1,5 +1,5 @@
 /* @flow */
-import {wrappedMixinKey} from './commons.js';
+import { wrappedMixinKey } from './commons.js';
 
 /**
  * Unwraps the function `wrapper` to return the original function wrapped by
@@ -10,4 +10,5 @@ import {wrappedMixinKey} from './commons.js';
  * @param {Function} wrapper A wrapped mixin produced by {@link wrap}
  * @return {Function} The originally wrapped mixin
  */
-export default (wrapper: Function): Function => wrapper[wrappedMixinKey] || wrapper;
+export default (wrapper: Function): Function =>
+  wrapper[wrappedMixinKey] || wrapper;
