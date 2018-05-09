@@ -62,7 +62,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 
 			if (changed) {
 				privates(this).state = nextState;
-				if (this.isConnected()) {
+				if (this.initialized) {
 					this.render();
 				}
 			}

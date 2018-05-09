@@ -4,11 +4,13 @@
       "targets": {
         "browsers": ["last 2 versions", "ie >= 11"]
       },
-      "modules": false
+      "modules": false,
+      "loose": true,
+      "useBuiltIns": true
       }
     ]
   ],
   "plugins": [
-    "transform-runtime"
+    "external-helpers"
   ]
 }

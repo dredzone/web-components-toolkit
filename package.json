@@ -8,7 +8,7 @@
     "version": "",
     "postversion": "git push && git push --tags",
     "clean": "rimraf lib",
-    "build": "npm run build:lib && npm run build:bundle",
+    "build": "npm run build:lib && npm run bundle",
     "lint": "eslint src",
     "serve": "static-server . --port 3000",
     "test": "node tasks/headless-tests.js",
@@ -17,7 +17,9 @@
     "flow:copy": "flow-copy-source src lib",
     "flow:transform": "flow-remove-types  --pretty src/ --out-dir lib/",
     "build:lib": "npm run clean && npm run lint && npm run flow",
-    "build:bundle": "rimraf bundles/umd && rollup -c"
+    "bundle": "npm run bundle:lib && npm run bundle:test",
+    "bundle:lib": "rollup -c rollup.config.js",
+    "bundle:test": "rollup -c rollup.config.test.js"
   },
   "keywords": [
     "web-components",
@@ -35,7 +37,9 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-eslint": "^7.0.0",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babelrc-rollup": "^3.0.0",
     "chai": "^4.1.2",
@@ -50,6 +54,7 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.58.2",
     "rollup-plugin-babel": "^3.0.4",
+    "rollup-plugin-uglify": "^3.0.0",
     "static-server": "^2.2.1"
   },
   "jspm": {
@@ -58,5 +63,7 @@
     "jspmPackage": true,
     "format": "esm"
   },
-  "dependencies": {}
+  "dependencies": {
+    "babel-runtime": "^6.26.0"
+  }
 }

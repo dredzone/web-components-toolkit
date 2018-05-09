@@ -21,13 +21,13 @@ export interface ICustomElement {
 
 	static define(tagName: string): void;
 
+	+initialized: boolean;
+
 	/**
 	 * Called during creation time,
 	 * subclasses extend override this, and should not use `constructor`
 	 */
 	construct(): void;
-
-	isConnected(): boolean;
 
 	/**
 	 * Called when an observed attribute has been added, removed, updated, or replaced.
@@ -119,6 +119,10 @@ export default (baseClass?: Class<HTMLElement>): Class<HTMLElement & ICustomElem
 			}
 		}
 
+		get initialized(): boolean {
+			return privates(this).initialized === true;
+		}
+
 		constructor(...args: Array<any>) {
 			super(...args);
 			this.construct();
@@ -126,10 +130,6 @@ export default (baseClass?: Class<HTMLElement>): Class<HTMLElement & ICustomElem
 
 		construct(): void {
 
-		}
-
-		isConnected(): boolean {
-			return privates(this).initialized === true;
 		}
 
 		/* eslint-disable no-unused-vars */

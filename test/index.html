@@ -6,6 +6,18 @@
     <link rel="stylesheet" href="/node_modules/mocha/mocha.css">
     <script src="/node_modules/mocha/mocha.js" type="text/javascript"></script>
     <script src="/node_modules/chai/chai.js" type="text/javascript"></script>
+    <script>
+		mocha.setup('bdd');
+		window.assert = chai.assert;
+		window.expect = chai.expect;
+    </script>
+    <script type="module">
+		import '/test/tests.js';
+		const errors = [];
+		mocha.run()
+			.on('fail', function(_, err) {errors.push(err.stack)})
+			.on('end', function() {console.log(`${this.failures ? JSON.stringify(errors): 'OK'}`)});
+    </script>
 </head>
 <body>
 <!-- Required for browser reporter -->
@@ -14,20 +26,12 @@
 <!-- Where tests can put elements -->
 <div id="container"></div>
 
-<script>
-	mocha.setup('bdd');
-	window.assert = chai.assert;
-	window.expect = chai.expect;
-</script>
-<script type="module">
-    import '/test/tests.js';
-	const errors = [];
-	mocha.run()
-		.on('fail', function(_, err) {errors.push(err.stack)})
-		.on('end', function() {console.log(`${this.failures ? JSON.stringify(errors): 'OK'}`)});
-</script>
+<script nomodule src="/node_modules/babel-polyfill/dist/polyfill.js"></script>
+<script nomodule src="/polyfills/document-register.js"></script>
+<script nomodule src="/polyfills/dom4.js"></script>
+<script nomodule src="/bundles/umd/test.js"></script>
 <script nomodule>
-
+	mocha.run();
 </script>
 </body>
 </html>

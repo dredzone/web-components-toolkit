@@ -1,16 +1,14 @@
 import babel from 'rollup-plugin-babel';
-import uglify from 'rollup-plugin-uglify';
 
 export default {
-	entry: 'lib/index.js',
-	dest: 'bundles/umd/index.js',
+	entry: 'test/tests.js',
+	dest: 'bundles/umd/test.js',
 	format: 'umd',
-	moduleName: 'VoyaUtilityToolkit',
+	moduleName: 'VoyaUtilityToolkitTests',
 	sourceMap: 'inline',
 	plugins: [
 		babel({
 			exclude: 'node_modules/**'
-		}),
-		uglify({})
+		})
 	]
 };

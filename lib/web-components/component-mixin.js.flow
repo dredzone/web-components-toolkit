@@ -7,7 +7,7 @@ import events, {type IEvents} from './events-mixin.js';
 export default (baseClass: Class<ICustomElement> = customElement()): Class<ICustomElement & IEvents & IProperties> => {
 	return class Component extends classBuilder(baseClass).with(events, properties) {
 		propertiesChanged(currentProps: Object, changedProps: Object, oldProps: Object): void { // eslint-disable-line no-unused-vars
-			if (this.isConnected()) {
+			if (this.initialized) {
 				this.render();
 			}
 		}
