@@ -1,8 +1,8 @@
 /* @flow */
-import {appliedMixinKey} from './commons.js';
+import { appliedMixinKey } from './commons.js';
 import unwrap from './unwrap.js';
 
-const {hasOwnProperty} = Object;
+const { hasOwnProperty } = Object;
 
 /**
  * Returns `true` iff `proto` is a prototype created by the application of
@@ -18,5 +18,8 @@ const {hasOwnProperty} = Object;
  * `mixin` to a superclass
  */
 export default (proto: Object, mixin: Function): boolean => {
-	return hasOwnProperty.call(proto, appliedMixinKey) && proto[appliedMixinKey] === unwrap(mixin);
+  return (
+    hasOwnProperty.call(proto, appliedMixinKey) &&
+    proto[appliedMixinKey] === unwrap(mixin)
+  );
 };

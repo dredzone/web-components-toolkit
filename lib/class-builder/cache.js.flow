@@ -16,18 +16,18 @@ const cachedApplicationKey: string = uniqueId('_cachedApplication');
  * @return {Function}
  */
 export default (mixin: Function): Function => {
-	return wrap(mixin, (superClass: Function): Function => {
-		let cachedApplication = superClass[cachedApplicationKey];
-		if (!cachedApplication) {
-			cachedApplication = superClass[cachedApplicationKey] = new Map();
-		}
+  return wrap(mixin, (superClass: Function): Function => {
+    let cachedApplication = superClass[cachedApplicationKey];
+    if (!cachedApplication) {
+      cachedApplication = superClass[cachedApplicationKey] = new Map();
+    }
 
-		// $FlowFixMe
-		let application: Function = cachedApplication.get(mixin);
-		if (!application) {
-			application = mixin(superClass);
-			cachedApplication.set(mixin, application);
-		}
-		return application;
-	});
+    // $FlowFixMe
+    let application: Function = cachedApplication.get(mixin);
+    if (!application) {
+      application = mixin(superClass);
+      cachedApplication.set(mixin, application);
+    }
+    return application;
+  });
 };

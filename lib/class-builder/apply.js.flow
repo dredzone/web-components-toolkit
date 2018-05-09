@@ -1,5 +1,5 @@
 /* @flow */
-import {appliedMixinKey} from './commons.js';
+import { appliedMixinKey } from './commons.js';
 import unwrap from './unwrap.js';
 
 /**
@@ -17,8 +17,8 @@ import unwrap from './unwrap.js';
  * @return {Function} A subclass of `superclass` produced by `mixin`
  */
 export default (superClass: Function, mixin: Function) => {
-	let application = mixin(superClass);
-	const proto: any = application.prototype;
-	proto[appliedMixinKey] = unwrap(mixin);
-	return application;
+  let application = mixin(superClass);
+  const proto: any = application.prototype;
+  proto[appliedMixinKey] = unwrap(mixin);
+  return application;
 };

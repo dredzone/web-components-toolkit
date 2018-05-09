@@ -1,6 +1,6 @@
 /* @flow */
 export default (element: Node): void => {
-	if (element.parentElement) {
-		element.parentElement.removeChild(element);
-	}
+  if (element.parentElement) {
+    element.parentElement.removeChild(element);
+  }
 };
