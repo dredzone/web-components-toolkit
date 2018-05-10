@@ -1,24 +1,27 @@
 /* @flow */
 import { all, any } from './array.js';
 
-export type Api = {
+export type TypeApi = {
   all(...params: Array<any>): boolean,
   any(...params: Array<any>): boolean
 };
 
-export type Is = {
-  array: Function & Api,
-  object: Function & Api,
-  string: Function & Api,
-  date: Function & Api,
-  regexp: Function & Api,
-  function: Function & Api,
-  boolean: Function & Api,
-  number: Function & Api,
-  null: Function & Api,
-  undefined: Function & Api,
-  arguments: Function & Api,
-  error: Function & Api
+export type Type = {
+  array: Function & TypeApi,
+  object: Function & TypeApi,
+  string: Function & TypeApi,
+  date: Function & TypeApi,
+  regexp: Function & TypeApi,
+  function: Function & TypeApi,
+  boolean: Function & TypeApi,
+  number: Function & TypeApi,
+  null: Function & TypeApi,
+  undefined: Function & TypeApi,
+  arguments: Function & TypeApi,
+  error: Function & TypeApi,
+  map: Function & TypeApi,
+  set: Function & TypeApi,
+  symbol: Function & TypeApi
 };
 
 const doAllApi: Function = (fn: Function): Function => (
@@ -28,17 +31,17 @@ const doAnyApi: Function = (fn: Function): Function => (
   ...params: Array<any>
 ) => any(params, fn);
 const toString: Function = Object.prototype.toString;
-const types: string[] = 'Array Object String Date RegExp Function Boolean Number Null Undefined Arguments Error'.split(
+const types: string[] = 'Map Set Symbol Array Object String Date RegExp Function Boolean Number Null Undefined Arguments Error'.split(
   ' '
 );
 const len: number = types.length;
 const typeCache: Object = {};
 const typeRegexp: RegExp = /\s([a-zA-Z]+)/;
-const is: Is = setup();
+const is: Type = setup();
 
 export default is;
 
-function setup(): Is {
+function setup(): Type {
   let checks: Object = {};
   for (let i: number = len; i--; ) {
     const type: string = types[i].toLowerCase();

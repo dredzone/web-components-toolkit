@@ -1,3 +1,3 @@
 /* @flow */
-export { default as all } from './array/all.js';
 export { default as any } from './array/any.js';
+export { default as all } from './array/all.js';
