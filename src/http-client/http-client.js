@@ -48,7 +48,7 @@ const httpClientFactory = function(
   const requestSteps = [];
   const responseSteps = [];
 
-  function run(method, customRunOptions = {}) {
+  function run(method, customRunOptions = {}): Promise<any> {
     let request: THttpClientOptions = Object.assign(
       {},
       instanceOptions,
@@ -152,14 +152,14 @@ const httpClientFactory = function(
     put: run.bind(this, 'PUT'),
     patch: run.bind(this, 'PATCH'),
     delete: run.bind(this, 'DELETE'),
-    options: (newOptions = {}) => {
+    options: (newOptions = {}): THttpClientOptions => {
       return clone(Object.assign(instanceOptions, newOptions));
     },
-    addRequestStep: function() {
+    addRequestStep: function(): THttpClient {
       requestSteps.push(normalizeAddStepArguments(arguments));
       return this;
     },
-    addResponseStep: function() {
+    addResponseStep: function(): THttpClient {
       responseSteps.push(normalizeAddStepArguments(arguments));
       return this;
     }
