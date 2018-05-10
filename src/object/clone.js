@@ -3,7 +3,7 @@ import type from '../type.js';
 
 export default (src: any): mixed => clone(src, [], []);
 
-function clone(src: any, circulars: Array<any>, clones: Array<any>) {
+function clone(src: any, circulars: Array<any>, clones: Array<any>): any {
   // Null/undefined/functions/etc
   if (!src || !type.object(src) || type.function(src)) {
     return src;
