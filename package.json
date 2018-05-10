@@ -10,7 +10,7 @@
     "clean": "rimraf lib",
     "build": "npm run build:lib && npm run bundle",
     "lint": "eslint src",
-    "serve": "static-server . --port 3000",
+    "serve": "node ./tasks/serve.js execute",
     "test": "node tasks/headless-tests.js",
     "flow": "npm run flow:check && npm run flow:transform && npm run flow:copy",
     "flow:check": "flow check ./src/",
@@ -58,6 +58,7 @@
     "chai": "^4.1.2",
     "eslint": "^4.19.1",
     "eslint-plugin-flowtype": "2.30.0",
+    "express": "^4.16.3",
     "flow-bin": "^0.60.1",
     "flow-copy-source": "^1.2.1",
     "flow-remove-types": "^1.2.3",
@@ -70,8 +71,7 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.58.2",
     "rollup-plugin-babel": "^3.0.4",
-    "rollup-plugin-uglify": "^3.0.0",
-    "static-server": "^2.2.1"
+    "rollup-plugin-uglify": "^3.0.0"
   },
   "jspm": {
     "main": "lib/index",
