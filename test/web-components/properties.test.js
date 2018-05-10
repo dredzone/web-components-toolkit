@@ -1,6 +1,6 @@
 import customElement from '../../lib/web-components/custom-element-mixin.js';
 import properties from '../../lib/web-components/properties-mixin.js';
-import listenEvent from '../../lib/dom/listen-event.js';
+import listenEvent from '../../lib/browser/listen-event.js';
 
 class PropertiesMixinTest extends properties(customElement()) {
   static get properties() {

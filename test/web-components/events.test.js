@@ -1,7 +1,7 @@
 import customElement from '../../lib/web-components/custom-element-mixin.js';
 import events from '../../lib/web-components/events-mixin.js';
-import stopEvent from '../../lib/dom/stop-event.js';
-import removeElement from '../../lib/dom/remove-element.js';
+import stopEvent from '../../lib/browser/stop-event.js';
+import removeElement from '../../lib/browser/remove-element.js';
 
 class EventsEmitter extends events(customElement()) {
   connected() {}
