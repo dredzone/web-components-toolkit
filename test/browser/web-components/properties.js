@@ -1,6 +1,6 @@
-import customElement from '../../lib/web-components/custom-element-mixin.js';
-import properties from '../../lib/web-components/properties-mixin.js';
-import listenEvent from '../../lib/browser/listen-event.js';
+import customElement from '../../../lib/browser/web-components/custom-element-mixin.js';
+import properties from '../../../lib/browser/web-components/properties-mixin.js';
+import listenEvent from '../../../lib/browser/listen-event.js';
 
 class PropertiesMixinTest extends properties(customElement()) {
   static get properties() {
@@ -30,13 +30,12 @@ describe('Properties Mixin', () => {
   const propertiesMixinTest = document.createElement('properties-mixin-test');
 
   before(() => {
-    container = document.getElementById('container');
-    container.append(propertiesMixinTest);
+	  container = document.getElementById('container');
+      container.append(propertiesMixinTest);
   });
 
   after(() => {
-    container.remove(propertiesMixinTest);
-    container.innerHTML = '';
+      container.innerHTML = '';
   });
 
   it('properties', () => {

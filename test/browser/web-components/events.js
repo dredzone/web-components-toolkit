@@ -1,7 +1,7 @@
-import customElement from '../../lib/web-components/custom-element-mixin.js';
-import events from '../../lib/web-components/events-mixin.js';
-import stopEvent from '../../lib/browser/stop-event.js';
-import removeElement from '../../lib/browser/remove-element.js';
+import customElement from '../../../lib/browser/web-components/custom-element-mixin.js';
+import events from '../../../lib/browser/web-components/events-mixin.js';
+import stopEvent from '../../../lib/browser/stop-event.js';
+import removeElement from '../../../lib/browser/remove-element.js';
 
 class EventsEmitter extends events(customElement()) {
   connected() {}
@@ -29,11 +29,10 @@ describe('Events Mixin', () => {
     container.append(listener);
   });
 
-  afterEach(() => {
-    removeElement(emmiter);
-    removeElement(listener);
+  after(() => {
     container.innerHTML = '';
   });
+
   it('expect emitter to fireEvent and listener to handle an event', () => {
     listener.on('hi', evt => {
       stopEvent(evt);

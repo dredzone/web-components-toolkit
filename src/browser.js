@@ -13,3 +13,4 @@ export { default as listenEvent } from './browser/listen-event.js';
 export { default as listenEventOnce } from './browser/listen-event-once.js';
 export { default as pausableEvent } from './browser/pausable-event.js';
 export { default as stopEvent } from './browser/stop-event.js';
+export * from './browser/web-components';

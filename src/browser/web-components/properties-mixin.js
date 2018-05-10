@@ -1,23 +1,95 @@
-/*  */
-import before from '../advice/before.js';
-import createStorage from '../create-storage.js';
-import microTask from '../browser/microtask.js';
+/* @flow */
+import before from '../../advice/before.js';
+import createStorage from '../../create-storage.js';
+import microTask from '../microtask.js';
+import type { ICustomElement } from './custom-element-mixin.js';
 
+export type PropertyConfig = {
+  type: Function,
+  value?: any,
+  reflectToAttribute: boolean,
+  readOnly: boolean,
+  observer?: string | Function,
+  notify: boolean,
+  hasObserver: boolean,
+  isObserver: boolean,
+  isObserverString: boolean,
+  isString: boolean,
+  isNumber: boolean,
+  isBoolean: boolean,
+  isObject: boolean,
+  isArray: boolean,
+  isDate: boolean
+};
 
+export type PropertiesConfig = {
+  [string]: PropertyConfig
+};
 
+export interface IProperties {
+  static +classProperties: PropertiesConfig;
 
+  static createProperties(): void;
 
-export default (baseClass) => {
+  static attributeToPropertyName(attribute: string): string;
+
+  static propertyNameToAttribute(property: string): string;
+
+  propertiesChanged(
+    currentProps: Object,
+    changedProps: Object,
+    oldProps: Object
+  ): void;
+
+  _createPropertyAccessor(property: string, readOnly: boolean): void;
+
+  _getProperty(property: string): any;
+
+  _setProperty(property: string, newValue: any): void;
+
+  _initializeProtoProperties(): void;
+
+  _initializeProperties(): void;
+
+  _attributeToProperty(attribute: string, value: string): void;
+
+  _isValidPropertyValue(property: string, value: any): boolean;
+
+  _propertyToAttribute(property: string, value: any): void;
+
+  _deserializeValue(property: string, value: any): any;
+
+  _serializeValue(property: string, value: any): any;
+
+  _setPendingProperty(property: string, value: any): boolean;
+
+  _invalidateProperties(): void;
+
+  _flushProperties(): void;
+
+  _shouldPropertiesChange(
+    currentProps: Object,
+    changedProps: Object,
+    oldProps: Object
+  ): boolean;
+
+  _shouldPropertyChange(property: string, value: any, old: any): boolean;
+}
+
+type InType = HTMLElement & ICustomElement;
+type OutType = InType & IProperties;
+
+export default (baseClass: Class<InType>): Class<OutType> => {
   const { defineProperty, keys, assign } = Object;
-  const attributeToPropertyNames = {};
-  const propertyNamesToAttributes = {};
-  const privates = createStorage();
+  const attributeToPropertyNames: { [key: string]: string } = {};
+  const propertyNamesToAttributes: { [key: string]: string } = {};
+  const privates: Function = createStorage();
 
-  let propertiesConfig;
-  let dataHasAccessor = {};
-  let dataProtoValues = {};
+  let propertiesConfig: PropertiesConfig;
+  let dataHasAccessor: { [key: string]: boolean } = {};
+  let dataProtoValues: { [key: string]: boolean } = {};
 
-  function enhancePropertyConfig(config) {
+  function enhancePropertyConfig(config: Object): void {
     config.hasObserver = 'observer' in config;
     config.isObserverString =
       config.hasObserver && typeof config.observer === 'string';
@@ -35,13 +107,13 @@ export default (baseClass) => {
         : config.isString || config.isNumber || config.isBoolean;
   }
 
-  function normalizeProperties(properties) {
-    const output = {};
+  function normalizeProperties(properties: Object): PropertyConfig {
+    const output: Object = {};
     for (let name in properties) {
       if (!Object.hasOwnProperty.call(properties, name)) {
         continue;
       }
-      const property = properties[name];
+      const property: Object = properties[name];
       output[name] =
         typeof property === 'function' ? { type: property } : property;
       enhancePropertyConfig(output[name]);
@@ -49,9 +121,9 @@ export default (baseClass) => {
     return output;
   }
 
-  function createConnectedAdvice() {
-    return function() {
-      const context = this;
+  function createConnectedAdvice(): Function {
+    return function(): void {
+      const context: IProperties = this;
       if (Object.keys(privates(context).initializeProperties).length > 0) {
         assign(context, privates(context).initializeProperties);
         privates(context).initializeProperties = {};
@@ -60,23 +132,23 @@ export default (baseClass) => {
     };
   }
 
-  function createAttributeChangeAdvice() {
-    return function(attribute, oldValue, newValue) {
-      const context = this;
+  function createAttributeChangeAdvice(): Function {
+    return function(attribute: string, oldValue: any, newValue: any): void {
+      const context: IProperties = this;
       if (oldValue !== newValue) {
         context._attributeToProperty(attribute, newValue);
       }
     };
   }
 
-  function createPropertiesChangedAdvice() {
+  function createPropertiesChangedAdvice(): Function {
     return function(
-      currentProps,
-      changedProps,
-      oldProps
-    ) {
-      let context = this;
-      Object.keys(changedProps).forEach((property) => {
+      currentProps: Object,
+      changedProps: Object,
+      oldProps: Object
+    ): void {
+      let context: IProperties & HTMLElement = this;
+      Object.keys(changedProps).forEach((property: string) => {
         const {
           notify,
           hasObserver,
@@ -106,17 +178,19 @@ export default (baseClass) => {
     };
   }
 
-  return class Properties extends baseClass {
+  return class Properties extends baseClass implements IProperties {
+    $key: any;
+    $value: any;
 
-    static get observedAttributes() {
+    static get observedAttributes(): Array<string> {
       return (
-        Object.keys(this.classProperties).map((property) =>
+        Object.keys(this.classProperties).map((property: string) =>
           this.propertyNameToAttribute(property)
         ) || []
       );
     }
 
-    static finalizeClass() {
+    static finalizeClass(): void {
       super.finalizeClass();
       before(createConnectedAdvice(), 'connected')(this);
       before(createAttributeChangeAdvice(), 'attributeChanged')(this);
@@ -124,11 +198,11 @@ export default (baseClass) => {
       this.createProperties();
     }
 
-    static attributeToPropertyName(attribute) {
-      let property = attributeToPropertyNames[attribute];
+    static attributeToPropertyName(attribute: string): string {
+      let property: ?string = attributeToPropertyNames[attribute];
       if (!property) {
         // Convert and memoize.
-        const hypenRegEx = /-([a-z])/g;
+        const hypenRegEx: RegExp = /-([a-z])/g;
         property = attribute.replace(hypenRegEx, match =>
           match[1].toUpperCase()
         );
@@ -137,22 +211,22 @@ export default (baseClass) => {
       return property;
     }
 
-    static propertyNameToAttribute(property) {
-      let attribute = propertyNamesToAttributes[property];
+    static propertyNameToAttribute(property: string): string {
+      let attribute: ?string = propertyNamesToAttributes[property];
       if (!attribute) {
         // Convert and memoize.
-        const uppercaseRegEx = /([A-Z])/g;
+        const uppercaseRegEx: RegExp = /([A-Z])/g;
         attribute = property.replace(uppercaseRegEx, '-$1').toLowerCase();
         propertyNamesToAttributes[property] = attribute;
       }
       return attribute;
     }
 
-    static get classProperties() {
+    static get classProperties(): PropertiesConfig {
       if (!propertiesConfig) {
         const getPropertiesConfig = () => propertiesConfig || {};
-        let checkObj = null;
-        let loop = true;
+        let checkObj: any = null;
+        let loop: boolean = true;
 
         while (loop) {
           checkObj = Object.getPrototypeOf(checkObj === null ? this : checkObj);
@@ -185,16 +259,16 @@ export default (baseClass) => {
       return propertiesConfig;
     }
 
-    static createProperties() {
+    static createProperties(): void {
       const proto = this.prototype;
-      const properties = this.classProperties;
-      keys(properties).forEach((property) => {
+      const properties: PropertiesConfig = this.classProperties;
+      keys(properties).forEach((property: string) => {
         if (Object.hasOwnProperty.call(proto, property)) {
           throw new Error(
             `Unable to setup property '${property}', property already exists`
           );
         }
-        const propertyValue = properties[property].value;
+        const propertyValue: any = properties[property].value;
         if (propertyValue !== undefined) {
           dataProtoValues[property] = propertyValue;
         }
@@ -215,12 +289,12 @@ export default (baseClass) => {
     }
 
     propertiesChanged(
-      currentProps,
-      changedProps,
-      oldProps // eslint-disable-line no-unused-vars
-    ) {}
+      currentProps: Object,
+      changedProps: Object,
+      oldProps: Object // eslint-disable-line no-unused-vars
+    ): void {}
 
-    _createPropertyAccessor(property, readOnly) {
+    _createPropertyAccessor(property: string, readOnly: boolean): void {
       if (!dataHasAccessor[property]) {
         dataHasAccessor[property] = true;
         defineProperty(this, property, {
@@ -231,18 +305,18 @@ export default (baseClass) => {
           },
           set: readOnly
             ? () => {}
-            : function(newValue) {
+            : function(newValue: any) {
                 this._setProperty(property, newValue);
               }
         });
       }
     }
 
-    _getProperty(property) {
+    _getProperty(property: string): any {
       return privates(this).data[property];
     }
 
-    _setProperty(property, newValue) {
+    _setProperty(property: string, newValue: any): void {
       if (this._isValidPropertyValue(property, newValue)) {
         if (this._setPendingProperty(property, newValue)) {
           this._invalidateProperties();
@@ -254,8 +328,8 @@ export default (baseClass) => {
       }
     }
 
-    _initializeProtoProperties() {
-      Object.keys(dataProtoValues).forEach((property) => {
+    _initializeProtoProperties(): void {
+      Object.keys(dataProtoValues).forEach((property: string) => {
         const value =
           typeof dataProtoValues[property] === 'function'
             ? dataProtoValues[property].call(this)
@@ -264,8 +338,8 @@ export default (baseClass) => {
       });
     }
 
-    _initializeProperties() {
-      Object.keys(dataHasAccessor).forEach((property) => {
+    _initializeProperties(): void {
+      Object.keys(dataHasAccessor).forEach((property: string) => {
         if (Object.hasOwnProperty.call(this, property)) {
           privates(this).initializeProperties[property] = this[property];
           delete this[property];
@@ -273,19 +347,19 @@ export default (baseClass) => {
       });
     }
 
-    _attributeToProperty(attribute, value) {
+    _attributeToProperty(attribute: string, value: string): void {
       if (!privates(this).serializing) {
-        const property = this.constructor.attributeToPropertyName(
+        const property: string = this.constructor.attributeToPropertyName(
           attribute
         );
         this[property] = this._deserializeValue(property, value);
       }
     }
 
-    _isValidPropertyValue(property, value) {
-      const propertyType = this.constructor.classProperties[property]
+    _isValidPropertyValue(property: string, value: any): boolean {
+      const propertyType: Function = this.constructor.classProperties[property]
         .type;
-      let isValid = false;
+      let isValid: boolean = false;
       if (typeof value === 'object') {
         isValid = value instanceof propertyType;
       } else {
@@ -294,7 +368,7 @@ export default (baseClass) => {
       return isValid;
     }
 
-    _propertyToAttribute(property, value) {
+    _propertyToAttribute(property: string, value: any): void {
       privates(this).serializing = true;
       const attribute = this.constructor.propertyNameToAttribute(property);
       value = this._serializeValue(property, value);
@@ -306,7 +380,7 @@ export default (baseClass) => {
       privates(this).serializing = false;
     }
 
-    _deserializeValue(property, value) {
+    _deserializeValue(property: string, value: any): any {
       const {
         isNumber,
         isArray,
@@ -334,8 +408,8 @@ export default (baseClass) => {
       return value;
     }
 
-    _serializeValue(property, value) {
-      const propertyConfig = this.constructor.classProperties[
+    _serializeValue(property: string, value: any): any {
+      const propertyConfig: PropertyConfig = this.constructor.classProperties[
         property
       ];
       const { isBoolean, isObject, isArray } = propertyConfig;
@@ -351,7 +425,7 @@ export default (baseClass) => {
       return value;
     }
 
-    _setPendingProperty(property, value) {
+    _setPendingProperty(property: string, value: any): boolean {
       let old = privates(this).data[property];
       let changed = this._shouldPropertyChange(property, value, old);
       if (changed) {
@@ -369,7 +443,7 @@ export default (baseClass) => {
       return changed;
     }
 
-    _invalidateProperties() {
+    _invalidateProperties(): void {
       if (!privates(this).dataInvalid) {
         privates(this).dataInvalid = true;
         microTask.run(() => {
@@ -381,10 +455,10 @@ export default (baseClass) => {
       }
     }
 
-    _flushProperties() {
-      const props = privates(this).data;
-      const changedProps = privates(this).dataPending;
-      const old = privates(this).dataOld;
+    _flushProperties(): void {
+      const props: Object = privates(this).data;
+      const changedProps: Object = privates(this).dataPending;
+      const old: Object = privates(this).dataOld;
 
       if (this._shouldPropertiesChange(props, changedProps, old)) {
         privates(this).dataPending = null;
@@ -394,14 +468,14 @@ export default (baseClass) => {
     }
 
     _shouldPropertiesChange(
-      currentProps,
-      changedProps,
-      oldProps // eslint-disable-line no-unused-vars
-    ) {
+      currentProps: Object,
+      changedProps: Object,
+      oldProps: Object // eslint-disable-line no-unused-vars
+    ): boolean {
       return Boolean(changedProps);
     }
 
-    _shouldPropertyChange(property, value, old) {
+    _shouldPropertyChange(property: string, value: any, old: any): boolean {
       return (
         // Strict equality check
         old !== value &&

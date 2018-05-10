@@ -1,5 +1,5 @@
 /* @flow */
-import classBuilder from '../class-builder.js';
+import classBuilder from '../../class-builder.js';
 import customElement, { type ICustomElement } from './custom-element-mixin.js';
 import properties, { type IProperties } from './properties-mixin.js';
 import events, { type IEvents } from './events-mixin.js';

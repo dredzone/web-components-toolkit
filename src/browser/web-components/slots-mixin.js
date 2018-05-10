@@ -1,6 +1,6 @@
 /* @flow */
-import before from '../advice/before.js';
-import elementChildren from '../browser/element-children.js';
+import before from '../../advice/before.js';
+import elementChildren from '../element-children.js';
 import type { ICustomElement } from './custom-element-mixin.js';
 
 export type SlotsData = {
