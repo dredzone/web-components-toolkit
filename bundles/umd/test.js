@@ -1170,11 +1170,10 @@
 
   /*  */
 
-  var clone = (function (src) {
-    return clone$1(src, [], []);
-  });
+  var clone = function clone(src) {
+    var circulars = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+    var clones = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
-  function clone$1(src, circulars, clones) {
     // Null/undefined/functions/etc
     if (!src || !is.object(src) || is.function(src)) {
       return src;
@@ -1192,7 +1191,7 @@
 
     // Arrays
     if (is.array(src)) {
-      return src.map(clone$1);
+      return src.map(clone);
     }
 
     // ES6 Maps
@@ -1215,7 +1214,7 @@
         var idx = circulars.findIndex(function (i) {
           return i === src[key];
         });
-        obj[key] = idx > -1 ? clones[idx] : clone$1(src[key], circulars, clones);
+        obj[key] = idx > -1 ? clones[idx] : clone(src[key], circulars, clones);
       };
 
       for (var key in src) {
@@ -1225,28 +1224,56 @@
     }
 
     return src;
-  }
+  };
+
+  var jsonClone = function jsonClone(value) {
+    try {
+      return JSON.parse(JSON.stringify(value));
+    } catch (e) {
+      return value;
+    }
+  };
 
   describe('Clone', function () {
-  	describe('primitives', function () {
-  		it('Returns equal data for Null/undefined/functions/etc', function () {
-  			// Null
-  			expect(clone(null)).to.be.null;
+    describe('primitives', function () {
+      it('Returns equal data for Null/undefined/functions/etc', function () {
+        // Null
+        expect(clone(null)).to.be.null;
 
-  			// Undefined
-  			expect(clone()).to.be.undefined;
+        // Undefined
+        expect(clone()).to.be.undefined;
 
-  			// Function
-  			var func = function func() {};
-  			assert.isFunction(clone(func), 'is a function');
+        // Function
+        var func = function func() {};
+        assert.isFunction(clone(func), 'is a function');
 
-  			// Etc: numbers and string
-  			assert.equal(clone(5), 5);
-  			assert.equal(clone('string'), 'string');
-  			assert.equal(clone(false), false);
-  			assert.equal(clone(true), true);
-  		});
-  	});
+        // Etc: numbers and string
+        assert.equal(clone(5), 5);
+        assert.equal(clone('string'), 'string');
+        assert.equal(clone(false), false);
+        assert.equal(clone(true), true);
+      });
+    });
+
+    describe('jsonClone', function () {
+      it('When non-serializable value is passed in, returns the same for Null/undefined/functions/etc', function () {
+        // Null
+        expect(jsonClone(null)).to.be.null;
+
+        // Undefined
+        expect(jsonClone()).to.be.undefined;
+
+        // Function
+        var func = function func() {};
+        assert.isFunction(jsonClone(func), 'is a function');
+
+        // Etc: numbers and string
+        assert.equal(jsonClone(5), 5);
+        assert.equal(jsonClone('string'), 'string');
+        assert.equal(jsonClone(false), false);
+        assert.equal(jsonClone(true), true);
+      });
+    });
   });
 
   describe('Type', function () {
@@ -1406,6 +1433,468 @@
         expect(is.set(Object.create(null))).to.be.false;
       });
     });
+  });
+
+  /*  */
+
+  var useFetch = function useFetch(httpClient) {
+    return httpClient.addResponseStep(function (_ref) {
+      var request = _ref.request,
+          response = _ref.response;
+
+      if (typeof response !== 'undefined') {
+        return response;
+      }
+      var fetchOptions = {
+        method: request.method,
+        mode: request.mode,
+        credentials: request.credentials,
+        headers: request.headers
+      };
+
+      var body = getBodyFromReq(request);
+      if (body) {
+        fetchOptions.body = body;
+      }
+
+      if (!request.url) {
+        throw new Error('http-client: url option is not set');
+      }
+
+      // $FlowFixMe
+      return fetch(request.url, fetchOptions).then(function (response) {
+        if (!response.ok) throw response;
+        return response.text();
+      }).then(function (response) {
+        try {
+          return JSON.parse(response);
+        } catch (e) {
+          return response;
+        }
+      });
+    });
+  };
+
+  /*  */
+
+  var defaultOptions = {
+    mode: 'cors',
+    data: undefined,
+    headers: {
+      'X-Requested-By': 'DEEP-UI',
+      'Content-Type': 'application/json'
+    },
+    credentials: 'same-origin', //'include',
+    returnRequestAndResponse: false
+  };
+
+  var httpClientFactory = function httpClientFactory() {
+    var customInstanceOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    var instanceOptions = Object.assign({}, defaultOptions, customInstanceOptions);
+    var requestSteps = [];
+    var responseSteps = [];
+
+    function run(method) {
+      var customRunOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      var request = Object.assign({}, instanceOptions, customRunOptions, {
+        method: method
+      });
+
+      var response = undefined;
+
+      var promise = Promise.resolve({
+        request: request,
+        response: response
+      });
+
+      requestSteps.forEach(function (_ref) {
+        var promiseMethod = _ref.promiseMethod,
+            callback = _ref.callback,
+            rejectCallback = _ref.rejectCallback;
+
+        // $FlowFixMe
+        if (!promise[promiseMethod]) {
+          throw new Error('http-client: requestStep promise method is not valid: ' + promiseMethod);
+        }
+        // $FlowFixMe
+        promise = promise[promiseMethod](function (arg) {
+          if (stepArgumentIsNormalized(arg)) {
+            request = clone(arg.request);
+            response = jsonClone(arg.response);
+          } else {
+            request = clone(arg);
+          }
+          return callback({
+            request: clone(request),
+            response: jsonClone(response)
+          });
+        }, rejectCallback);
+      });
+
+      //extract final request object
+      promise = promise.then(function (arg) {
+        if (stepArgumentIsNormalized(arg)) {
+          request = clone(arg.request);
+          response = jsonClone(arg.response);
+        } else {
+          request = clone(arg);
+        }
+        return {
+          request: clone(request),
+          response: jsonClone(response)
+        };
+      });
+
+      responseSteps.forEach(function (_ref2) {
+        var promiseMethod = _ref2.promiseMethod,
+            callback = _ref2.callback,
+            rejectCallback = _ref2.rejectCallback;
+
+        // $FlowFixMe
+        if (!promise[promiseMethod]) {
+          throw new Error('http-client: responseStep method is not valid: ' + promiseMethod);
+        }
+        // $FlowFixMe
+        promise = promise[promiseMethod](function (arg) {
+          if (stepArgumentIsNormalized(arg)) {
+            response = jsonClone(arg.response);
+          } else {
+            response = jsonClone(arg);
+          }
+          return callback({
+            request: clone(request),
+            response: jsonClone(response)
+          });
+        }, rejectCallback);
+      });
+
+      // one more step to extract final response and determine shape of data to return
+      promise = promise.then(function (arg) {
+        if (stepArgumentIsNormalized(arg)) {
+          response = jsonClone(arg.response);
+        } else {
+          response = jsonClone(arg);
+        }
+
+        if (request.returnRequestAndResponse) {
+          return {
+            request: request,
+            response: response
+          };
+        }
+        return response;
+      });
+
+      return promise;
+    } //end doFetch()
+
+    var httpClient = {
+      get: run.bind(this, 'GET'),
+      post: run.bind(this, 'POST'),
+      put: run.bind(this, 'PUT'),
+      patch: run.bind(this, 'PATCH'),
+      delete: run.bind(this, 'DELETE'),
+      options: function options() {
+        var newOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        return clone(Object.assign(instanceOptions, newOptions));
+      },
+      addRequestStep: function addRequestStep() {
+        requestSteps.push(normalizeAddStepArguments(arguments));
+        return this;
+      },
+      addResponseStep: function addResponseStep() {
+        responseSteps.push(normalizeAddStepArguments(arguments));
+        return this;
+      }
+    };
+
+    return useFetch(httpClient);
+  };
+
+  var getBodyFromReq = function getBodyFromReq(req) {
+    if (req.data) {
+      return JSON.stringify(req.data);
+    } else if (req.body) {
+      return req.body;
+    }
+    return '';
+  };
+
+  function normalizeAddStepArguments(args) {
+    var promiseMethod = void 0;
+    var callback = void 0;
+    var rejectCallback = void 0;
+    if (typeof args[0] === 'string') {
+      promiseMethod = args[0];
+      callback = args[1];
+      rejectCallback = args[2];
+    } else {
+      promiseMethod = 'then';
+      callback = args[0];
+      rejectCallback = args[1];
+    }
+    if (promiseMethod !== 'then' && promiseMethod !== 'catch' || typeof callback !== 'function') {
+      throw new Error('http-client: bad arguments passed to add(Request/Response)Step');
+    }
+    return {
+      promiseMethod: promiseMethod,
+      callback: callback,
+      rejectCallback: rejectCallback
+    };
+  }
+
+  function stepArgumentIsNormalized(arg) {
+    return (typeof arg === 'undefined' ? 'undefined' : _typeof(arg)) === 'object' && Object.keys(arg).length === 2 && arg.hasOwnProperty('request') && arg.hasOwnProperty('response');
+  }
+
+  describe('http-client - basic usage', function () {
+    it('able to make a GET request', function (done) {
+      var httpClient = httpClientFactory();
+      httpClient.get({
+        url: '/http-client-get-test'
+      }).then(function (response) {
+        chai.expect(response.foo).to.equal('1');
+        done();
+      });
+    });
+
+    it('able to make a POST request', function (done) {
+      var httpClient = httpClientFactory();
+      httpClient.post({
+        url: '/http-client-post-test',
+        data: {
+          testData: '1'
+        }
+      }).then(function (response) {
+        chai.expect(response.foo).to.equal('2');
+        done();
+      });
+    });
+
+    it("doesn't blow up when response isn't JSON", function (done) {
+      var httpClient = httpClientFactory();
+      httpClient.get({
+        url: '/http-client-response-not-json'
+      }).then(function (response) {
+        chai.expect(response).to.equal('not json');
+        done();
+      });
+    });
+
+    it('options can be overwritten at any level', function (done) {
+      var httpClient = httpClientFactory({
+        credentials: 'include'
+      });
+      chai.expect(httpClient.options().credentials).to.equal('include');
+
+      httpClient.options({
+        credentials: 'omit'
+      });
+      chai.expect(httpClient.options().credentials).to.equal('omit');
+
+      httpClient.get({
+        url: '/http-client-get-test',
+        credentials: 'same-origin',
+        returnRequestAndResponse: true
+      }).then(function (_ref) {
+        var request = _ref.request,
+            response = _ref.response;
+
+        chai.expect(request.credentials).to.equal('same-origin');
+        done();
+      });
+    });
+
+    it('request step can modify the request object', function (done) {
+      var httpClient = httpClientFactory();
+      httpClient.addRequestStep(function (_ref2) {
+        var request = _ref2.request;
+
+        return Object.assign({}, request, {
+          url: '/http-client-modified-url',
+          returnRequestAndResponse: true
+        });
+      });
+      httpClient.get({ url: '/will-be-overwritten' }).then(function (_ref3) {
+        var request = _ref3.request,
+            response = _ref3.response;
+
+        chai.expect(request.url).to.equal('/http-client-modified-url');
+        chai.expect(response).to.equal('response for modified url');
+        done();
+      });
+    });
+
+    it('request step can add a response object', function (done) {
+      var httpClient = httpClientFactory();
+      httpClient.addRequestStep(function (_ref4) {
+        var request = _ref4.request;
+
+        if (request.url === '/does-not-exist') {
+          return {
+            request: request,
+            response: 'shortcircuit response'
+          };
+        }
+        return request;
+      });
+      httpClient.get({ url: '/does-not-exist' }).then(function (response) {
+        chai.expect(response).to.equal('shortcircuit response');
+        done();
+      });
+    });
+
+    it('response step can modify the response object', function (done) {
+      var httpClient = httpClientFactory();
+      httpClient.addResponseStep(function (_ref5) {
+        var response = _ref5.response;
+
+        response.foo = 'a response step was here';
+        return response;
+      });
+      httpClient.get({
+        url: '/http-client-get-test'
+      }).then(function (response) {
+        chai.expect(response.foo).to.equal('a response step was here');
+        done();
+      });
+    });
+  });
+
+  /*  */
+
+  var memCache = {};
+
+  var useMemCache = function useMemCache(httpClient) {
+    useSaveToMemCache(httpClient);
+    useGetFromCache(httpClient);
+    return httpClient;
+  };
+
+  var useGetFromCache = function useGetFromCache(httpClient) {
+    return httpClient.addRequestStep(function (_ref) {
+      var request = _ref.request,
+          response = _ref.response;
+
+      if (!response && typeof memCache[cacheKey(request)] !== 'undefined' && (typeof request.responseIsCachable === 'undefined' || request.responseIsCachable({
+        request: request,
+        response: memCache[cacheKey(request)]
+      }))) {
+        request.response = jsonClone(memCache[cacheKey(request)]);
+        request.servedFromCache = true;
+      } else {
+        request.servedFromCache = false;
+      }
+      return request;
+    });
+  };
+
+  var useSaveToMemCache = function useSaveToMemCache(httpClient) {
+    return httpClient.addResponseStep(function (_ref2) {
+      var request = _ref2.request,
+          response = _ref2.response;
+
+      if (typeof request.responseIsCachable === 'undefined' || request.responseIsCachable({ request: request, response: response })) {
+        memCache[cacheKey(request)] = response;
+        request.savedToCache = true;
+      } else {
+        request.savedToCache = false;
+      }
+      return response;
+    });
+  };
+
+  var bustMemCache = function bustMemCache() {
+    var partialUrl = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+    Object.keys(memCache).forEach(function (k) {
+      if (k.includes(partialUrl)) {
+        memCache[k] = undefined;
+      }
+    });
+  };
+
+  function cacheKey(request) {
+    return request.url + '::' + request.method + '::' + getBodyFromReq(request);
+  }
+
+  describe('http-client w/ mem-cache', function () {
+    it('response can be cached', function (done) {
+      var httpClient = useMemCache(httpClientFactory());
+      httpClient.get({
+        url: '/http-client-get-test',
+        returnRequestAndResponse: true
+      }).then(function (_ref) {
+        var request = _ref.request,
+            response = _ref.response;
+
+        chai.expect(response.foo).to.equal('1');
+        chai.expect(request.servedFromCache).to.equal(false);
+      }).then(function () {
+        httpClient.get({
+          url: '/http-client-get-test',
+          returnRequestAndResponse: true
+        }).then(function (_ref2) {
+          var request = _ref2.request,
+              response = _ref2.response;
+
+          chai.expect(response.foo).to.equal('1');
+          chai.expect(request.servedFromCache).to.equal(true);
+          done();
+        });
+      });
+    });
+
+    it('cache can be busted', function (done) {
+      var httpClient = useMemCache(httpClientFactory());
+      httpClient.get({
+        url: '/http-client-get-test',
+        returnRequestAndResponse: true
+      }).then(function () {
+        bustMemCache();
+        httpClient.get({
+          url: '/http-client-get-test',
+          returnRequestAndResponse: true
+        }).then(function (_ref3) {
+          var request = _ref3.request,
+              response = _ref3.response;
+
+          chai.expect(response.foo).to.equal('1');
+          chai.expect(request.servedFromCache).to.equal(false);
+          done();
+        });
+      });
+    });
+
+    //TODO: FAILS due to jsonClone being used on a object that has a property that has a function as the value
+    it('responseIsCachable can prevent cached response from being cached', function (done) {
+      var httpClient = useMemCache(httpClientFactory({
+        responseIsCachable: function responseIsCachable() {
+          return false;
+        }
+      }));
+      httpClient.get({
+        url: '/http-client-get-test',
+        returnRequestAndResponse: true
+      }).then(function () {
+        httpClient.get({
+          url: '/http-client-get-test',
+          returnRequestAndResponse: true
+        }).then(function (_ref4) {
+          var request = _ref4.request,
+              response = _ref4.response;
+
+          chai.expect(response.foo).to.equal('1');
+          chai.expect(request.servedFromCache).to.equal(false);
+          done();
+        });
+      });
+    });
+
+    // it('responseIsCachable can prevent cached response from being returned', done => {});
   });
 
 })));

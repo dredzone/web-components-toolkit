@@ -1,18 +1,7 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 const getPort = require('get-port');
-const StaticServer = require('static-server');
-
-const startStaticHttpServer = async () => {
-  const server = new StaticServer({
-    rootPath: path.join(__dirname, '..'),
-    port: await getPort()
-  });
-  await new Promise(resolve => {
-    server.start(resolve);
-  });
-  return server;
-};
+const serve = require('./serve');
 
 const runTestsInHeadlessChrome = async port => {
   const options = {
@@ -33,8 +22,8 @@ const runTestsInHeadlessChrome = async port => {
 };
 
 (async () => {
-  const server = await startStaticHttpServer();
-  const testResult = await runTestsInHeadlessChrome(server.port);
+  const server = await serve();
+  const testResult = await runTestsInHeadlessChrome(server.address().port);
   if (testResult === 'OK') {
     console.log('Tests passed.');
   } else {
@@ -42,5 +31,5 @@ const runTestsInHeadlessChrome = async port => {
     errors.map(e => console.log(e));
     console.error(`\n${errors.length} Error(s)`);
   }
-  server.stop();
+  server.close();
 })();

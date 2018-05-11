@@ -138,23 +138,23 @@ describe('Type', () => {
     });
   });
 
-	describe('map', () => {
-		it('should return true if passed parameter type is Map', () => {
-			expect(is.map(new Map)).to.be.true;
-		});
-		it('should return false if passed parameter type is not Map', () => {
-			expect(is.map(null)).to.be.false;
-			expect(is.map(Object.create(null))).to.be.false;
-		});
-	});
+  describe('map', () => {
+    it('should return true if passed parameter type is Map', () => {
+      expect(is.map(new Map())).to.be.true;
+    });
+    it('should return false if passed parameter type is not Map', () => {
+      expect(is.map(null)).to.be.false;
+      expect(is.map(Object.create(null))).to.be.false;
+    });
+  });
 
-	describe('set', () => {
-		it('should return true if passed parameter type is Set', () => {
-			expect(is.set(new Set)).to.be.true;
-		});
-		it('should return false if passed parameter type is not Set', () => {
-			expect(is.set(null)).to.be.false;
-			expect(is.set(Object.create(null))).to.be.false;
-		});
-	});
+  describe('set', () => {
+    it('should return true if passed parameter type is Set', () => {
+      expect(is.set(new Set())).to.be.true;
+    });
+    it('should return false if passed parameter type is not Set', () => {
+      expect(is.set(null)).to.be.false;
+      expect(is.set(Object.create(null))).to.be.false;
+    });
+  });
 });
