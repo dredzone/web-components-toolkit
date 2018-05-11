@@ -16,6 +16,6 @@
     "es6": true
   },
   "rules": {
-
+    "flowtype/generic-spacing": 0
   }
 }
