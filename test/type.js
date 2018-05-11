@@ -1,6 +1,6 @@
 import is from '../lib/type.js';
 
-describe('Type', () => {
+describe('type', () => {
   describe('arguments', () => {
     it('should return true if passed parameter type is arguments', () => {
       let getArguments = function() {

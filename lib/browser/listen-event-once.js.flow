@@ -1,7 +1,8 @@
 /* @flow */
+import {browser} from '../environment.js';
 import listenEvent, { type EventHandler } from './listen-event.js';
 
-export default (
+export default browser((
   target: EventTarget,
   type: string,
   listener: Function,
@@ -17,4 +18,4 @@ export default (
     capture
   );
   return handle;
-};
+});

@@ -1,4 +1,5 @@
 /* @flow */
+import { browser } from '../../environment.js';
 import before from '../../advice/before.js';
 import elementChildren from '../element-children.js';
 import type { ICustomElement } from './custom-element-mixin.js';
@@ -17,7 +18,7 @@ export interface ISlots {
 type InType = HTMLElement & ICustomElement;
 type OutType = InType & ISlots;
 
-export default (baseClass: Class<InType>): Class<OutType> => {
+export default browser((baseClass: Class<InType>): Class<OutType> => {
   return class Slots extends baseClass implements ISlots {
     slots: SlotsData;
 
@@ -58,4 +59,4 @@ export default (baseClass: Class<InType>): Class<OutType> => {
       }
     };
   }
-};
+});

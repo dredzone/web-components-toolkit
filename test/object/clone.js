@@ -1,6 +1,6 @@
 import clone, { jsonClone } from '../../lib/object/clone.js';
 
-describe('Clone', () => {
+describe('clone', () => {
   describe('primitives', () => {
     it('Returns equal data for Null/undefined/functions/etc', () => {
       // Null

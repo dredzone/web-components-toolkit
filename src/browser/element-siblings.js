@@ -1,5 +1,7 @@
 /* @flow */
-export default (node: Node): Array<Node> => {
+import { browser } from '../environment.js';
+
+export default browser((node: Node): Array<Node> => {
   let siblings: Array<Node> = [];
   if (node.parentNode && node.parentNode.firstChild) {
     let sibling: Node = node.parentNode.firstChild;
@@ -15,4 +17,4 @@ export default (node: Node): Array<Node> => {
   }
 
   return siblings;
-};
+});

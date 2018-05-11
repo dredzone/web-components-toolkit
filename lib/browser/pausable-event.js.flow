@@ -1,4 +1,5 @@
 /* @flow */
+import {browser} from '../environment.js';
 import listenEvent, { type EventHandler } from './listen-event.js';
 
 export type PausableEventHandler = EventHandler & {
@@ -6,7 +7,7 @@ export type PausableEventHandler = EventHandler & {
   resume(): void
 };
 
-export default (
+export default browser((
   target: EventTarget,
   type: string,
   listener: Function,
@@ -35,4 +36,4 @@ export default (
       paused = false;
     }
   };
-};
+});

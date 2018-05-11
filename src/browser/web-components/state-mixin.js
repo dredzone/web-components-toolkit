@@ -1,4 +1,5 @@
 /* @flow */
+import { browser } from '../../environment.js';
 import createStorage from '../../create-storage.js';
 import after from '../../advice/after.js';
 import type { ICustomElement } from './custom-element-mixin.js';
@@ -22,7 +23,7 @@ export interface IState {
 type InType = HTMLElement & ICustomElement;
 type OutType = InType & IState;
 
-export default (baseClass: Class<InType>): Class<OutType> => {
+export default browser((baseClass: Class<InType>): Class<OutType> => {
   const { assign } = Object;
   const privates: Function = createStorage();
 
@@ -108,4 +109,4 @@ export default (baseClass: Class<InType>): Class<OutType> => {
       }
     };
   }
-};
+});

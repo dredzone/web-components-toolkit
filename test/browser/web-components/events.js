@@ -18,7 +18,7 @@ class EventsListener extends events(customElement()) {
 EventsEmitter.define('events-emitter');
 EventsListener.define('events-listener');
 
-describe('Events Mixin', () => {
+describe('events-mixin', () => {
   let container;
   const emmiter = document.createElement('events-emitter');
   const listener = document.createElement('events-listener');

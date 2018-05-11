@@ -1,5 +1,7 @@
 /* @flow */
-export default (passThrough: any): Promise<any> => {
+import { browser } from '../environment.js';
+
+export default browser((passThrough: any): Promise<any> => {
   if (document.readyState === 'loading') {
     return new Promise((resolve: Function) => {
       document.addEventListener('DOMContentLoaded', () => resolve(passThrough));
@@ -7,4 +9,4 @@ export default (passThrough: any): Promise<any> => {
   }
 
   return Promise.resolve(passThrough);
-};
+});

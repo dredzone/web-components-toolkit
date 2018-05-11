@@ -1,4 +1,5 @@
 /* @flow */
+import { browser } from '../../environment.js';
 import after from '../../advice/after.js';
 import createStorage from '../../create-storage.js';
 import listenEvent, { type EventHandler } from '../listen-event.js';
@@ -22,7 +23,7 @@ type OutType = InType & IEvents;
 /**
  * Mixin adds CustomEvent handling to an element
  */
-export default (baseClass: Class<InType>): Class<OutType> => {
+export default browser((baseClass: Class<InType>): Class<OutType> => {
   const { assign } = Object;
   const privates: Function = createStorage(function() {
     return {
@@ -80,4 +81,4 @@ export default (baseClass: Class<InType>): Class<OutType> => {
       context.off();
     };
   }
-};
+});

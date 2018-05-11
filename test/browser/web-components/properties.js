@@ -25,7 +25,7 @@ class PropertiesMixinTest extends properties(customElement()) {
 
 PropertiesMixinTest.define('properties-mixin-test');
 
-describe('Properties Mixin', () => {
+describe('properties-mixin', () => {
   let container;
   const propertiesMixinTest = document.createElement('properties-mixin-test');
 

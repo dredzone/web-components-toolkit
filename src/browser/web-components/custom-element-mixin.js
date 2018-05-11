@@ -1,4 +1,5 @@
 /* @flow */
+import { browser } from '../../environment.js';
 import createStorage from '../../create-storage.js';
 import around from '../../advice/around.js';
 import microTask from '../microtask.js';
@@ -67,9 +68,9 @@ export interface ICustomElement {
   _postRender(firstRender: boolean): void;
 }
 
-export default (
-  baseClass?: Class<HTMLElement>
-): Class<HTMLElement & ICustomElement> => {
+export default browser((baseClass?: Class<HTMLElement>): Class<
+  HTMLElement & ICustomElement
+> => {
   const customElementsV1Callbacks: Array<string> = [
     'connectedCallback',
     'disconnectedCallback',
@@ -200,4 +201,4 @@ export default (
       });
     };
   }
-};
+});
