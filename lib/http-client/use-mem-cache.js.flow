@@ -1,7 +1,7 @@
 /* @flow */
 import type { THttpClient } from './http-client.js';
 import { getBodyFromReq } from './http-client.js';
-import { jsonClone } from '../object/clone';
+import { jsonClone } from '../object/clone.js';
 
 const memCache = {};
 

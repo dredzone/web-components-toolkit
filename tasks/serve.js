@@ -3,9 +3,9 @@ const path = require('path');
 
 const executeImmediately = process.argv[2] === 'execute';
 
-const serve = function(port = 3000) {
+const serve = function(port = process.env.port) {
   const app = express();
-  app.use(express.static(process.cwd(), { extensions: ['js'] }));
+  app.use(express.static(process.cwd()));
 
   //app config to support tests
   app.get('/http-client-get-test', function(req, res) {
@@ -22,7 +22,7 @@ const serve = function(port = 3000) {
   });
   //end app config to support tests
 
-  const server = app.listen(port, foo => {
+  const server = app.listen(port, () => {
     console.log(`serving on port ${port}`);
     return Promise.resolve();
   });
