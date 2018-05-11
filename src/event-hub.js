@@ -10,8 +10,8 @@ export type TEventHub = {
 
 const eventHub = (): TEventHub => ({
   hub: Object.create(null),
-  emit(event: string, data: any): void {
-    (this.hub[event] || []).forEach(handler => handler(data));
+  emit(event: string, ...args: Array<any>): void {
+    (this.hub[event] || []).forEach(handler => handler(...args));
   },
   on(event: string, handler: Function): void {
     if (!this.hub[event]) this.hub[event] = [];
