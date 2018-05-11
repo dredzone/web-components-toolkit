@@ -1,10 +1,13 @@
 /* @flow */
-export default (tagName: string, attributes: Object): Element => {
-  let element: HTMLElement = document.createElement(tagName);
-  for (let attr in attributes) {
-    if (Object.hasOwnProperty.call(attributes, attr)) {
-      element.setAttribute(attr, attributes[attr]);
-    }
+import { browser } from '../environment.js';
+import templateContent from './template-content.js';
+
+export default browser((html: string): Node => {
+  const template: HTMLTemplateElement = document.createElement('template');
+  template.innerHTML = html.trim();
+  const frag: DocumentFragment = templateContent(template);
+  if (frag && frag.firstChild) {
+    return frag.firstChild;
   }
-  return element;
-};
+  throw new Error(`Unable to createElement for ${html}`);
+});

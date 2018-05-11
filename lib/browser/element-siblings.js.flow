@@ -1,10 +1,10 @@
 /* @flow */
-export default (element: Node): Array<Node> => {
+export default (node: Node): Array<Node> => {
   let siblings: Array<Node> = [];
-  if (element.parentNode && element.parentNode.firstChild) {
-    let sibling: Node = element.parentNode.firstChild;
+  if (node.parentNode && node.parentNode.firstChild) {
+    let sibling: Node = node.parentNode.firstChild;
     do {
-      if (sibling.nodeType === 1 && sibling !== element) {
+      if (sibling.nodeType === 1 && sibling !== node) {
         siblings.push(sibling);
       }
     } while (
