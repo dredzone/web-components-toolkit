@@ -1,5 +1,8 @@
 /* @flow */
-export default (element: Element, nodeType: number = 1): Array<Element> => {
+export default (
+  element: Element,
+  nodeType: number = Node.ELEMENT_NODE
+): Array<Element> => {
   let childNodes: NodeList<any> = element.childNodes;
   let children: Array<Element> = [];
   if (childNodes && childNodes.length > 0) {
