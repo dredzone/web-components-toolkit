@@ -1,5 +1,7 @@
 /* @flow */
-export const isBrowser: boolean = ![typeof window, typeof document].includes('undefined');
+export const isBrowser: boolean = ![typeof window, typeof document].includes(
+  'undefined'
+);
 
 export const browser: Function = (fn: Function, raise: boolean = true) => (
   ...args: Array<any>
@@ -8,6 +10,6 @@ export const browser: Function = (fn: Function, raise: boolean = true) => (
     return fn(...args);
   }
   if (raise) {
-    throw new Error(`${fn.name} is not running in browser`);
+    throw new Error(`${fn.name} for browser use only`);
   }
 };

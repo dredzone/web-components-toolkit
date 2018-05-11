@@ -1,5 +1,5 @@
 /* @flow */
-import {browser} from '../../environment.js';
+import { browser } from '../../environment.js';
 import before from '../../advice/before.js';
 import elementChildren from '../element-children.js';
 import type { ICustomElement } from './custom-element-mixin.js';

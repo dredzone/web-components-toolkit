@@ -1,18 +1,20 @@
 /* @flow */
-import {browser} from '../environment.js';
+import { browser } from '../environment.js';
 
 export type EventHandler = {
   remove(): void
 };
 
-export default browser((
-  target: EventTarget,
-  type: string,
-  listener: Function,
-  capture: boolean = false
-): EventHandler => {
-  return parse(target, type, listener, capture);
-});
+export default browser(
+  (
+    target: EventTarget,
+    type: string,
+    listener: Function,
+    capture: boolean = false
+  ): EventHandler => {
+    return parse(target, type, listener, capture);
+  }
+);
 
 function addListener(
   target: HTMLElement,

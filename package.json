@@ -17,7 +17,7 @@
     "flow:copy": "flow-copy-source src lib",
     "flow:transform": "flow-remove-types  --pretty src/ --out-dir lib/",
     "build:lib": "npm run clean && npm run lint && npm run flow",
-    "bundle": "npm run bundle:lib && npm run bundle:test",
+    "bundle": "npm run bundle:lib & npm run bundle:test",
     "bundle:lib": "rollup -c rollup.config.js",
     "bundle:test": "rollup -c rollup.config.test.js",
     "prettier": "prettier --single-quote --write ./src/*.js ./src/**/*.js ./test/*.js ./test/**/*.js ./tasks/*.js ./rollup.config.js ./rollup.config.test.js"
