@@ -68,7 +68,9 @@ export interface ICustomElement {
   _postRender(firstRender: boolean): void;
 }
 
-export default browser((baseClass?: Class<HTMLElement>): Class<HTMLElement & ICustomElement> => {
+export default browser((baseClass?: Class<HTMLElement>): Class<
+  HTMLElement & ICustomElement
+> => {
   const customElementsV1Callbacks: Array<string> = [
     'connectedCallback',
     'disconnectedCallback',
