@@ -1,6 +1,6 @@
 {
   "name": "utility-toolkit",
-  "version": "0.20.0",
+  "version": "0.19.0",
   "description": "Essential set of tools to develop web-components and applications",
   "main": "bundles/umd/index.js",
   "module": "lib/index.js",
