@@ -23,7 +23,7 @@
     "prettier": "prettier --single-quote --write ./src/*.js ./src/**/*.js ./test/*.js ./test/**/*.js ./tasks/*.js ./rollup.config.js ./rollup.config.test.js"
   },
   "lint-staged": {
-    "./**/*.js": [
+    "src/**/*.js": [
       "eslint",
       "prettier --single-quote --write",
       "git add"

@@ -10,6 +10,6 @@ export const browser: Function = (fn: Function, raise: boolean = true) => (
     return fn(...args);
   }
   if (raise) {
-    throw new Error(`${fn.name} is not running in browser`);
+    throw new Error(`${fn.name} for browser use only`);
   }
 };
