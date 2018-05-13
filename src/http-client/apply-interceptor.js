@@ -1,10 +1,8 @@
 /* @flow */
 import type Interceptor from './configurator.js';
 
-type InType = Request | Response | Promise<Request | Response>;
-
 export default (
-  input: InType,
+  input: Request | Response | Promise<Request | Response>,
   interceptors: Array<Interceptor> = [],
   successName: string,
   errorName: string,
