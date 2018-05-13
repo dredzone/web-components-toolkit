@@ -9,7 +9,7 @@
     "postversion": "git push && git push --tags",
     "clean": "rimraf lib",
     "build": "npm run build:lib && npm run bundle",
-    "lint": "eslint src",
+    "lint": "eslint src --fix",
     "serve": "env-cmd .env node ./tasks/serve.js execute",
     "test": "env-cmd .env node tasks/headless-tests.js",
     "flow": "npm run flow:check && npm run flow:transform && npm run flow:copy",
