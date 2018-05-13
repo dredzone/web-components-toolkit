@@ -32,7 +32,7 @@ export default (configure: (configurator: IConfigurator) => void): IFetch => {
           );
         }
 
-        return processResponse(response, request, config);
+        return processResponse(response, config);
       })
       .then(result => {
         if (result instanceof Request) {

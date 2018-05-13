@@ -5,8 +5,7 @@ export default (
   input: Request | Response | Promise<Request | Response>,
   interceptors: Array<Interceptor> = [],
   successName: string,
-  errorName: string,
-  ...interceptorArgs: Array<any>
+  errorName: string
 ): Promise<any> =>
   interceptors.reduce((chain: Promise<any>, interceptor: Interceptor) => {
     // $FlowFixMe
@@ -15,8 +14,8 @@ export default (
     const errorHandler: Function = interceptor[errorName] && interceptor[errorName].bind(interceptor);
 
     return chain.then(
-      (successHandler && (value => successHandler(value, ...interceptorArgs))) || identity,
-      (errorHandler && (reason => errorHandler(reason, ...interceptorArgs))) || thrower
+      (successHandler && (value => successHandler(value))) || identity,
+      (errorHandler && (reason => errorHandler(reason))) || thrower
     );
   }, Promise.resolve(input));
 
