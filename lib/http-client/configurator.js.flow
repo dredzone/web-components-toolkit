@@ -104,7 +104,7 @@ class Configurator implements IConfigurator {
       mode: 'cors',
       credentials: 'same-origin',
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'X-Requested-By': 'DEEP-UI'
       }
     };

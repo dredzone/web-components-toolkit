@@ -1,16 +1,12 @@
-/*  */
+/* @flow */
 import type from '../type.js';
-import { } from './configurator.js';
+import { type RequestInit, type IConfigurator } from './configurator.js';
 
-export default (
-  input,
-  init,
-  config
-) => {
-  let defaults = config.defaults || {};
-  let request;
-  let body = '';
-  let requestContentType;
+export default (input: Request | string, init: RequestInit, config: IConfigurator): Request => {
+  let defaults: RequestInit = config.defaults || {};
+  let request: Request;
+  let body: Blob | FormData | URLSearchParams | string = '';
+  let requestContentType: string;
 
   let parsedDefaultHeaders = parseHeaderValues(defaults.headers);
   if (input instanceof Request) {
@@ -19,23 +15,14 @@ export default (
   } else {
     init || (init = {});
     body = init.body;
-    let bodyObj = body ? { body } : null;
-    let requestInit = Object.assign(
-      {},
-      defaults,
-      { headers: {} },
-      init,
-      bodyObj
-    );
+    let bodyObj: Object | null = body ? { body } : null;
+    let requestInit: RequestInit = Object.assign({}, defaults, { headers: {} }, init, bodyObj);
     requestContentType = new Headers(requestInit.headers).get('Content-Type');
     request = new Request(getRequestUrl(config.baseUrl, input), requestInit);
   }
   if (!requestContentType) {
     if (new Headers(parsedDefaultHeaders).has('content-type')) {
-      request.headers.set(
-        'Content-Type',
-        new Headers(parsedDefaultHeaders).get('content-type')
-      );
+      request.headers.set('Content-Type', new Headers(parsedDefaultHeaders).get('content-type'));
     } else if (body && isJSON(String(body))) {
       request.headers.set('Content-Type', 'application/json');
     }
@@ -49,8 +36,8 @@ export default (
   return request;
 };
 
-function parseHeaderValues(headers) {
-  let parsedHeaders = {};
+function parseHeaderValues(headers: Headers | Object): Object {
+  let parsedHeaders: Object = {};
   for (let name in headers || {}) {
     if (headers.hasOwnProperty(name)) {
       // $FlowFixMe
@@ -59,9 +46,9 @@ function parseHeaderValues(headers) {
   }
   return parsedHeaders;
 }
-const absoluteUrlRegexp = /^([a-z][a-z0-9+\-.]*:)?\/\//i;
+const absoluteUrlRegexp: RegExp = /^([a-z][a-z0-9+\-.]*:)?\/\//i;
 
-function getRequestUrl(baseUrl, url) {
+function getRequestUrl(baseUrl: string, url: string): string {
   if (absoluteUrlRegexp.test(url)) {
     return url;
   }
@@ -69,7 +56,7 @@ function getRequestUrl(baseUrl, url) {
   return (baseUrl || '') + url;
 }
 
-function setDefaultHeaders(headers, defaultHeaders) {
+function setDefaultHeaders(headers: Headers, defaultHeaders: Object): void {
   for (let name in defaultHeaders || {}) {
     if (defaultHeaders.hasOwnProperty(name) && !headers.has(name)) {
       headers.set(name, defaultHeaders[name]);
@@ -77,7 +64,7 @@ function setDefaultHeaders(headers, defaultHeaders) {
   }
 }
 
-function isJSON(str) {
+function isJSON(str: string): boolean {
   try {
     JSON.parse(str);
   } catch (err) {

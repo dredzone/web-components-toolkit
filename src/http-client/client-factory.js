@@ -1,11 +1,7 @@
 /* @flow */
 import type from '../type.js';
-import {
-  type RequestInit,
-  type IConfigurator,
-  default as createConfig
-} from './configurator.js';
-import buildRequest from './build-request.js';
+import { type RequestInit, type IConfigurator, default as createConfig } from './configurator.js';
+import buildRequest from './request-builder.js';
 import applyInterceptors from './interceptor.js';
 
 export interface IFetch {
@@ -14,17 +10,12 @@ export interface IFetch {
 
 export default (configure: (configurator: IConfigurator) => void): IFetch => {
   if (type.undefined(fetch)) {
-    throw new Error(
-      "Requires Fetch API implementation, but the current environment doesn't support it."
-    );
+    throw new Error("Requires Fetch API implementation, but the current environment doesn't support it.");
   }
   const config: IConfigurator = createConfig();
   configure(config);
 
-  const fetchApi: Function = (
-    input: Request | string,
-    init: RequestInit = {}
-  ): Promise<Response> => {
+  const fetchApi: Function = (input: Request | string, init: RequestInit = {}): Promise<Response> => {
     let request: Request = buildRequest(input, init, config);
 
     return processRequest(request, config)
@@ -55,17 +46,8 @@ export default (configure: (configurator: IConfigurator) => void): IFetch => {
   return fetchApi;
 };
 
-function processRequest(
-  request: Request | Promise<Request>,
-  config: IConfigurator
-): Promise<any> {
-  return applyInterceptors(
-    request,
-    config.interceptors,
-    'request',
-    'requestError',
-    config
-  );
+function processRequest(request: Request | Promise<Request>, config: IConfigurator): Promise<any> {
+  return applyInterceptors(request, config.interceptors, 'request', 'requestError', config);
 }
 
 function processResponse(
@@ -73,12 +55,5 @@ function processResponse(
   request: Request,
   config: IConfigurator
 ): Promise<any> {
-  return applyInterceptors(
-    response,
-    config.interceptors,
-    'response',
-    'responseError',
-    request,
-    config
-  );
+  return applyInterceptors(response, config.interceptors, 'response', 'responseError', request, config);
 }

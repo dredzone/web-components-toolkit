@@ -1,30 +1,35 @@
-/*  */
+/* @flow */
 import type from '../type.js';
 import {
+  type RequestInit,
+  type IConfigurator,
   default as createConfig
 } from './configurator.js';
-import buildRequest from './build-request.js';
+import buildRequest from './request-builder.js';
 import applyInterceptors from './interceptor.js';
 
+export interface IFetch {
+  (input: Request | string, init?: RequestInit): Promise<Response>;
+}
 
-export default (configure) => {
+export default (configure: (configurator: IConfigurator) => void): IFetch => {
   if (type.undefined(fetch)) {
     throw new Error(
       "Requires Fetch API implementation, but the current environment doesn't support it."
     );
   }
-  const config = createConfig();
+  const config: IConfigurator = createConfig();
   configure(config);
 
-  const fetchApi = (
-    input,
-    init = {}
-  ) => {
-    let request = buildRequest(input, init, config);
+  const fetchApi: Function = (
+    input: Request | string,
+    init: RequestInit = {}
+  ): Promise<Response> => {
+    let request: Request = buildRequest(input, init, config);
 
     return processRequest(request, config)
-      .then((result) => {
-        let response;
+      .then((result: Request | Response) => {
+        let response: Promise<Response>;
 
         if (result instanceof Response) {
           response = Promise.resolve(result);
@@ -51,9 +56,9 @@ export default (configure) => {
 };
 
 function processRequest(
-  request,
-  config
-) {
+  request: Request | Promise<Request>,
+  config: IConfigurator
+): Promise<any> {
   return applyInterceptors(
     request,
     config.interceptors,
@@ -64,10 +69,10 @@ function processRequest(
 }
 
 function processResponse(
-  response,
-  request,
-  config
-) {
+  response: Response | Promise<Response>,
+  request: Request,
+  config: IConfigurator
+): Promise<any> {
   return applyInterceptors(
     response,
     config.interceptors,
