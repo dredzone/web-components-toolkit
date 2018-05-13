@@ -1,8 +1,9 @@
 /* @flow */
 import type from '../type.js';
 import { type RequestInit, type IConfigurator } from './configurator.js';
+import applyInterceptors from './apply-interceptor.js';
 
-export default (input: Request | string, init: RequestInit, config: IConfigurator): Request => {
+export const buildRequest: Function = (input: Request | string, init: RequestInit, config: IConfigurator): Request => {
   let defaults: RequestInit = config.defaults || {};
   let request: Request;
   let body: Blob | FormData | URLSearchParams | string = '';
@@ -35,6 +36,15 @@ export default (input: Request | string, init: RequestInit, config: IConfigurato
   }
   return request;
 };
+
+export const processRequest: Function = (request: Request | Promise<Request>, config: IConfigurator): Promise<any> =>
+  applyInterceptors(request, config.interceptors, 'request', 'requestError', config);
+
+export const processResponse: Function = (
+  response: Response | Promise<Response>,
+  request: Request,
+  config: IConfigurator
+): Promise<any> => applyInterceptors(response, config.interceptors, 'response', 'responseError', request, config);
 
 function parseHeaderValues(headers: Headers | Object): Object {
   let parsedHeaders: Object = {};

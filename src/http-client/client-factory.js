@@ -1,8 +1,7 @@
 /* @flow */
 import type from '../type.js';
 import { type RequestInit, type IConfigurator, default as createConfig } from './configurator.js';
-import buildRequest from './request-builder.js';
-import applyInterceptors from './interceptor.js';
+import { buildRequest, processRequest, processResponse } from './request.js';
 
 export interface IFetch {
   (input: Request | string, init?: RequestInit): Promise<Response>;
@@ -45,15 +44,3 @@ export default (configure: (configurator: IConfigurator) => void): IFetch => {
 
   return fetchApi;
 };
-
-function processRequest(request: Request | Promise<Request>, config: IConfigurator): Promise<any> {
-  return applyInterceptors(request, config.interceptors, 'request', 'requestError', config);
-}
-
-function processResponse(
-  response: Response | Promise<Response>,
-  request: Request,
-  config: IConfigurator
-): Promise<any> {
-  return applyInterceptors(response, config.interceptors, 'response', 'responseError', request, config);
-}
