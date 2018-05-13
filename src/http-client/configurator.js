@@ -100,7 +100,14 @@ class Configurator implements IConfigurator {
   }
 
   useStandardConfigurator(): Configurator {
-    let standardConfig = { credentials: 'same-origin' };
+    let standardConfig: RequestInit = {
+      mode: 'cors',
+      credentials: 'same-origin',
+      headers: {
+        Accept: 'application/json',
+        'X-Requested-By': 'DEEP-UI'
+      }
+    };
     Object.assign(this.defaults, standardConfig, this.defaults);
     return this.rejectErrorResponses();
   }

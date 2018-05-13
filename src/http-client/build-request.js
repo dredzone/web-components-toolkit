@@ -2,11 +2,7 @@
 import type from '../type.js';
 import { type RequestInit, type IConfigurator } from './configurator.js';
 
-export default (
-  input: Request | string,
-  init: RequestInit,
-  config: IConfigurator
-): Request => {
+export default (input: Request | string, init: RequestInit, config: IConfigurator): Request => {
   let defaults: RequestInit = config.defaults || {};
   let request: Request;
   let body: Blob | FormData | URLSearchParams | string = '';
@@ -20,22 +16,13 @@ export default (
     init || (init = {});
     body = init.body;
     let bodyObj: Object | null = body ? { body } : null;
-    let requestInit: RequestInit = Object.assign(
-      {},
-      defaults,
-      { headers: {} },
-      init,
-      bodyObj
-    );
+    let requestInit: RequestInit = Object.assign({}, defaults, { headers: {} }, init, bodyObj);
     requestContentType = new Headers(requestInit.headers).get('Content-Type');
     request = new Request(getRequestUrl(config.baseUrl, input), requestInit);
   }
   if (!requestContentType) {
     if (new Headers(parsedDefaultHeaders).has('content-type')) {
-      request.headers.set(
-        'Content-Type',
-        new Headers(parsedDefaultHeaders).get('content-type')
-      );
+      request.headers.set('Content-Type', new Headers(parsedDefaultHeaders).get('content-type'));
     } else if (body && isJSON(String(body))) {
       request.headers.set('Content-Type', 'application/json');
     }
@@ -54,9 +41,7 @@ function parseHeaderValues(headers: Headers | Object): Object {
   for (let name in headers || {}) {
     if (headers.hasOwnProperty(name)) {
       // $FlowFixMe
-      parsedHeaders[name] = type.function(headers[name])
-        ? headers[name]()
-        : headers[name];
+      parsedHeaders[name] = type.function(headers[name]) ? headers[name]() : headers[name];
     }
   }
   return parsedHeaders;
