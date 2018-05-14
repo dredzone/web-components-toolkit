@@ -11,12 +11,27 @@ const serve = function(port = process.env.port) {
   app.get('/http-client-get-test', function(req, res) {
     res.send({ foo: '1' });
   });
+
   app.post('/http-client-post-test', function(req, res) {
     res.send({ foo: '2' });
   });
+
+  app.delete('/http-client-delete-test', function(req, res) {
+		res.send({ deleted: true });
+  });
+
+  app.put('/http-client-put-test', function(req, res) {
+      res.send({ created: true });
+  });
+
+  app.patch('/http-client-patch-test', function(req, res) {
+      res.send({ updated: true });
+  });
+
   app.get('/http-client-response-not-json', function(req, res) {
     res.send('not json');
   });
+
   app.get('/http-client-modified-url', function(req, res) {
     res.send('response for modified url');
   });
