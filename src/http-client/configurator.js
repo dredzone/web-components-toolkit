@@ -16,7 +16,7 @@ export interface IConfigurator {
 
   +interceptors: Interceptor[];
 
-  +middleware: Array<Function>;
+  +mixins: Array<Function>;
 
   withBaseUrl(baseUrl: string): IConfigurator;
 
@@ -24,7 +24,7 @@ export interface IConfigurator {
 
   withInterceptor(interceptor: Interceptor): IConfigurator;
 
-  withMiddleware(...middleware: Array<Function>): IConfigurator;
+  withMixins(...mixins: Array<Function>): IConfigurator;
 
   useStandardConfigurator(): IConfigurator;
 
@@ -62,13 +62,12 @@ class Configurator implements IConfigurator {
   baseUrl: string;
   defaults: RequestInit;
   interceptors: Interceptor[];
-  middleware: Array<Function>;
+  mixins: Array<Function>;
 
   constructor() {
     this.baseUrl = '';
     this.defaults = {};
     this.interceptors = [];
-    this.middleware = [];
   }
 
   withBaseUrl(baseUrl: string): Configurator {
@@ -86,10 +85,8 @@ class Configurator implements IConfigurator {
     return this;
   }
 
-  withMiddleware(...middleware: Array<Function>): IConfigurator {
-    middleware.forEach((fn: Function) => {
-      this.middleware.push(fn);
-    });
+  withMixins(...mixins: Array<Function>): IConfigurator {
+    this.mixins = mixins;
     return this;
   }
 

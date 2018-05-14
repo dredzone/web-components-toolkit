@@ -8,14 +8,11 @@ export default (
   errorName: string
 ): Promise<any> =>
   interceptors.reduce((chain: Promise<any>, interceptor: Interceptor) => {
-    // $FlowFixMe
-    const successHandler: Function = interceptor[successName] && interceptor[successName].bind(interceptor);
-    // $FlowFixMe
-    const errorHandler: Function = interceptor[errorName] && interceptor[errorName].bind(interceptor);
-
+    const successHandler: Function = interceptor[successName];
+    const errorHandler: Function = interceptor[errorName];
     return chain.then(
-      (successHandler && (value => successHandler(value))) || identity,
-      (errorHandler && (reason => errorHandler(reason))) || thrower
+        (successHandler && successHandler.bind(interceptor)) || identity,
+        (errorHandler && errorHandler.bind(interceptor)) || thrower
     );
   }, Promise.resolve(input));
 

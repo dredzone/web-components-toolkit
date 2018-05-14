@@ -1,7 +1,7 @@
 /* @flow */
 import type from '../type.js';
 import { type RequestInit, type IConfigurator } from './configurator.js';
-import applyInterceptors from './apply-interceptor.js';
+import applyInterceptors from './apply-interceptors.js';
 
 export const buildRequest: Function = (
   input: Request | string,
@@ -12,8 +12,8 @@ export const buildRequest: Function = (
   let request: Request;
   let body: Blob | FormData | URLSearchParams | string = '';
   let requestContentType: string;
+  let parsedDefaultHeaders: Object = parseHeaderValues(defaults.headers);
 
-  let parsedDefaultHeaders = parseHeaderValues(defaults.headers);
   if (input instanceof Request) {
     request = input;
     requestContentType = new Headers(request.headers).get('Content-Type');
