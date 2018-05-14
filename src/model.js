@@ -2,14 +2,17 @@ import dget from './object/dget.js';
 import dset from './object/dset.js';
 import { jsonClone } from './object/clone.js';
 import is from './type.js';
+import createStorage from './create-storage.js';
+import uniqueId from './unique-id.js';
 
 const model = (baseClass = class {}) => {
-  const stateKey = '_state'; //TODO uniqueString.get('_state');
+  const privates = createStorage();
   let subscriberCount = 0;
 
   return class Model extends baseClass {
     constructor(...args) {
       super(...args);
+      this._stateKey = uniqueId('_state');
       this._subscribers = new Map();
       this._setState(this.defaultState);
     }
@@ -79,11 +82,11 @@ const model = (baseClass = class {}) => {
     }
 
     _getState(accessor) {
-      return jsonClone(accessor ? dget(this[stateKey], accessor) : this[stateKey]);
+      return jsonClone(accessor ? dget(privates[this._stateKey], accessor) : privates[this._stateKey]);
     }
 
     _setState(newState) {
-      this[stateKey] = newState;
+      privates[this._stateKey] = newState;
     }
 
     _subscribe(context, accessor, cb) {

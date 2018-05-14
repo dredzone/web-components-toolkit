@@ -2,6 +2,40 @@
 essential set of tools to develop components or applications
 
 
+## eventHub
+
+### Purpose
+- Provides a simple pub/sub pattern for various uses including event aggregators
+
+### Usage
+app-channel.js
+```
+import eventHubFactory from 'utility-toolkit/event-hub.js';
+
+const appCh = eventHubFactory();
+export default appCh;
+```
+
+my-module1.js
+```
+import appCh from 'app-channel.js';
+
+let appChSubscriber = appCh.createSubscriber()
+  .on('foo', (data) => {
+    console.log(data) //1
+
+    //don't forget to destroy your subscriber when you are done with it
+    appChSubscriber.destroy();
+  })
+
+```
+
+my-module2.js
+```
+import appCh from 'app-channel.js';
+appCh.publish('foo', 1); //should trigger event
+```
+
 ## model
 
 ### Purpose

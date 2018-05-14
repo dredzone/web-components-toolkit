@@ -21,10 +21,10 @@ const eventHubFactory = (): TEventHub => {
   //$FlowFixMe
   return {
     publish: function(event: string, ...args: Array<any>): void {
-      subscribers.forEach((subscriptions) => {
-        (subscriptions.get(event) || []).forEach((callback) => {
+      subscribers.forEach(subscriptions => {
+        (subscriptions.get(event) || []).forEach(callback => {
           callback(...args);
-        })
+        });
       });
       return this;
     },
@@ -45,16 +45,16 @@ const eventHubFactory = (): TEventHub => {
           return this;
         },
         off: function(event: string): void {
-            //$FlowFixMe
-            subscribers.get(context).delete(event);
-            return this;
+          //$FlowFixMe
+          subscribers.get(context).delete(event);
+          return this;
         },
         destroy: function(): void {
-            subscribers.delete(context);
+          subscribers.delete(context);
         }
-      }
+      };
     }
-  }
+  };
 };
 
 export default eventHubFactory;
