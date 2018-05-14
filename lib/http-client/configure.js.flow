@@ -2,7 +2,7 @@
 import type from '../type.js';
 import classBuilder from '../class-builder.js';
 import { type IConfigurator, default as createConfig } from './configurator.js';
-import { type IFetch, FetchClient} from './fetch-client.js';
+import { type IFetch, FetchClient } from './fetch-client.js';
 
 export default (configure: (configurator: IConfigurator) => void): IFetch => {
   if (type.undefined(fetch)) {
