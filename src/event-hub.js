@@ -1,26 +1,60 @@
 /* @flow */
+type TEventSubscribers = Map<number, TEventSubscriptions>;
+type TEventSubscriptions = Map<string, TEventSubscriptionEvents>;
+type TEventSubscriptionEvents = Array<Function>;
 
 export type TEventHub = {
-  emit(event: string, data: any): void,
-
-  on(event: string, handler: Function): void,
-
-  off(event: string, handler: Function): void
+  publish(event: string, data: any): void,
+  createSubscriber(): TEventHubSubscriber
 };
 
-const eventHub = (): TEventHub => ({
-  hub: Object.create(null),
-  emit(event: string, ...args: Array<any>): void {
-    (this.hub[event] || []).forEach(handler => handler(...args));
-  },
-  on(event: string, handler: Function): void {
-    if (!this.hub[event]) this.hub[event] = [];
-    this.hub[event].push(handler);
-  },
-  off(event: string, handler: Function): void {
-    const i: number = (this.hub[event] || []).findIndex(h => h === handler);
-    if (i > -1) this.hub[event].splice(i, 1);
-  }
-});
+export type TEventHubSubscriber = {
+  on(context: any, event: string, callback: Function): void,
+  off(context: any, event: string, callback: Function): void,
+  destroy(context: any): void
+};
 
-export default eventHub();
+const eventHubFactory = (): TEventHub => {
+  const subscribers: TEventSubscribers = new Map();
+  let subscriberCount = 0;
+
+  //$FlowFixMe
+  return {
+    publish: function(event: string, ...args: Array<any>): void {
+      subscribers.forEach(subscriptions => {
+        (subscriptions.get(event) || []).forEach(callback => {
+          callback(...args);
+        });
+      });
+      return this;
+    },
+    createSubscriber: function() {
+      let context = subscriberCount++;
+      return {
+        on: function(event: string, callback: Function): void {
+          if (!subscribers.has(context)) {
+            subscribers.set(context, new Map());
+          }
+          //$FlowFixMe
+          const subscriber: TEventSubscriptions = subscribers.get(context);
+          if (!subscriber.has(event)) {
+            subscriber.set(event, []);
+          }
+          //$FlowFixMe
+          subscriber.get(event).push(callback);
+          return this;
+        },
+        off: function(event: string): void {
+          //$FlowFixMe
+          subscribers.get(context).delete(event);
+          return this;
+        },
+        destroy: function(): void {
+          subscribers.delete(context);
+        }
+      };
+    }
+  };
+};
+
+export default eventHubFactory;

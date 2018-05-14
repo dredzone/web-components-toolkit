@@ -11,8 +11,8 @@ export default (
     const successHandler: Function = interceptor[successName];
     const errorHandler: Function = interceptor[errorName];
     return chain.then(
-        (successHandler && successHandler.bind(interceptor)) || identity,
-        (errorHandler && errorHandler.bind(interceptor)) || thrower
+      (successHandler && successHandler.bind(interceptor)) || identity,
+      (errorHandler && errorHandler.bind(interceptor)) || thrower
     );
   }, Promise.resolve(input));
 
