@@ -42,5 +42,8 @@ export default (configure: (configurator: IConfigurator) => void): IFetch => {
       });
   };
 
+  if (config.middleware.length > 0) {
+    return config.middleware.reduce((f, m) => m(f), fetchApi);
+  }
   return fetchApi;
 };

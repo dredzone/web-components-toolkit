@@ -3,7 +3,11 @@ import type from '../type.js';
 import { type RequestInit, type IConfigurator } from './configurator.js';
 import applyInterceptors from './apply-interceptor.js';
 
-export const buildRequest: Function = (input: Request | string, init: RequestInit = {}, config: IConfigurator): Request => {
+export const buildRequest: Function = (
+  input: Request | string,
+  init: RequestInit = {},
+  config: IConfigurator
+): Request => {
   let defaults: RequestInit = config.defaults || {};
   let request: Request;
   let body: Blob | FormData | URLSearchParams | string = '';
@@ -36,10 +40,8 @@ export const buildRequest: Function = (input: Request | string, init: RequestIni
   return request;
 };
 
-export const processRequest: Function = (
-    request: Request | Promise<Request>,
-    config: IConfigurator
-): Promise<any> => applyInterceptors(request, config.interceptors, 'request', 'requestError');
+export const processRequest: Function = (request: Request | Promise<Request>, config: IConfigurator): Promise<any> =>
+  applyInterceptors(request, config.interceptors, 'request', 'requestError');
 
 export const processResponse: Function = (
   response: Response | Promise<Response>,
