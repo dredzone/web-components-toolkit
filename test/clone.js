@@ -1,4 +1,4 @@
-import clone from '../lib/clone.js';
+import clone, {jsonClone} from '../lib/clone.js';
 
 describe('clone', () => {
   describe('primitives', () => {
@@ -21,29 +21,29 @@ describe('clone', () => {
     });
   });
 
-  describe('clone.json', () => {
+  describe('jsonClone', () => {
     it('When non-serializable value is passed in it throws', () => {
-			expect(() => clone.json()).to.throw(Error);
-			expect(() => clone.json(() => {})).to.throw(Error);
-			expect(() => clone.json(undefined)).to.throw(Error);
+			expect(() => jsonClone()).to.throw(Error);
+			expect(() => jsonClone(() => {})).to.throw(Error);
+			expect(() => jsonClone(undefined)).to.throw(Error);
     });
 
 		it('Primitive serializable values', () => {
-			expect(clone.json(null)).to.be.null;
-			assert.equal(clone.json(5), 5);
-			assert.equal(clone.json('string'), 'string');
-			assert.equal(clone.json(false), false);
-			assert.equal(clone.json(true), true);
+			expect(jsonClone(null)).to.be.null;
+			assert.equal(jsonClone(5), 5);
+			assert.equal(jsonClone('string'), 'string');
+			assert.equal(jsonClone(false), false);
+			assert.equal(jsonClone(true), true);
 		});
 
 		it('Object is not same', () => {
 		  const obj = {'a': 'b'};
-			expect(clone.json(obj)).not.to.be.equal(obj);
+			expect(jsonClone(obj)).not.to.be.equal(obj);
 		});
 
 		it('Object reviver function', () => {
 			const obj = {'a': '2'};
-			const cloned = clone.json(obj, (k, v) => k !== '' ? Number(v) * 2 : v);
+			const cloned = jsonClone(obj, (k, v) => k !== '' ? Number(v) * 2 : v);
 			expect(cloned.a).equal(4);
 		});
 	});

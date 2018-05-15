@@ -24,12 +24,8 @@ export type Type = {
   symbol: Function & TypeApi
 };
 
-const doAllApi: Function = (fn: Function): Function => (
-  ...params: Array<any>
-) => all(params, fn);
-const doAnyApi: Function = (fn: Function): Function => (
-  ...params: Array<any>
-) => any(params, fn);
+const doAllApi: Function = (fn: Function): Function => (...params: Array<any>) => all(params, fn);
+const doAnyApi: Function = (fn: Function): Function => (...params: Array<any>) => any(params, fn);
 const toString: Function = Object.prototype.toString;
 const types: string[] = 'Map Set Symbol Array Object String Date RegExp Function Boolean Number Null Undefined Arguments Error'.split(
   ' '
@@ -37,23 +33,13 @@ const types: string[] = 'Map Set Symbol Array Object String Date RegExp Function
 const len: number = types.length;
 const typeCache: Object = {};
 const typeRegexp: RegExp = /\s([a-zA-Z]+)/;
-const is: Type = setup();
 
-export default is;
+export default (setup(): Type);
 
-function setup(): Type {
-  let checks: Object = {};
-  for (let i: number = len; i--; ) {
-    const type: string = types[i].toLowerCase();
-    checks[type] = obj => getType(obj) === type;
-    checks[type].all = doAllApi(checks[type]);
-    checks[type].any = doAnyApi(checks[type]);
-  }
-  return checks;
-}
+export const getType: Function = (src: any): string => getSrcType(src);
 
-function getType(obj: any): string {
-  let type: string = toString.call(obj);
+function getSrcType(src: any): string {
+  let type: string = toString.call(src);
   if (!typeCache[type]) {
     let matches: any = type.match(typeRegexp);
     if (Array.isArray(matches) && matches.length > 1) {
@@ -61,4 +47,15 @@ function getType(obj: any): string {
     }
   }
   return typeCache[type];
+}
+
+function setup(): Type {
+  let checks: Object = {};
+  for (let i: number = len; i--; ) {
+    const type: string = types[i].toLowerCase();
+    checks[type] = src => getSrcType(src) === type;
+    checks[type].all = doAllApi(checks[type]);
+    checks[type].any = doAnyApi(checks[type]);
+  }
+  return checks;
 }

@@ -7,19 +7,14 @@ export type ClassBuilder = {
   with(...mixins: Array<Function>): Class<any>
 };
 
-export const createMixin: Function = (mixin: Function): Function => dedupeMixin(
-	cacheMixin(
-		declareMixin(mixin)
-	)
-);
+export const createMixin: Function = (mixin: Function): Function => dedupeMixin(cacheMixin(declareMixin(mixin)));
 
-export default (Ctor: Class<any> = class {}): ClassBuilder => freeze({
-	with(...mixins: Array<Function>): Class<any> {
-		return mixins
-			.map((mixin: Function) => createMixin(mixin))
-			.reduce((k, m) => m(k), Ctor);
-	}
-});
+export default (Ctor: Class<any> = class {}): ClassBuilder =>
+  freeze({
+    with(...mixins: Array<Function>): Class<any> {
+      return mixins.map((mixin: Function) => createMixin(mixin)).reduce((k, m) => m(k), Ctor);
+    }
+  });
 
 // used by wrap() and unwrap()
 const wrappedMixinKey: string = uniqueId('_wrappedMixin');
@@ -47,11 +42,11 @@ const cachedApplicationKey: string = uniqueId('_cachedApplication');
  * @return {Function} `wrapper`
  */
 function wrap(mixin: Function, wrapper: Function): Function {
-	setPrototypeOf(wrapper, mixin);
-	if (!mixin[wrappedMixinKey]) {
-		mixin[wrappedMixinKey] = mixin;
-	}
-	return wrapper;
+  setPrototypeOf(wrapper, mixin);
+  if (!mixin[wrappedMixinKey]) {
+    mixin[wrappedMixinKey] = mixin;
+  }
+  return wrapper;
 }
 
 /**
@@ -64,7 +59,7 @@ function wrap(mixin: Function, wrapper: Function): Function {
  * @return {Function} The originally wrapped mixin
  */
 function unwrap(wrapper: Function): Function {
-	return wrapper[wrappedMixinKey] || wrapper;
+  return wrapper[wrappedMixinKey] || wrapper;
 }
 
 /**
@@ -82,10 +77,10 @@ function unwrap(wrapper: Function): Function {
  * @return {Function} A subclass of `superclass` produced by `mixin`
  */
 function applyMixin(superClass: Function, mixin: Function) {
-	let application = mixin(superClass);
-	const proto: any = application.prototype;
-	proto[appliedMixinKey] = unwrap(mixin);
-	return application;
+  let application = mixin(superClass);
+  const proto: any = application.prototype;
+  proto[appliedMixinKey] = unwrap(mixin);
+  return application;
 }
 
 /**
@@ -102,9 +97,7 @@ function applyMixin(superClass: Function, mixin: Function) {
  * `mixin` to a superclass
  */
 function isApplicationOf(proto: Object, mixin: Function): boolean {
-	return (
-		hasOwnProperty.call(proto, appliedMixinKey) && proto[appliedMixinKey] === unwrap(mixin)
-	);
+  return hasOwnProperty.call(proto, appliedMixinKey) && proto[appliedMixinKey] === unwrap(mixin);
 }
 
 /**
@@ -118,13 +111,13 @@ function isApplicationOf(proto: Object, mixin: Function): boolean {
  * chain
  */
 function hasMixin(o: Object, mixin: Function): boolean {
-	while (o !== null) {
-		if (isApplicationOf(o, mixin)) {
-			return true;
-		}
-		o = getPrototypeOf(o);
-	}
-	return false;
+  while (o !== null) {
+    if (isApplicationOf(o, mixin)) {
+      return true;
+    }
+    o = getPrototypeOf(o);
+  }
+  return false;
 }
 
 /**
@@ -137,7 +130,7 @@ function hasMixin(o: Object, mixin: Function): boolean {
  * @return {Function} a new mixin function
  */
 function declareMixin(mixin: Function): Function {
-	return wrap(mixin, (superClass: Function) => applyMixin(superClass, mixin));
+  return wrap(mixin, (superClass: Function) => applyMixin(superClass, mixin));
 }
 
 /**
@@ -149,10 +142,10 @@ function declareMixin(mixin: Function): Function {
  * @return {Function} a new mixin function
  */
 function dedupeMixin(mixin: Function) {
-	return wrap(
-		mixin,
-		(superClass: Function): Function => hasMixin(superClass.prototype, mixin) ? superClass : mixin(superClass)
-	);
+  return wrap(
+    mixin,
+    (superClass: Function): Function => (hasMixin(superClass.prototype, mixin) ? superClass : mixin(superClass))
+  );
 }
 
 /**
@@ -167,18 +160,18 @@ function dedupeMixin(mixin: Function) {
  * @return {Function}
  */
 function cacheMixin(mixin: Function): Function {
-	return wrap(mixin, (superClass: Function): Function => {
-		let cachedApplication = superClass[cachedApplicationKey];
-		if (!cachedApplication) {
-			cachedApplication = superClass[cachedApplicationKey] = new Map();
-		}
+  return wrap(mixin, (superClass: Function): Function => {
+    let cachedApplication = superClass[cachedApplicationKey];
+    if (!cachedApplication) {
+      cachedApplication = superClass[cachedApplicationKey] = new Map();
+    }
 
-		// $FlowFixMe
-		let application: Function = cachedApplication.get(mixin);
-		if (!application) {
-			application = mixin(superClass);
-			cachedApplication.set(mixin, application);
-		}
-		return application;
-	});
+    // $FlowFixMe
+    let application: Function = cachedApplication.get(mixin);
+    if (!application) {
+      application = mixin(superClass);
+      cachedApplication.set(mixin, application);
+    }
+    return application;
+  });
 }
