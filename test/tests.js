@@ -1,5 +1,5 @@
 import './browser.js';
-import './object.js';
+import './clone.js';
 import './type.js';
 import './browser.js';
 import './http-client.js';

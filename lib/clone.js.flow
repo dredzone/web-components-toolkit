@@ -1,11 +1,7 @@
-/*  */
-import type from '../type.js';
+/* @flow */
+import type from './type.js';
 
-const clone = function(
-  src,
-  circulars = [],
-  clones = []
-) {
+const clone = function(src: any, circulars: Array<any> = [], clones: Array<any> = []): any {
   // Null/undefined/functions/etc
   if (!src || !type.object(src) || type.function(src)) {
     return src;
@@ -39,10 +35,10 @@ const clone = function(
   // Object
   if (type.object(src)) {
     circulars.push(src);
-    const obj = Object.create(src);
+    const obj: Object = Object.create(src);
     clones.push(obj);
-    for (let key in src) {
-      let idx = circulars.findIndex((i) => i === src[key]);
+    for (let key: string in src) {
+      let idx: number = circulars.findIndex((i: number) => i === src[key]);
       obj[key] = idx > -1 ? clones[idx] : clone(src[key], circulars, clones);
     }
     return obj;
@@ -53,10 +49,4 @@ const clone = function(
 
 export default clone;
 
-export const jsonClone = function(value) {
-  try {
-    return JSON.parse(JSON.stringify(value));
-  } catch (e) {
-    return value;
-  }
-};
+clone.json = (value: Object, reviver: Function = (k, v) => v) => JSON.parse(JSON.stringify(value), reviver);

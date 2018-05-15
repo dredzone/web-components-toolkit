@@ -1,6 +1,6 @@
-import dget from './object/dget.js';
-import dset from './object/dset.js';
-import { jsonClone } from './object/clone.js';
+import { dget } from './object.js';
+import { dset } from './object.js';
+import clone from './clone.js';
 import is from './type.js';
 import createStorage from './create-storage.js';
 import uniqueId from './unique-id.js';
@@ -35,7 +35,7 @@ const model = (baseClass = class {}) => {
         accessor = arg1;
       }
       let oldState = this._getState();
-      let newState = jsonClone(oldState);
+      let newState = clone.json(oldState);
 
       if (accessor) {
         dset(newState, accessor, value);
@@ -82,7 +82,7 @@ const model = (baseClass = class {}) => {
     }
 
     _getState(accessor) {
-      return jsonClone(accessor ? dget(privates[this._stateKey], accessor) : privates[this._stateKey]);
+      return clone.json(accessor ? dget(privates[this._stateKey], accessor) : privates[this._stateKey]);
     }
 
     _setState(newState) {

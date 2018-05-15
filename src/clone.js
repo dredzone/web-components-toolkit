@@ -1,11 +1,7 @@
 /* @flow */
-import type from '../type.js';
+import type from './type.js';
 
-const clone = function(
-  src: any,
-  circulars: Array<any> = [],
-  clones: Array<any> = []
-): any {
+const clone = function(src: any, circulars: Array<any> = [], clones: Array<any> = []): any {
   // Null/undefined/functions/etc
   if (!src || !type.object(src) || type.function(src)) {
     return src;
@@ -53,10 +49,4 @@ const clone = function(
 
 export default clone;
 
-export const jsonClone = function(value: any) {
-  try {
-    return JSON.parse(JSON.stringify(value));
-  } catch (e) {
-    return value;
-  }
-};
+clone.json = (value: Object, reviver: Function = (k, v) => v) => JSON.parse(JSON.stringify(value), reviver);
