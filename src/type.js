@@ -1,40 +1,58 @@
 /* @flow */
 import { all, any } from './array.js';
 
-export type TypeApi = {
+export type IsType = {
+  (src: any): boolean
+};
+
+export type IsTypeApi = {
   all(...params: Array<any>): boolean,
   any(...params: Array<any>): boolean
 };
 
-export type Type = {
-  array: Function & TypeApi,
-  object: Function & TypeApi,
-  string: Function & TypeApi,
-  date: Function & TypeApi,
-  regexp: Function & TypeApi,
-  function: Function & TypeApi,
-  boolean: Function & TypeApi,
-  number: Function & TypeApi,
-  null: Function & TypeApi,
-  undefined: Function & TypeApi,
-  arguments: Function & TypeApi,
-  error: Function & TypeApi,
-  map: Function & TypeApi,
-  set: Function & TypeApi,
-  symbol: Function & TypeApi
+export type Is = {
+  array: IsType & IsTypeApi,
+  object: IsType & IsTypeApi,
+  string: IsType & IsTypeApi,
+  date: IsType & IsTypeApi,
+  regexp: IsType & IsTypeApi,
+  function: IsType & IsTypeApi,
+  boolean: IsType & IsTypeApi,
+  number: IsType & IsTypeApi,
+  null: IsType & IsTypeApi,
+  undefined: IsType & IsTypeApi,
+  arguments: IsType & IsTypeApi,
+  error: IsType & IsTypeApi,
+  map: IsType & IsTypeApi,
+  set: IsType & IsTypeApi,
+  symbol: IsType & IsTypeApi
 };
 
 const doAllApi: Function = (fn: Function): Function => (...params: Array<any>) => all(params, fn);
 const doAnyApi: Function = (fn: Function): Function => (...params: Array<any>) => any(params, fn);
 const toString: Function = Object.prototype.toString;
-const types: string[] = 'Map Set Symbol Array Object String Date RegExp Function Boolean Number Null Undefined Arguments Error'.split(
-  ' '
-);
+const types: string[] = [
+  'Map',
+  'Set',
+  'Symbol',
+  'Array',
+  'Object',
+  'String',
+  'Date',
+  'RegExp',
+  'Function',
+  'Boolean',
+  'Number',
+  'Null',
+  'Undefined',
+  'Arguments',
+  'Error'
+];
 const len: number = types.length;
 const typeCache: Object = {};
 const typeRegexp: RegExp = /\s([a-zA-Z]+)/;
 
-export default (setup(): Type);
+export default (setup(): Is);
 
 export const getType: Function = (src: any): string => getSrcType(src);
 
@@ -49,7 +67,7 @@ function getSrcType(src: any): string {
   return typeCache[type];
 }
 
-function setup(): Type {
+function setup(): Is {
   let checks: Object = {};
   for (let i: number = len; i--; ) {
     const type: string = types[i].toLowerCase();

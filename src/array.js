@@ -1,4 +1,3 @@
 /* @flow */
-export const all: Function = (arr: Array<any>, fn: Function = Boolean) => arr.every(fn);
-
-export const any: Function = (arr: Array<any>, fn: Function = Boolean) => arr.some(fn);
+export { default as any } from './array/any.js';
+export { default as all } from './array/all.js';

@@ -1,11 +1,7 @@
 /* @flow */
-export const isBrowser: boolean = ![typeof window, typeof document].includes(
-  'undefined'
-);
+export const isBrowser: boolean = ![typeof window, typeof document].includes('undefined');
 
-export const browser: Function = (fn: Function, raise: boolean = true) => (
-  ...args: Array<any>
-): any => {
+export const browser: Function = (fn: Function, raise: boolean = true) => (...args: Array<any>): any => {
   if (isBrowser) {
     return fn(...args);
   }

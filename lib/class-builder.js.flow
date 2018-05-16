@@ -3,6 +3,15 @@ import uniqueId from './unique-id.js';
 
 const { freeze, setPrototypeOf, getPrototypeOf, hasOwnProperty } = Object;
 
+// used by wrap() and unwrap()
+const wrappedMixinKey: string = uniqueId('_wrappedMixin');
+
+// used by applyMixin() and isApplicationOf()
+const appliedMixinKey: string = uniqueId('_appliedMixin');
+
+// used by cache mixin decorator
+const cachedApplicationKey: string = uniqueId('_cachedApplication');
+
 export type ClassBuilder = {
   with(...mixins: Array<Function>): Class<any>
 };
@@ -15,15 +24,6 @@ export default (Ctor: Class<any> = class {}): ClassBuilder =>
       return mixins.map((mixin: Function) => createMixin(mixin)).reduce((k, m) => m(k), Ctor);
     }
   });
-
-// used by wrap() and unwrap()
-const wrappedMixinKey: string = uniqueId('_wrappedMixin');
-
-// used by applyMixin() and isApplicationOf()
-const appliedMixinKey: string = uniqueId('_appliedMixin');
-
-// used by cache mixin decorator
-const cachedApplicationKey: string = uniqueId('_cachedApplication');
 
 /**
  * Sets up the function `mixin` to be wrapped by the function `wrapper`, while
