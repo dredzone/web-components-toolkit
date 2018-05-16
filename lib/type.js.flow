@@ -24,15 +24,11 @@ export type Type = {
   symbol: Function & TypeApi
 };
 
-const doAllApi: Function = (fn: Function): Function => (
-	...params: Array<any>
-) => all(params, fn);
-const doAnyApi: Function = (fn: Function): Function => (
-	...params: Array<any>
-) => any(params, fn);
+const doAllApi: Function = (fn: Function): Function => (...params: Array<any>) => all(params, fn);
+const doAnyApi: Function = (fn: Function): Function => (...params: Array<any>) => any(params, fn);
 const toString: Function = Object.prototype.toString;
 const types: string[] = 'Map Set Symbol Array Object String Date RegExp Function Boolean Number Null Undefined Arguments Error'.split(
-	' '
+  ' '
 );
 const len: number = types.length;
 const typeCache: Object = {};
@@ -43,14 +39,14 @@ export default (setup(): Type);
 export const getType: Function = (src: any): string => getSrcType(src);
 
 function getSrcType(src: any): string {
-	let type: string = toString.call(src);
-	if (!typeCache[type]) {
-		let matches: any = type.match(typeRegexp);
-		if (Array.isArray(matches) && matches.length > 1) {
-			typeCache[type] = matches[1].toLowerCase();
-		}
-	}
-	return typeCache[type];
+  let type: string = toString.call(src);
+  if (!typeCache[type]) {
+    let matches: any = type.match(typeRegexp);
+    if (Array.isArray(matches) && matches.length > 1) {
+      typeCache[type] = matches[1].toLowerCase();
+    }
+  }
+  return typeCache[type];
 }
 
 function setup(): Type {

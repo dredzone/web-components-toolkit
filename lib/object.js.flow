@@ -1,7 +1,7 @@
 /* @flow */
 import type from './type.js';
 
-export const dset: Function = (obj: Object, key: string, value: any): void => {
+export const dSet: Function = (obj: Object, key: string, value: any): void => {
   if (key.indexOf('.') === -1) {
     obj[key] = value;
     return;
@@ -19,7 +19,7 @@ export const dset: Function = (obj: Object, key: string, value: any): void => {
   object[parts[depth]] = value;
 };
 
-export const dget: Function = (obj: Object, key: string, defaultValue: any = undefined): any => {
+export const dGet: Function = (obj: Object, key: string, defaultValue: any = undefined): any => {
   if (key.indexOf('.') === -1) {
     return obj[key] ? obj[key] : defaultValue;
   }
@@ -39,5 +39,5 @@ export const dget: Function = (obj: Object, key: string, defaultValue: any = und
 
 const { keys } = Object;
 
-export const toMap: Function = (o: Object): Map<any, any> =>
+export const objectToMap: Function = (o: Object): Map<any, any> =>
   keys(o).reduce((m: Map<any, any>, k: any) => m.set(k, o[k]), new Map());

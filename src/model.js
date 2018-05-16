@@ -1,5 +1,4 @@
-import { dget } from './object.js';
-import { dset } from './object.js';
+import { dGet, dSet } from './object.js';
 import { jsonClone } from './clone.js';
 import is from './type.js';
 import createStorage from './create-storage.js';
@@ -38,7 +37,7 @@ const model = (baseClass = class {}) => {
       let newState = jsonClone(oldState);
 
       if (accessor) {
-        dset(newState, accessor, value);
+        dSet(newState, accessor, value);
       } else {
         newState = value;
       }
@@ -72,7 +71,7 @@ const model = (baseClass = class {}) => {
           }
           bindRules.forEach(bindRule => {
             self._subscribe(context, bindRule[0], value => {
-              dset(context, bindRule[1], value);
+              dSet(context, bindRule[1], value);
             });
           });
           return this;
@@ -82,7 +81,7 @@ const model = (baseClass = class {}) => {
     }
 
     _getState(accessor) {
-      return jsonClone(accessor ? dget(privates[this._stateKey], accessor) : privates[this._stateKey]);
+      return jsonClone(accessor ? dGet(privates[this._stateKey], accessor) : privates[this._stateKey]);
     }
 
     _setState(newState) {
@@ -105,14 +104,14 @@ const model = (baseClass = class {}) => {
           //e.g.  sa='foo.bar.baz', a='foo.bar.baz'
           //e.g.  sa='foo.bar.baz', a='foo.bar.baz.blaz'
           if (accessor.indexOf(setAccessor) === 0) {
-            cb(dget(newState, accessor), dget(oldState, accessor));
+            cb(dGet(newState, accessor), dGet(oldState, accessor));
             return;
           }
           //e.g. sa='foo.bar.baz', a='foo.*'
           if (accessor.indexOf('*') > -1) {
             const deepAccessor = accessor.replace('.*', '').replace('*', '');
             if (setAccessor.indexOf(deepAccessor) === 0) {
-              cb(dget(newState, deepAccessor), dget(oldState, deepAccessor));
+              cb(dGet(newState, deepAccessor), dGet(oldState, deepAccessor));
               return;
             }
           }
