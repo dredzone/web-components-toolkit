@@ -35,11 +35,7 @@ export interface ICustomElement {
    * Note: only attributes listed in the observedAttributes property will receive this callback.
    */
   // attributeChangedCallback(attributeName: string, oldValue: string, newValue: string): void;
-  attributeChanged(
-    attributeName: string,
-    oldValue: string,
-    newValue: string
-  ): void;
+  attributeChanged(attributeName: string, oldValue: string, newValue: string): void;
 
   /**
    * Called every time the element is inserted into the DOM.
@@ -136,11 +132,7 @@ export default (baseClass?: Class<HTMLElement>): Class<HTMLElement & ICustomElem
     construct(): void {}
 
     /* eslint-disable no-unused-vars */
-    attributeChanged(
-      attributeName: string,
-      oldValue: string,
-      newValue: string
-    ): void {}
+    attributeChanged(attributeName: string, oldValue: string, newValue: string): void {}
     /* eslint-enable no-unused-vars */
 
     connected(): void {}

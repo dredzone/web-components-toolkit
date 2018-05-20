@@ -46,7 +46,11 @@ const types: string[] = [
   'Null',
   'Undefined',
   'Arguments',
-  'Error'
+  'Error',
+  'Request',
+  'Response',
+  'Headers',
+  'Blob'
 ];
 const len: number = types.length;
 const typeCache: Object = {};

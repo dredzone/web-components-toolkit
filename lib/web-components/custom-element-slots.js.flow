@@ -43,9 +43,7 @@ export default browser((baseClass: Class<InType>): Class<OutType> => {
       if (firstRender) {
         const children: Array<Element> = elementChildren(context);
         children.forEach((child: Element) => {
-          const attribute: mixed = child.getAttribute
-            ? child.getAttribute('slot')
-            : null;
+          const attribute: mixed = child.getAttribute ? child.getAttribute('slot') : null;
           if (typeof attribute === 'string' && attribute.length > 0) {
             const slot: string = attribute.replace(hypenRegEx, match => match[1].toUpperCase());
             context.slots[slot] = child;

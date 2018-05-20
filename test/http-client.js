@@ -32,6 +32,7 @@ describe('http-client', () => {
 		createHttpClient().patch('/http-client-patch-test')
 			.then(response => response.json())
 			.then(data => {
+				console.log('sjsjsj');
 				chai.expect(data.updated).to.equal(true);
 				done();
 			});
@@ -55,4 +56,27 @@ describe('http-client', () => {
 			});
 	});
 
+	it("with interceptor", done => {
+		let client = createHttpClient((config) => {
+			config
+				.useStandardConfigurator()
+				.withInterceptor({
+					request(request) {
+						console.log('request interceptor ', request);
+						return new Response(request.url);
+				},
+				response(response) {
+					console.log('response interceptor ', response);
+					return response;
+				}
+			});
+		});
+		client.get('/http-client-response-not-json')
+			.then(response => response.text())
+			.then(response => {
+				chai.expect(response).to.equal('not json');
+				done();
+			});
+
+	});
 });

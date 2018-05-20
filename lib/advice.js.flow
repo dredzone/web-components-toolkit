@@ -1,5 +1,5 @@
 /* @flow */
-export { default as before } from './advice/before.js';
-export { default as around } from './advice/around.js';
-export { default as after } from './advice/after.js';
-export { default as afterThrow } from './advice/after-throw.js';
+export { default as adviceBefore } from './advice/before.js';
+export { default as adviceAround } from './advice/around.js';
+export { default as adviceAfter } from './advice/after.js';
+export { default as adviceAfterThrow } from './advice/after-throw.js';

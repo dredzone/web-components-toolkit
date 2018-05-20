@@ -56,9 +56,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
     }
 
     dispatch(type: string, data: Object = {}): void {
-      this.dispatchEvent(
-        new CustomEvent(type, assign(eventDefaultParams, { detail: data }))
-      );
+      this.dispatchEvent(new CustomEvent(type, assign(eventDefaultParams, { detail: data })));
     }
 
     off(): void {

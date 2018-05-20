@@ -35,11 +35,7 @@ export interface IProperties {
 
   static propertyNameToAttribute(property: string): string;
 
-  propertiesChanged(
-    currentProps: Object,
-    changedProps: Object,
-    oldProps: Object
-  ): void;
+  propertiesChanged(currentProps: Object, changedProps: Object, oldProps: Object): void;
 
   _createPropertyAccessor(property: string, readOnly: boolean): void;
 
@@ -67,11 +63,7 @@ export interface IProperties {
 
   _flushProperties(): void;
 
-  _shouldPropertiesChange(
-    currentProps: Object,
-    changedProps: Object,
-    oldProps: Object
-  ): boolean;
+  _shouldPropertiesChange(currentProps: Object, changedProps: Object, oldProps: Object): boolean;
 
   _shouldPropertyChange(property: string, value: any, old: any): boolean;
 }
@@ -91,8 +83,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 
   function enhancePropertyConfig(config: Object): void {
     config.hasObserver = 'observer' in config;
-    config.isObserverString =
-      config.hasObserver && typeof config.observer === 'string';
+    config.isObserverString = config.hasObserver && typeof config.observer === 'string';
     config.isString = config.type === String;
     config.isNumber = config.type === Number;
     config.isBoolean = config.type === Boolean;
@@ -114,8 +105,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
         continue;
       }
       const property: Object = properties[name];
-      output[name] =
-        typeof property === 'function' ? { type: property } : property;
+      output[name] = typeof property === 'function' ? { type: property } : property;
       enhancePropertyConfig(output[name]);
     }
     return output;
@@ -142,11 +132,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
   }
 
   function createPropertiesChangedAdvice(): Function {
-    return function(
-      currentProps: Object,
-      changedProps: Object,
-      oldProps: Object
-    ): void {
+    return function(currentProps: Object, changedProps: Object, oldProps: Object): void {
       let context: IProperties & HTMLElement = this;
       Object.keys(changedProps).forEach((property: string) => {
         const {
@@ -183,11 +169,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
     $value: any;
 
     static get observedAttributes(): Array<string> {
-      return (
-        Object.keys(this.classProperties).map((property: string) =>
-          this.propertyNameToAttribute(property)
-        ) || []
-      );
+      return Object.keys(this.classProperties).map((property: string) => this.propertyNameToAttribute(property)) || [];
     }
 
     static finalizeClass(): void {
@@ -203,9 +185,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
       if (!property) {
         // Convert and memoize.
         const hypenRegEx: RegExp = /-([a-z])/g;
-        property = attribute.replace(hypenRegEx, match =>
-          match[1].toUpperCase()
-        );
+        property = attribute.replace(hypenRegEx, match => match[1].toUpperCase());
         attributeToPropertyNames[attribute] = property;
       }
       return property;
@@ -264,9 +244,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
       const properties: PropertiesConfig = this.classProperties;
       keys(properties).forEach((property: string) => {
         if (Object.hasOwnProperty.call(proto, property)) {
-          throw new Error(
-            `Unable to setup property '${property}', property already exists`
-          );
+          throw new Error(`Unable to setup property '${property}', property already exists`);
         }
         const propertyValue: any = properties[property].value;
         if (propertyValue !== undefined) {
@@ -349,16 +327,13 @@ export default (baseClass: Class<InType>): Class<OutType> => {
 
     _attributeToProperty(attribute: string, value: string): void {
       if (!privates(this).serializing) {
-        const property: string = this.constructor.attributeToPropertyName(
-          attribute
-        );
+        const property: string = this.constructor.attributeToPropertyName(attribute);
         this[property] = this._deserializeValue(property, value);
       }
     }
 
     _isValidPropertyValue(property: string, value: any): boolean {
-      const propertyType: Function = this.constructor.classProperties[property]
-        .type;
+      const propertyType: Function = this.constructor.classProperties[property].type;
       let isValid: boolean = false;
       if (typeof value === 'object') {
         isValid = value instanceof propertyType;
@@ -381,14 +356,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
     }
 
     _deserializeValue(property: string, value: any): any {
-      const {
-        isNumber,
-        isArray,
-        isBoolean,
-        isDate,
-        isString,
-        isObject
-      } = this.constructor.classProperties[property];
+      const { isNumber, isArray, isBoolean, isDate, isString, isObject } = this.constructor.classProperties[property];
       if (isBoolean) {
         value = value !== null && value !== undefined;
       } else if (isNumber) {
@@ -396,12 +364,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
       } else if (isString) {
         value = value === null || value === undefined ? '' : String(value);
       } else if (isObject || isArray) {
-        value =
-          value === null || value === undefined
-            ? isArray
-              ? null
-              : {}
-            : JSON.parse(value);
+        value = value === null || value === undefined ? (isArray ? null : {}) : JSON.parse(value);
       } else if (isDate) {
         value = value === null || value === undefined ? '' : new Date(value);
       }
@@ -409,9 +372,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
     }
 
     _serializeValue(property: string, value: any): any {
-      const propertyConfig: PropertyConfig = this.constructor.classProperties[
-        property
-      ];
+      const propertyConfig: PropertyConfig = this.constructor.classProperties[property];
       const { isBoolean, isObject, isArray } = propertyConfig;
 
       if (isBoolean) {

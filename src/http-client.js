@@ -45,6 +45,7 @@ export interface IHttpClient {
 
   addInterceptor(interceptor: Interceptor): void;
 }
+
 /**
  * The init object used to initialize a fetch Request.
  * See https://developer.mozilla.org/en-US/docs/Web/API/Request/Request

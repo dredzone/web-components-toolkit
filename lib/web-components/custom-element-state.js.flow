@@ -58,8 +58,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
     setState(changes: Object): void {
       const nextState: Object = assign({}, privates(this).state, changes);
       const previousState: Object = privates(this).state;
-      const changed =
-        previousState === undefined || this.shouldComponentUpdate(nextState);
+      const changed = previousState === undefined || this.shouldComponentUpdate(nextState);
 
       if (changed) {
         privates(this).state = nextState;
@@ -88,10 +87,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
       if (firstRender) {
         context.componentWillRender(this.state);
       } else {
-        context.componentWillUpdate(
-          this.state,
-          assign({}, privates(context).renderedState)
-        );
+        context.componentWillUpdate(this.state, assign({}, privates(context).renderedState));
       }
     };
   }
