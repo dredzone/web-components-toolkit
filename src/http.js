@@ -56,17 +56,17 @@ export interface IHttp {
 
   method(value: string): IHttp;
 
-  send(): Promise<any>;
+  send(): ResponseChain;
 
-  get(): Promise<any>;
+  get(): ResponseChain;
 
-  post(): Promise<any>;
+  post(): ResponseChain;
 
-  insert(): Promise<any>;
+  insert(): ResponseChain;
 
-  update(): Promise<any>;
+  update(): ResponseChain;
 
-  delete(): Promise<any>;
+  delete(): ResponseChain;
 }
 
 export const HttpMethods = Object.freeze({
@@ -179,27 +179,27 @@ class Http implements IHttp {
     return this.options({ method: value });
   }
 
-  get(): Promise<any> {
+  get(): ResponseChain {
     return this.method(HttpMethods.Get).send();
   }
 
-  post(): Promise<any> {
+  post(): ResponseChain {
     return this.method(HttpMethods.Post).send();
   }
 
-  insert(): Promise<any> {
+  insert(): ResponseChain {
     return this.method(HttpMethods.Put).send();
   }
 
-  update(): Promise<any> {
+  update(): ResponseChain {
     return this.method(HttpMethods.Patch).send();
   }
 
-  delete(): Promise<any> {
+  delete(): ResponseChain {
     return this.method(HttpMethods.Delete).send();
   }
 
-  send(): Promise<any> {
+  send(): ResponseChain {
     const { url, options, middleware, resolvers, catchers } = privates(this).config;
     const request: FetchLike = applyMiddleware(middleware)(fetch);
     const wrapper: Promise<Response> = request(url, options).then((response: Response) => {
