@@ -8,7 +8,9 @@ export type MergeOptions = {
 
 export const arrayReplaceStrategy: Function = (source: Array<any>, target: Array<any>) => clone(target);
 
-export default (opts: MergeOptions = { arrayMerge: arrayReplaceStrategy }): Function => (...args: Array<any>): any => {
+export const factory: Function = (opts: MergeOptions = { arrayMerge: arrayReplaceStrategy }): Function => (
+  ...args: Array<any>
+): any => {
   let result: any;
 
   for (let i: number = args.length; i > 0; --i) {
@@ -17,6 +19,8 @@ export default (opts: MergeOptions = { arrayMerge: arrayReplaceStrategy }): Func
 
   return result;
 };
+
+export default factory();
 
 function merge(source: any, target: any, opts: MergeOptions): any {
   if (is.undefined(target)) {

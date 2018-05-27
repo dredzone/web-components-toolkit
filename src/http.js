@@ -1,52 +1,110 @@
 /* @flow */
 import createStorage from './create-storage.js';
-import clone from './object/clone.js';
+import { clone, merge } from './object.js';
 
-export type HttpRequestOptions = RequestOptions & {
-  [key: string]: any
+export type ResponseChain = {
+  res: (cb?: (type: Response) => Response) => Promise<Response>,
+  json: (cb?: (type: Object) => Object) => Promise<Object>
 };
 
-export type HttpResponse = Response & {
-  [key: string]: any
-};
+export type FetchLike = (url: string, opts: RequestOptions) => Promise<Response>;
 
-export type HttpError = Error & {
-  status: number,
-  response: HttpResponse,
-  text?: string,
-  json?: any
-};
+export type ConfiguredMiddleware = (next: FetchLike) => FetchLike;
 
-export type FetchLike = (url: string, opts: HttpRequestOptions) => Promise<HttpResponse>;
-
-export type HttpMiddleware = (next: FetchLike) => FetchLike;
-
-export type Middleware = (options?: { [key: string]: any }) => HttpMiddleware;
-
-export type ResponseChain = {};
+export type Middleware = (options?: { [key: string]: any }) => ConfiguredMiddleware;
 
 export type HttpConfig = {
   url: string,
-  options: HttpRequestOptions,
-  catchers: Map<number | string, (error: HttpError, originalRequest: IHttp) => void>,
-  resolvers: Array<(resolver: ResponseChain, originalRequest: IHttp) => any>,
-  middleware: Array<HttpMiddleware>
+  options: RequestOptions,
+  catchers: Map<number | string, (error: Error, originalRequest: RequestOptions) => void>,
+  resolvers: Array<(resolver: ResponseChain, originalRequest: RequestOptions) => any>,
+  middleware: Array<ConfiguredMiddleware>
 };
 
 export interface IHttp {
   constructor(config: HttpConfig): void;
 
+  middleware(middleware: ConfiguredMiddleware[], clear: boolean): IHttp;
+
   url(url: string, replace: boolean): IHttp;
+
+  options(options: RequestOptions, mixin: boolean): IHttp;
+
+  headers(headerValues: { [key: string]: string }): IHttp;
+
+  accept(headerValue: string): IHttp;
+
+  content(headerValue: string): IHttp;
+
+  mode(value: ModeType): IHttp;
+
+  credentials(value: CredentialsType): IHttp;
+
+  cache(value: CacheType): IHttp;
+
+  integrity(value: string): IHttp;
+
+  keepalive(value: boolean): IHttp;
+
+  redirect(value: RedirectType): IHttp;
+
+  body(contents: any): IHttp;
+
+  auth(value: string): IHttp;
+
+  form(input: Object): IHttp;
+
+  method(value: string): IHttp;
+
+  send(): Promise<any>;
+
+  get(): Promise<any>;
+
+  post(): Promise<any>;
+
+  insert(): Promise<any>;
+
+  update(): Promise<any>;
+
+  delete(): Promise<any>;
 }
 
-export default (url: string = '', options: HttpRequestOptions = {}): IHttp =>
-  new Http({ url, options, catchers: new Map(), resolvers: [], middleware: [] });
+export const HttpMethods = Object.freeze({
+  Get: 'GET',
+  Post: 'POST',
+  Put: 'PUT',
+  Patch: 'PATCH',
+  Delete: 'DELETE'
+});
+
+export default (): IHttp => new Http(createConfig());
 
 const privates: Function = createStorage();
+
+class HttpError extends Error {
+  response: Response;
+  constructor(response: Response) {
+    super(`${response.status} for ${response.url}`);
+    this.name = 'HttpError';
+    this.response = response;
+  }
+}
 
 class Http implements IHttp {
   constructor(config: HttpConfig) {
     privates(this).config = config;
+  }
+
+  catcher(errorId: number | string, catcher: (error: Error, originalRequest: RequestOptions) => any): IHttp {
+    const config: HttpConfig = clone(privates(this).config);
+    config.catchers.set(errorId, catcher);
+    return new Http(config);
+  }
+
+  middleware(middleware: ConfiguredMiddleware[], clear = false) {
+    const config: HttpConfig = clone(privates(this).config);
+    config.middleware = clear ? middleware : config.middleware.concat(middleware);
+    return new Http(config);
   }
 
   url(url: string, replace: boolean = false): IHttp {
@@ -54,4 +112,170 @@ class Http implements IHttp {
     config.url = replace ? url : config.url + url;
     return new Http(config);
   }
+
+  options(options: RequestOptions, mixin: boolean = true): IHttp {
+    const config: HttpConfig = clone(privates(this).config);
+    config.options = mixin ? merge(config.options, options) : Object.assign({}, options);
+    return new Http(config);
+  }
+
+  headers(headerValues: { [headerName: string]: string }): IHttp {
+    const config: HttpConfig = clone(privates(this).config);
+    config.options.headers = merge(config.options.headers, headerValues);
+    return new Http(config);
+  }
+
+  accept(headerValue: string): IHttp {
+    return this.headers({ Accept: headerValue });
+  }
+
+  content(headerValue: string): IHttp {
+    return this.headers({ 'Content-Type': headerValue });
+  }
+
+  mode(value: ModeType): IHttp {
+    return this.options({ mode: value });
+  }
+
+  credentials(value: CredentialsType): IHttp {
+    return this.options({ credentials: value });
+  }
+
+  cache(value: CacheType): IHttp {
+    return this.options({ cache: value });
+  }
+
+  integrity(value: string): IHttp {
+    return this.options({ integrity: value });
+  }
+
+  keepalive(value: boolean = true): IHttp {
+    return this.options({ keepalive: value });
+  }
+
+  redirect(value: RedirectType): IHttp {
+    return this.options({ redirect: value });
+  }
+
+  body(contents: any): IHttp {
+    const config: HttpConfig = clone(privates(this).config);
+    config.options.body = contents;
+    return new Http(config);
+  }
+
+  auth(headerValue: string): IHttp {
+    return this.headers({ Authorization: headerValue });
+  }
+
+  json(value: Object): IHttp {
+    return this.content('application/json').body(JSON.stringify(value));
+  }
+
+  form(value: Object): IHttp {
+    return this.body(convertFormUrl(value)).content('application/x-www-form-urlencoded');
+  }
+
+  method(value: string = HttpMethods.Get): IHttp {
+    return this.options({ method: value });
+  }
+
+  get(): Promise<any> {
+    return this.method(HttpMethods.Get).send();
+  }
+
+  post(): Promise<any> {
+    return this.method(HttpMethods.Post).send();
+  }
+
+  insert(): Promise<any> {
+    return this.method(HttpMethods.Put).send();
+  }
+
+  update(): Promise<any> {
+    return this.method(HttpMethods.Patch).send();
+  }
+
+  delete(): Promise<any> {
+    return this.method(HttpMethods.Delete).send();
+  }
+
+  send(): Promise<any> {
+    const { url, options, middleware, resolvers, catchers } = privates(this).config;
+    const request: FetchLike = applyMiddleware(middleware)(fetch);
+    const wrapper: Promise<Response> = request(url, options).then((response: Response) => {
+      if (!response.ok) {
+        throw new HttpError(response);
+      }
+      return response;
+    });
+
+    const doCatch = (promise: Promise<any>): Promise<any> => {
+      return promise.catch(err => {
+        if (catchers.has(err.status)) {
+          return catchers.get(err.status)(err, this);
+        }
+        if (catchers.has(err.name)) {
+          return catchers.get(err.name)(err, this);
+        }
+        throw err;
+      });
+    };
+
+    const wrapTypeParser: Function = (funName: string | null) => (cb?: Function) =>
+      funName
+        ? doCatch(
+            wrapper
+              // $FlowFixMe
+              .then(response => response && response[funName]())
+              .then(response => (response && cb && cb(response)) || response)
+          )
+        : doCatch(wrapper.then(response => (response && cb && cb(response)) || response));
+
+    const responseChain: ResponseChain = {
+      res: wrapTypeParser(null),
+      json: wrapTypeParser('json')
+    };
+
+    return resolvers.reduce((chain, r) => r(chain, options), responseChain);
+  }
+}
+
+function applyMiddleware(middlewares: ConfiguredMiddleware[]) {
+  return (fetchFunction: FetchLike): FetchLike => {
+    if (middlewares.length === 0) {
+      return fetchFunction;
+    }
+
+    if (middlewares.length === 1) {
+      return middlewares[0](fetchFunction);
+    }
+
+    return (middlewares.reduceRight(
+      (acc, curr, idx): any => (idx === middlewares.length - 2 ? curr(acc(fetchFunction)) : curr((acc: any)))
+    ): any);
+  };
+}
+
+function createConfig(): HttpConfig {
+  return Object.assign(
+    {},
+    {
+      url: '',
+      options: {},
+      catchers: new Map(),
+      resolvers: [],
+      middleware: []
+    }
+  );
+}
+
+function convertFormUrl(formObject: Object) {
+  return Object.keys(formObject)
+    .map(
+      key =>
+        encodeURIComponent(key) +
+        '=' +
+        `${encodeURIComponent(typeof formObject[key] === 'object' ? JSON.stringify(formObject[key]) : formObject[key])}`
+    )
+    .join('&');
 }
