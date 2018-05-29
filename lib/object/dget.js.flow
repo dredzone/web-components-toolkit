@@ -1,7 +1,7 @@
 /* @flow */
 export default (obj: Object, key: string, defaultValue: any = undefined): any => {
   if (key.indexOf('.') === -1) {
-    return obj[key] ? obj[key] : defaultValue;
+    return typeof obj[key] !== 'undefined' ? obj[key] : defaultValue;
   }
   const parts: string[] = key.split('.');
   const length: number = parts.length;
