@@ -23,6 +23,8 @@ export interface ICustomElement {
 
   +initialized: boolean;
 
+  constructor(): void;
+
   /**
    * Called during creation time,
    * subclasses extend override this, and should not use `constructor`
