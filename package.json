@@ -2,8 +2,8 @@
   "name": "utility-toolkit",
   "version": "0.20.0",
   "description": "Essential set of tools to develop web-components and applications",
-  "main": "bundles/umd/index.js",
   "module": "lib/index.js",
+  "main": "bundles/umd/index.js",
   "scripts": {
     "version": "",
     "postversion": "git push && git push --tags",

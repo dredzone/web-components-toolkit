@@ -11,11 +11,11 @@ export type Router = {
   otherwise: (routeHandler: Function) => void
 };
 
-export default (domEntryPoint: Node) => {
+export default (domEntryPoint: Element) => {
   let routes = {};
   let loadEventHandler: EventHandler | null = null;
   let hashEventHandler: EventHandler | null = null;
-  const lastDomEntryPoint: Node = domEntryPoint.cloneNode(true);
+  const lastDomEntryPoint: Element = domEntryPoint.cloneNode(true);
   let lastRouteHandler: Function | null = null;
 
   const navigateTo: Function = (hashUrl: string): void => {
@@ -37,7 +37,7 @@ export default (domEntryPoint: Node) => {
       return;
     }
 
-    const domClone: Node = lastDomEntryPoint.cloneNode(true);
+    const domClone: Element = lastDomEntryPoint.cloneNode(true);
     if (domEntryPoint && domEntryPoint.parentElement) {
       domEntryPoint.parentElement.insertBefore(domClone, domEntryPoint);
     }
