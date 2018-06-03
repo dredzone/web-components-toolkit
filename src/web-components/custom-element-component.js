@@ -4,7 +4,10 @@ import customElement, { type ICustomElement } from './custom-element.js';
 import properties, { type IProperties } from './custom-element-properties.js';
 import events, { type IEvents } from './custom-element-events.js';
 
-export default (baseClass: Class<ICustomElement> = customElement()): Class<ICustomElement & IEvents & IProperties> => {
+type InType = HTMLElement & ICustomElement;
+type OutType = InType & IEvents & IProperties;
+
+export default (baseClass: Class<InType> = customElement()): Class<OutType> => {
   return class Component extends classBuilder(baseClass).with(events, properties) {
     propertiesChanged(
       currentProps: Object, // eslint-disable-line no-unused-vars
