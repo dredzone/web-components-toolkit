@@ -23,7 +23,7 @@ export interface ICustomElement {
 
   +initialized: boolean;
 
-	constructor(): void;
+  constructor(): void;
 
   /**
    * Called during creation time,

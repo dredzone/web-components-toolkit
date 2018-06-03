@@ -6,7 +6,7 @@ import removeElement from './remove-element.js';
 export type Router = {
   addRoute: (hashUrl: string, routeHandler: Function, data: any) => Router,
 
-  navigateTo: (hashUrl: string) => void,
+  navigateTo: (hashUrl: string, force: boolean) => void,
 
   otherwise: (routeHandler: Function) => void
 };
@@ -18,7 +18,11 @@ export default (domEntryPoint: Element) => {
   const lastDomEntryPoint: Element = domEntryPoint.cloneNode(true);
   let lastRouteHandler: Function | null = null;
 
-  const navigateTo: Function = (hashUrl: string): void => {
+  const navigateTo: Function = (hashUrl: string, force: boolean = false): void => {
+    if (force) {
+      handleRouting();
+      return;
+    }
     window.location.hash = hashUrl;
   };
 
