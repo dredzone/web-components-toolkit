@@ -6,25 +6,28 @@ import removeElement from './remove-element.js';
 export type Router = {
   addRoute: (hashUrl: string, routeHandler: Function, data: any) => Router,
 
-  navigateTo: (hashUrl: string, force?: boolean) => void,
+  navigate: (hashUrl?: string) => void,
 
-  otherwise: (routeHandler: Function) => void
+  otherwise: (routeHandler: Function) => void,
+
+  reload: () => void,
+
+  start: () => void
 };
 
-export default (domEntryPoint: Element) => {
-  let routes = {};
-  let loadEventHandler: EventHandler | null = null;
+export type Routes = { [key: string]: Function };
+
+export default (domEntryPoint: Node) => {
+  const lastDomEntryPoint: Node = domEntryPoint.cloneNode(true);
+  let routes: Routes = {};
   let hashEventHandler: EventHandler | null = null;
-  const lastDomEntryPoint: Element = domEntryPoint.cloneNode(true);
   let lastRouteHandler: Function | null = null;
 
-  const navigateTo: Function = (hashUrl: string, force?: boolean = false): void => {
-    if (force) {
-      handleRouting();
-      return;
-    }
+  const navigate: Function = (hashUrl?: string = ''): void => {
     window.location.hash = hashUrl;
   };
+
+  const reload: Function = (): void => handleRouting();
 
   const otherwise: Function = (routeHandler: Function): void => {
     routes['*'] = routeHandler;
@@ -33,7 +36,7 @@ export default (domEntryPoint: Element) => {
   const addRoute: Function = (hashUrl: string, routeHandler: Function, data: any): Router => {
     routes[hashUrl] = routeHandler;
     routes[hashUrl].data = data;
-    return { addRoute, otherwise, navigateTo };
+    return { start, reload, addRoute, otherwise, navigate };
   };
 
   const initializeDomElement: Function = (): void => {
@@ -41,7 +44,7 @@ export default (domEntryPoint: Element) => {
       return;
     }
 
-    const domClone: Element = lastDomEntryPoint.cloneNode(true);
+    const domClone: Node = lastDomEntryPoint.cloneNode(true);
     if (domEntryPoint && domEntryPoint.parentElement) {
       domEntryPoint.parentElement.insertBefore(domClone, domEntryPoint);
     }
@@ -79,33 +82,30 @@ export default (domEntryPoint: Element) => {
     }
   };
 
+  const start: Function = (): void => {
+    hashEventHandler = listenEvent(window, 'hashchange', handleRouting);
+  };
+
   if (hashEventHandler) {
     hashEventHandler.remove();
   }
-  if (loadEventHandler) {
-    loadEventHandler.remove();
-  }
-  hashEventHandler = listenEvent(window, 'hashchange', handleRouting);
-  loadEventHandler = listenEvent(window, 'load', handleRouting);
 
-  return { addRoute, otherwise, navigateTo };
+  return { start, addRoute, otherwise, navigate, reload };
 };
 
-export const parseRouteParamToCorrectType = (paramValue: any) => {
+function parseRouteParamToCorrectType(paramValue: any) {
   if (!isNaN(paramValue)) {
     return parseInt(paramValue, 10);
   }
-
   if (paramValue === 'true' || paramValue === 'false') {
     return JSON.parse(paramValue);
   }
-
   return paramValue;
-};
+}
 
 function extractRouteParams(routeIdentifier, currentHash) {
-  const splittedHash = currentHash.split('/');
-  const splittedRouteIdentifier = routeIdentifier.split('/');
+  const splittedHash: string[] = currentHash.split('/');
+  const splittedRouteIdentifier: string[] = routeIdentifier.split('/');
 
   return splittedRouteIdentifier
     .map((routeIdentifierToken, index) => {
