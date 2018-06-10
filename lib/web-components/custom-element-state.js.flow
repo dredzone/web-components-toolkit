@@ -2,6 +2,8 @@
 import createStorage from '../create-storage.js';
 import after from '../advice/after.js';
 import type { ICustomElement } from './custom-element.js';
+import merger from '../object/merge';
+import clone from '../object/clone';
 
 export interface IState {
   +state: Object;
@@ -23,8 +25,8 @@ type InType = HTMLElement & ICustomElement;
 type OutType = InType & IState;
 
 export default (baseClass: Class<InType>): Class<OutType> => {
-  const { assign } = Object;
   const privates: Function = createStorage();
+	const merge: Function = merger();
 
   return class State extends baseClass implements IState {
     static finalizeClass(): void {
@@ -43,7 +45,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
     }
 
     get state(): Object {
-      return assign({}, privates(this).state);
+      return clone(privates(this).state);
     }
 
     shouldComponentUpdate(nextState: Object): boolean {
@@ -56,7 +58,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
     }
 
     setState(changes: Object): void {
-      const nextState: Object = assign({}, privates(this).state, changes);
+      const nextState: Object = merge(privates(this).state, changes);
       const previousState: Object = privates(this).state;
       const changed = previousState === undefined || this.shouldComponentUpdate(nextState);
 
@@ -87,7 +89,7 @@ export default (baseClass: Class<InType>): Class<OutType> => {
       if (firstRender) {
         context.componentWillRender(this.state);
       } else {
-        context.componentWillUpdate(this.state, assign({}, privates(context).renderedState));
+        context.componentWillUpdate(this.state, clone(privates(context).renderedState));
       }
     };
   }
